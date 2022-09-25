@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.infrastructure;
 
 import ar.edu.unlam.tallerweb1.SpringTest;
+import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.junit.Test;
 import org.springframework.test.annotation.Rollback;
@@ -20,11 +21,16 @@ public class ConexionBaseDeDatosTest extends SpringTest{
     @Test
     @Transactional @Rollback
     public void crearUsuario(){
-        Usuario usuario = new Usuario();
+        /*Usuario usuario = new Usuario();
         usuario.setEmail("seba@gmail.com");
         usuario.setPassword("1234");
-        usuario.setRol("ADMIN");
-        session().save(usuario);
-        assertThat(usuario.getId()).isNotNull();
+        usuario.setRol("ADMIN");*/
+        Ingrediente ing = new Ingrediente();
+        ing.setIdIngrediente(1L);
+        ing.setDescripcion("test");
+        ing.setPaso(1);
+        ing.setPrecio(125F);
+        session().save(ing);
+        assertThat(ing.getIdIngrediente()).isNotNull();
     }
 }

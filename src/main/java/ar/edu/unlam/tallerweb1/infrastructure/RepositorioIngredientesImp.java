@@ -20,12 +20,12 @@ public class RepositorioIngredientesImp implements RepositorioIngredientes {
 
     @Override
     public List<Ingrediente> obtenerIngrediente() {
-        return (List<Ingrediente>) sessionFactory.getCurrentSession().createCriteria(Usuario.class).list();
+        return (List<Ingrediente>) sessionFactory.getCurrentSession().createCriteria(Ingrediente.class).list();
     }
 
     @Override
     public Ingrediente obtenerIngredientePorId(Long id) {
-        return (Ingrediente) sessionFactory.getCurrentSession().createCriteria(Usuario.class)
+        return (Ingrediente) sessionFactory.getCurrentSession().createCriteria(Ingrediente.class)
                 .add(Restrictions.eq("id", id))
                 .uniqueResult();
 
