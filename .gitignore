@@ -18,5 +18,5 @@ hs_err_pid*
 *.DS_Store
 /.java-version
 /test/
-/src/main/resources/
-/src/test/resources/
+src/main/resources/hibernateContext.xml
+src/test/resources/test-hibernateContext.xml
