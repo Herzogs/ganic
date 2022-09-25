@@ -32,5 +32,6 @@ public class ConexionBaseDeDatosTest extends SpringTest{
         ing.setPrecio(125F);
         session().save(ing);
         assertThat(ing.getIdIngrediente()).isNotNull();
+
     }
 }
