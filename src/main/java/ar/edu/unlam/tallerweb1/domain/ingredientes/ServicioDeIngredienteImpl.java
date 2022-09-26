@@ -6,8 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Service("servicioIngrediente")
-@Transactional
+@Service
 public class ServicioDeIngredienteImpl implements ServicioDeIngrediente {
 
     private RepositorioIngredientes repo;
@@ -25,5 +24,10 @@ public class ServicioDeIngredienteImpl implements ServicioDeIngrediente {
     @Override
     public Ingrediente obtenerIngredientePorId(Long id) {
         return this.repo.obtenerIngredientePorId(id);
+    }
+
+    @Override
+    public List<Ingrediente> obtenerTodosLosIngredientes() {
+        return this.repo.obtenerIngrediente();
     }
 }

@@ -21,43 +21,51 @@ public class ServicioIngredienteTest extends SpringTest {
 
 
     @Before
-    public void inicializandoComponentes() {
+    public void init() {
         this.repo = mock(RepositorioIngredientes.class);
         this.servicio = new ServicioDeIngredienteImpl(this.repo);
     }
 
     @Test
-    public void siNoEncuentraIngredienteConPasoDevuelveListaVacia() {
-        Integer paso = 2;
-        dadoQueNoExistenIngredientesParaElPasoSolicitado(paso);
-        List<Ingrediente> valor_obtenido = this.servicio.obtenerIngredientesPorPaso(2);
+    public void alPedirUnIngredienteQueLoDevuelta() {
+        obtenerIngredientePorID(1L);
+        Ingrediente n1 = new Ingrediente(1L, "Pan Centeno", 123F, 1);
+        System.out.println("VALOR QUES ESTAMOS ESPERANDO ID: " + this.repo.obtenerIngredientePorId(1L));
+        assertThat(this.repo.obtenerIngredientePorId(1L)).isEqualTo(n1);
+    }
+
+    @Test
+    public void alPedirUnIngredientePorIdEsteNoCoincida() {
+        obtenerIngredientePorID(1L);
+        Ingrediente n2 = new Ingrediente(2L, "Pan Negro", 100F, 1);
+        System.out.println("VALOR QUES ESTAMOS ESPERANDO ID: " + this.repo.obtenerIngredientePorId(1L));
+        assertThat(this.repo.obtenerIngredientePorId(1L)).isNotEqualTo(n2);
+    }
+
+    @Test
+    public void siPidoUnIngredienteConPasoQueNoExistaDevuelvaListaVacia() {
+        Integer paso_invalido = 7;
+        obtenerTodosLosIngredientesDelPaso1();
+        List<Ingrediente> valor_obtenido = this.servicio.obtenerIngredientesPorPaso(paso_invalido);
+        System.out.println("VALOR DEL SERVICIO: " + this.servicio.obtenerIngredientesPorPaso(7));
         assertThat(valor_obtenido).isEmpty();
     }
 
     @Test
-    public void siSeEncuentraIngredienteConPasoDevuelveListaDeIngrediente() {
-        Integer paso = 1;
-        dadoQueNoExistenIngredientesParaElPasoSolicitado(paso);
-        List<Ingrediente> valor_obtenido = this.servicio.obtenerIngredientesPorPaso(2);
-        assertThat(valor_obtenido).isEmpty();
+    public void siPidoUnaListaDeIngredientesConPasoValidoDevuelvaListaNoVacia() {
+        Integer paso_valido = 1;
+        obtenerTodosLosIngredientesDelPaso1();
+        List<Ingrediente> valor_obtenido = this.servicio.obtenerIngredientesPorPaso(paso_valido);
+        System.out.println("VALOR DEL SERVIÇIO DEL PASO 1:" + valor_obtenido);
+        assertThat(valor_obtenido).isNotEqualTo(new ArrayList<>());
     }
 
-    private void dadoQueNoExistenIngredientesParaElPasoSolicitado(Integer paso) {
-        when(this.repo.obtenerIngredientePorPaso(paso)).thenReturn(new ArrayList<>());
+    private void obtenerIngredientePorID(Long id){
+        Ingrediente ejemplo = new Ingrediente(1L, "Pan Centeno", 123F, 1);
+        when(this.repo.obtenerIngredientePorId(id)).thenReturn(ejemplo);
     }
 
-    private void dadoQueSiExistenIngredientesParaElPasoSolicitado(Integer paso) {
-        Integer pasoValido = 1;
-        dadoQueSiExisteIngrdienteParaElPasoSolicitado(pasoValido);
-        List<Ingrediente> valor_obtenido = cuandoBuscoUnIngredientePorPaso(pasoValido);
-        assertThat(valor_obtenido).isNotEmpty();
-    }
-
-    private List<Ingrediente> cuandoBuscoUnIngredientePorPaso(Integer paso) {
-        return this.servicio.obtenerIngredientesPorPaso(paso);
-    }
-
-    private void dadoQueSiExisteIngrdienteParaElPasoSolicitado(Integer paso) {
+    private void obtenerTodosLosIngredientesDelPaso1(){
         List<Ingrediente> valor_esperado = new ArrayList<>();
         Ingrediente n1 = new Ingrediente(1L, "Pan Centeno", 123F, 1);
         Ingrediente n2 = new Ingrediente(2L, "Pan Negro", 100F, 1);
@@ -67,7 +75,6 @@ public class ServicioIngredienteTest extends SpringTest {
         valor_esperado.add(n2);
         valor_esperado.add(n3);
         valor_esperado.add(n4);
-        when(this.repo.obtenerIngredientePorPaso(paso)).thenReturn(new ArrayList<>());
+        when(this.repo.obtenerIngredientePorPaso(1)).thenReturn(valor_esperado);
     }
-
 }
