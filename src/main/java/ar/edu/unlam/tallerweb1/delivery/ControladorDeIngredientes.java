@@ -33,7 +33,6 @@ public class ControladorDeIngredientes {
 
 		List<Ingrediente> ingrediente = servicioDeIngrediente.obtenerTodosLosIngredientes();
 		
-		
 		ingredientes.put("ingrediente", ingrediente);
 
 		return new ModelAndView("ingredientes", ingredientes);
