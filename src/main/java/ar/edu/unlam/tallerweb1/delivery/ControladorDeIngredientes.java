@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.delivery;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +15,30 @@ import ar.edu.unlam.tallerweb1.domain.ingredientes.ServicioDeIngrediente;
 
 @Controller
 public class ControladorDeIngredientes {
-	
+
 	private ServicioDeIngrediente servicioDeIngrediente;
-	
-	
+	private List<Ingrediente> ingredientesDelUsuario;
+
 	@Autowired
 	public ControladorDeIngredientes(ServicioDeIngrediente servicioDeIngrediente) {
 		super();
 		this.servicioDeIngrediente = servicioDeIngrediente;
+		this.ingredientesDelUsuario = new ArrayList<>();
+	}
+
+	@RequestMapping(path = "/ingredientes", method = RequestMethod.GET)
+	public ModelAndView ingredientes() {
+
+		ModelMap ingredientes = new ModelMap();
+
+		List<Ingrediente> ingrediente = servicioDeIngrediente.obtenerTodosLosIngredientes();
+		
+		
+		ingredientes.put("ingrediente", ingrediente);
+
+		return new ModelAndView("ingredientes", ingredientes);
+		
+
 	}
 
 	// TipoDePan
@@ -29,9 +46,9 @@ public class ControladorDeIngredientes {
 	public ModelAndView tiposDePanes() {
 
 		ModelMap tiposDePanes = new ModelMap();
-		
+
 		List<Ingrediente> panes = servicioDeIngrediente.obtenerIngredientesPorPaso(1);
-		
+
 		tiposDePanes.put("ListaDePanes", panes);
 
 		return new ModelAndView("tipos-de-panes", tiposDePanes);
