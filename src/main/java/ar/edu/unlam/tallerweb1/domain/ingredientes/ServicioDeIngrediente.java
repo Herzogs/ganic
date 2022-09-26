@@ -6,4 +6,6 @@ public interface ServicioDeIngrediente {
 
     List<Ingrediente> obtenerIngredientesPorPaso(Integer paso);
     Ingrediente obtenerIngredientePorId(Long id);
+
+    List<Ingrediente> obtenerTodosLosIngredientes();
 }
