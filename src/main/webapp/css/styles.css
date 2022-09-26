@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Encode+Sans:wght@300;400;500;600;700&display=swap');
+body{
+    margin: 0;
+    padding: 0;
+    color: #030303;
+    box-sizing: border-box;
+    font-family: 'Encode Sans', sans-serif;
+}
+nav{
+    background-color: #14213d;
+    color: #ffffff;
+}
+.navbar_container{
+    color: #fff;
+}
+.navbar_container a{
+    color: #fff;
+}
+.img_home{
+    max-width: 350px;
+}
+.img_logo{
+    max-width: 500px;
+    text-align: start;
+}
+.info_container{
+    background-color: #e5e5e5;
+}
+.info_parrafo{
+    font-size: 18px;
+    font-weight: 500;
+}
