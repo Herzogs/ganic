@@ -11,7 +11,7 @@ public class ControladorDeIngredientePrincipal {
 	
 	@RequestMapping(path = "/ingrediente-principal", method = RequestMethod.GET)
 	public ModelAndView ingredientePrincipal() {
-		return new ModelAndView("ingrediente-princial");
+		return new ModelAndView("ingrediente-principal");
 	
 	
 	}
