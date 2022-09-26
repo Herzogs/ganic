@@ -1,4 +1,3 @@
-
 <%--
   Created by IntelliJ IDEA.
   User: h3rz
@@ -18,11 +17,10 @@
     <title>Document</title>
 </head>
 <body>
-<c:forEach var="ing" items="${modelo}" >
-        <p>${ing.getDescripcion}</p> <br/>
-    <p>${ing.descripcion}</p>
+<c:forEach var="ing" items="${ingredientes}" >
+    <p>${ing.descripcion}</p><br>
+    <p>${ing.precio}</p>
 </c:forEach>
 
-<h1>hola</h1>
 </body>
 </html>
