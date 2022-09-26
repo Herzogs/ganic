@@ -2,13 +2,17 @@ package ar.edu.unlam.tallerweb1.infrastructure;
 
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.RepositorioIngredientes;
-import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
+
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 
 import java.util.List;
 
+@Repository("repositorioIngredientes")
 public class RepositorioIngredientesImp implements RepositorioIngredientes {
 
     private SessionFactory sessionFactory;
@@ -20,24 +24,38 @@ public class RepositorioIngredientesImp implements RepositorioIngredientes {
 
     @Override
     public List<Ingrediente> obtenerIngrediente() {
-        return (List<Ingrediente>) sessionFactory.getCurrentSession().createCriteria(Ingrediente.class).list();
+        final Session session = this.sessionFactory.getCurrentSession();
+        return (List<Ingrediente>) session.createCriteria(Ingrediente.class).list();
     }
 
     @Override
     public Ingrediente obtenerIngredientePorId(Long id) {
-        return (Ingrediente) sessionFactory.getCurrentSession().createCriteria(Ingrediente.class)
-                .add(Restrictions.eq("id", id))
+        final Session session = this.sessionFactory.getCurrentSession();
+        return (Ingrediente) session.createCriteria(Ingrediente.class)
+                .add(Restrictions.eq("idIngrediente", id))
                 .uniqueResult();
 
     }
 
     @Override
-    public Ingrediente obtenerIngredientePorNombre(String n) {
-        return null;
+    public List<Ingrediente> obtenerIngredientePorNombre(String desc) {
+        final Session session = this.sessionFactory.getCurrentSession();
+        return (List<Ingrediente>) session.createCriteria(Ingrediente.class)
+                .add(Restrictions.eq("descripcion", desc))
+                .list();
     }
 
     @Override
     public void guardarIngrediente(Ingrediente ing) {
+        final Session session = sessionFactory.getCurrentSession();
+        session.save(ing);
+    }
 
+    @Override
+    public List<Ingrediente> obtenerIngredientePorPaso(Integer paso) {
+        final Session session = this.sessionFactory.getCurrentSession();
+        return (List<Ingrediente>) session.createCriteria(Ingrediente.class)
+                .add(Restrictions.eq("paso",paso))
+                .list();
     }
 }

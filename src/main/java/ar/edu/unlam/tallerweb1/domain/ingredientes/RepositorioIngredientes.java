@@ -6,6 +6,7 @@ public interface RepositorioIngredientes {
 
     public List<Ingrediente> obtenerIngrediente();
     public Ingrediente obtenerIngredientePorId(Long id);
-    public Ingrediente obtenerIngredientePorNombre (String n);
+    public List<Ingrediente> obtenerIngredientePorNombre (String desc);
     public void guardarIngrediente(Ingrediente ing);
+    List<Ingrediente> obtenerIngredientePorPaso(Integer paso);
 }
