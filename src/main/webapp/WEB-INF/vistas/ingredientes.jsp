@@ -10,7 +10,10 @@
 </head>
 <body>
 
-	<c:forEach items="${ingredientes}" var="ing"><article class="card shadow"> <p>${ing.descripcion}</p> </article></c:forEach>
+	<c:forEach items="${ingredientes}" var="ing"><article class="card shadow"> 
+	<p>${ing.descripcion}</p> </article>
+	
+	</c:forEach>
 	<!-- Placed at the end of the document so the pages load faster -->
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
