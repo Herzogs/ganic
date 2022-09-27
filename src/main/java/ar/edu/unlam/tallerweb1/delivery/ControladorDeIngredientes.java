@@ -129,5 +129,10 @@ public class ControladorDeIngredientes {
 
 		return new ModelAndView("ingredientes-seleccionados", model);
 	}
-	
+
+	@RequestMapping(path = "/confirmar", method = RequestMethod.GET)
+	public ModelAndView confirmar() {
+		return new ModelAndView("confirmar");
+	}
+
 }

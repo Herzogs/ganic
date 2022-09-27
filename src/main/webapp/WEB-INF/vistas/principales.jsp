@@ -55,7 +55,7 @@
                 </c:forEach>
             </div>
             <a href="home" class="btn btn-primary px-5 my-5">Volver al Home</a>
-            <a href="principales" class="btn btn-success px-5 my-5">Confirmar</a>
+            <a href="opcionales" class="btn btn-success px-5 my-5">Confirmar</a>
 
         </div>
     </section>
@@ -65,6 +65,4 @@
         integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
         crossorigin="anonymous"></script>
 </body>
-
->>>>>>> 9b9835400d2335f52f6db004f7878a28adda3ad3
 </html>
