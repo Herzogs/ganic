@@ -71,7 +71,6 @@ public class RepositorioIngredientesImplTest extends SpringTest {
         valor_esperado.add(n3);
         valor_esperado.add(n4);
         List<Ingrediente> valor_obtenido = this.repo.obtenerIngredientePorPaso(1);
-        System.out.println(repo.obtenerIngredientePorId(1L).getNombre()+ "Datos esperados");
         assertThat(valor_esperado).isEqualTo(valor_obtenido);
     }
 }
