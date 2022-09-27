@@ -17,7 +17,7 @@
     <title>Document</title>
 </head>
 <body>
-<c:forEach var="ing" items="${ingredientes}" >
+<c:forEach var="ing" items="${ingrediente}" >
     <p>${ing.descripcion}</p><br>
     <p>${ing.precio}</p>
 </c:forEach>
