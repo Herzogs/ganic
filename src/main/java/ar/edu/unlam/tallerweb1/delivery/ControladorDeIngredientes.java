@@ -41,7 +41,7 @@ public class ControladorDeIngredientes {
 	}
 
 	// TipoDePan
-	@RequestMapping(path = "/tipos-de-panes", method = RequestMethod.GET)
+	@RequestMapping(path = "/panes", method = RequestMethod.GET)
 	public ModelAndView tiposDePanes() {
 
 		ModelMap model = new ModelMap();
@@ -50,7 +50,7 @@ public class ControladorDeIngredientes {
 
 		model.put("ListaDePanes", panes);
 
-		return new ModelAndView("tipos-de-panes", model);
+		return new ModelAndView("panes", model);
 
 	}
 
@@ -67,11 +67,11 @@ public class ControladorDeIngredientes {
 
 		ingredientesDelUsuario.add(ingrediente);
 
-		return new ModelAndView("ingrediente-principal", model);
+		return new ModelAndView("principales", model);
 	}
 
 	// IngredientePrincipal
-	@RequestMapping(path = "/ingrediente-principal", method = RequestMethod.GET)
+	@RequestMapping(path = "/principales", method = RequestMethod.GET)
 	public ModelAndView ingredientePrincipal() {
 
 		ModelMap model = new ModelMap();
@@ -80,7 +80,7 @@ public class ControladorDeIngredientes {
 
 		model.put("ListaDeIngredientesPrincipales", ingredientePrincipal);
 
-		return new ModelAndView("ingrediente-principal", model);
+		return new ModelAndView("principales", model);
 
 	}
 
@@ -96,11 +96,11 @@ public class ControladorDeIngredientes {
 
 		ingredientesDelUsuario.add(ingrediente);
 
-		return new ModelAndView("ingrediente-opcional", model);
+		return new ModelAndView("opcionales", model);
 	}
 
 	// IngredienteOpcional
-	@RequestMapping(path = "/ingrediente-opcional", method = RequestMethod.GET)
+	@RequestMapping(path = "/opcionales", method = RequestMethod.GET)
 	public ModelAndView ingredienteOpcional() {
 
 		ModelMap model = new ModelMap();
@@ -109,7 +109,7 @@ public class ControladorDeIngredientes {
 
 		model.put("ListaDeIngredientesOpcionales", ingredienteOpcional);
 
-		return new ModelAndView("ingrediente-opcional", model);
+		return new ModelAndView("opcionales", model);
 
 	}
 
