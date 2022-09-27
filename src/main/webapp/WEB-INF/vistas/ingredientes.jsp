@@ -14,9 +14,9 @@
     <nav class="nav_style d-flex align-items-center">
         <div class="container">
             <div class="text-center">
-                <a href="">Home</a>
+                <a href="home">Home</a>
                 <a href="">Menu</a>
-                <a href=""><img src="img/ganiclogo.png" class="img-fluid logo_style" alt="Logo"></a>
+                <a href="home"><img src="img/ganiclogo.png" class="img-fluid logo_style" alt="Logo"></a>
                 <a href="">Contacto</a>
                 <a href="">Nosotros</a>
             </div>
@@ -53,8 +53,8 @@
                     </div>
                     </div>
                 </c:forEach>
-
             </div>
+            <a href="home" class="btn btn-primary px-5 my-5">Volver al Home</a>
         </div>
     </section>
 </main>
