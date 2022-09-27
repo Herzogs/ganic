@@ -17,8 +17,10 @@
     <title>Document</title>
 </head>
 <body>
-<c:forEach var="ing" items="${ingrediente}" >
+
+<c:forEach var="ing" items="${ingredientes}" >
     <p>${ing.nombre}</p><br>
+
     <p>${ing.precio}</p>
 </c:forEach>
 
