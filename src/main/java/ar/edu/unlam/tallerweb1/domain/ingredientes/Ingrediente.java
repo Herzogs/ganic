@@ -41,8 +41,16 @@ public class Ingrediente {
 		return nombre;
 	}
 
-	public void setNombre(String descripcion) {
-		this.nombre = descripcion;
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getDetalle() {
+		return detalle;
+	}
+
+	public void setDetalle(String detalle) {
+		this.nombre = detalle;
 	}
 
 	public Float getPrecio() {
@@ -68,12 +76,12 @@ public class Ingrediente {
 		if (o == null || getClass() != o.getClass())
 			return false;
 		Ingrediente that = (Ingrediente) o;
-		return getIdIngrediente().equals(that.getIdIngrediente()) && getNombre().equals(that.getNombre())
+		return getIdIngrediente().equals(that.getIdIngrediente()) && getNombre().equals(that.getNombre())  && getDetalle().equals(that.getDetalle())
 				&& getPrecio().equals(that.getPrecio()) && getPaso().equals(that.getPaso());
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(getIdIngrediente(), getNombre(), getPrecio(), getPaso());
+		return Objects.hash(getIdIngrediente(), getNombre(), getDetalle(), getPrecio(), getPaso());
 	}
 }
