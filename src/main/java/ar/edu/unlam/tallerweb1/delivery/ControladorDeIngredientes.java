@@ -29,13 +29,13 @@ public class ControladorDeIngredientes {
 	@RequestMapping(path = "/ingredientes", method = RequestMethod.GET)
 	public ModelAndView ingredientes() {
 
-		ModelMap ingredientes = new ModelMap();
+		ModelMap model = new ModelMap();
 
 		List<Ingrediente> ingrediente = servicioDeIngrediente.obtenerTodosLosIngredientes();
 		
-		ingredientes.put("ingrediente", ingrediente);
+		model.put("ingrediente", ingrediente);
 
-		return new ModelAndView("ingredientes", ingredientes);
+		return new ModelAndView("ingredientes", model);
 		
 
 	}
@@ -44,13 +44,13 @@ public class ControladorDeIngredientes {
 	@RequestMapping(path = "/tipos-de-panes", method = RequestMethod.GET)
 	public ModelAndView tiposDePanes() {
 
-		ModelMap tiposDePanes = new ModelMap();
+		ModelMap model = new ModelMap();
 
 		List<Ingrediente> panes = servicioDeIngrediente.obtenerIngredientesPorPaso(1);
 
-		tiposDePanes.put("ListaDePanes", panes);
+		model.put("ListaDePanes", panes);
 
-		return new ModelAndView("tipos-de-panes", tiposDePanes);
+		return new ModelAndView("tipos-de-panes", model);
 
 	}
 
@@ -69,7 +69,15 @@ public class ControladorDeIngredientes {
 	// IngredientePrincipal
 	@RequestMapping(path = "/ingrediente-principal", method = RequestMethod.GET)
 	public ModelAndView ingredientePrincipal() {
-		return new ModelAndView("ingrediente-principal");
+		
+		ModelMap model = new ModelMap();
+
+		List<Ingrediente> ingredientePrincipal = servicioDeIngrediente.obtenerIngredientesPorPaso(2);
+
+		model.put("ListaDeIngredientesPrincipales", ingredientePrincipal);
+
+		return new ModelAndView("ingrediente-principal", model);
+		
 
 	}
 
@@ -86,7 +94,16 @@ public class ControladorDeIngredientes {
 	// IngredienteOpcional
 	@RequestMapping(path = "/ingrediente-opcional", method = RequestMethod.GET)
 	public ModelAndView ingredienteOpcional() {
-		return new ModelAndView("ingrediente-opcional");
+		
+		ModelMap model = new ModelMap();
+
+		List<Ingrediente> ingredienteOpcional = servicioDeIngrediente.obtenerIngredientesPorPaso(3);
+
+		model.put("ListaDeIngredientesOpcionales", ingredienteOpcional);
+
+		return new ModelAndView("ingrediente-opcional", model);
+		
+		
 
 	}
 
