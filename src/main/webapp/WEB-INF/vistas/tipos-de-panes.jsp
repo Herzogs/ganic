@@ -18,7 +18,7 @@
 </head>
 <body>
 <c:forEach var="ing" items="${ListaDePanes}" >
-    <p>${ing.descripcion}</p><br>
+    <p>${ing.nombre}</p><br>
     <p>${ing.precio}</p>
 </c:forEach>
 

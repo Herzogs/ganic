@@ -41,7 +41,7 @@ public class RepositorioIngredientesImp implements RepositorioIngredientes {
     public List<Ingrediente> obtenerIngredientePorNombre(String desc) {
         final Session session = this.sessionFactory.getCurrentSession();
         return (List<Ingrediente>) session.createCriteria(Ingrediente.class)
-                .add(Restrictions.eq("descripcion", desc))
+                .add(Restrictions.eq("nombre", desc))
                 .list();
     }
 

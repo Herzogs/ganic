@@ -29,7 +29,7 @@ public class ServicioIngredienteTest extends SpringTest {
     @Test
     public void alPedirUnIngredienteQueLoDevuelta() {
         obtenerIngredientePorID(1L);
-        Ingrediente n1 = new Ingrediente(1L, "Pan Centeno", 123F, 1);
+        Ingrediente n1 = new Ingrediente(1L, "Pan Centeno", 123F, 1, "detalle");
         System.out.println("VALOR QUES ESTAMOS ESPERANDO ID: " + this.repo.obtenerIngredientePorId(1L));
         assertThat(this.repo.obtenerIngredientePorId(1L)).isEqualTo(n1);
     }
@@ -37,7 +37,7 @@ public class ServicioIngredienteTest extends SpringTest {
     @Test
     public void alPedirUnIngredientePorIdEsteNoCoincida() {
         obtenerIngredientePorID(1L);
-        Ingrediente n2 = new Ingrediente(2L, "Pan Negro", 100F, 1);
+        Ingrediente n2 = new Ingrediente(2L, "Pan Negro", 100F, 1, "detalle");
         System.out.println("VALOR QUES ESTAMOS ESPERANDO ID: " + this.repo.obtenerIngredientePorId(1L));
         assertThat(this.repo.obtenerIngredientePorId(1L)).isNotEqualTo(n2);
     }
@@ -61,16 +61,16 @@ public class ServicioIngredienteTest extends SpringTest {
     }
 
     private void obtenerIngredientePorID(Long id){
-        Ingrediente ejemplo = new Ingrediente(1L, "Pan Centeno", 123F, 1);
+        Ingrediente ejemplo = new Ingrediente(1L, "Pan Centeno", 123F, 1, "detalle");
         when(this.repo.obtenerIngredientePorId(id)).thenReturn(ejemplo);
     }
 
     private void obtenerTodosLosIngredientesDelPaso1(){
         List<Ingrediente> valor_esperado = new ArrayList<>();
-        Ingrediente n1 = new Ingrediente(1L, "Pan Centeno", 123F, 1);
-        Ingrediente n2 = new Ingrediente(2L, "Pan Negro", 100F, 1);
-        Ingrediente n3 = new Ingrediente(3L, "Pan Pizza", 160F, 1);
-        Ingrediente n4 = new Ingrediente(4L, "Pan Casero", 200F, 1);
+        Ingrediente n1 = new Ingrediente(1L, "Pan Centeno", 123F, 1, "detalle");
+        Ingrediente n2 = new Ingrediente(2L, "Pan Negro", 100F, 1, "detalle");
+        Ingrediente n3 = new Ingrediente(3L, "Pan Pizza", 160F, 1, "detalle");
+        Ingrediente n4 = new Ingrediente(4L, "Pan Casero", 200F, 1, "detalle");
         valor_esperado.add(n1);
         valor_esperado.add(n2);
         valor_esperado.add(n3);
