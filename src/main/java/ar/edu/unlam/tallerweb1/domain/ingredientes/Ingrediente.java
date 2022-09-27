@@ -14,18 +14,22 @@ public class Ingrediente {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idIngrediente;
 
-    private String descripcion;
+    private String nombre;
     private Float precio;
     private Integer paso;
+
+    private String detalle;
 
     public Ingrediente() {
     }
 
-    public Ingrediente(Long idIngrediente, String descripcion, Float precio, Integer paso) {
+
+    public Ingrediente(Long idIngrediente, String nombre, Float precio, Integer paso, String detalle) {
         this.idIngrediente = idIngrediente;
-        this.descripcion = descripcion;
+        this.nombre = nombre;
         this.precio = precio;
         this.paso = paso;
+        this.detalle = detalle;
     }
 
     public Long getIdIngrediente() {
@@ -36,12 +40,12 @@ public class Ingrediente {
         this.idIngrediente = idIngrediente;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setNombre(String descripcion) {
+        this.nombre = descripcion;
     }
 
     public Float getPrecio() {
@@ -65,11 +69,11 @@ public class Ingrediente {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Ingrediente that = (Ingrediente) o;
-        return getIdIngrediente().equals(that.getIdIngrediente()) && getDescripcion().equals(that.getDescripcion()) && getPrecio().equals(that.getPrecio()) && getPaso().equals(that.getPaso());
+        return getIdIngrediente().equals(that.getIdIngrediente()) && getNombre().equals(that.getNombre()) && getPrecio().equals(that.getPrecio()) && getPaso().equals(that.getPaso());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getIdIngrediente(), getDescripcion(), getPrecio(), getPaso());
+        return Objects.hash(getIdIngrediente(), getNombre(), getPrecio(), getPaso());
     }
 }
