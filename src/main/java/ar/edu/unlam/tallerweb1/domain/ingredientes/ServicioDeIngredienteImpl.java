@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
-@Service("ServicioDeIngrediente")
+@Service("servicioDeIngrediente")
 @Transactional
 
 public class ServicioDeIngredienteImpl implements ServicioDeIngrediente {

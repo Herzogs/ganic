@@ -2,7 +2,6 @@ package ar.edu.unlam.tallerweb1.infrastructure;
 
 import ar.edu.unlam.tallerweb1.SpringTest;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
-import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.junit.Test;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +26,7 @@ public class ConexionBaseDeDatosTest extends SpringTest{
         usuario.setRol("ADMIN");*/
         Ingrediente ing = new Ingrediente();
         ing.setIdIngrediente(1L);
-        ing.setDescripcion("test");
+        ing.setNombre("test");
         ing.setPaso(1);
         ing.setPrecio(125F);
         session().save(ing);

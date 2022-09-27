@@ -34,7 +34,7 @@ public class ControladorDeIngredientes {
 
 		List<Ingrediente> ingrediente = servicioDeIngrediente.obtenerTodosLosIngredientes();
 
-		model.put("ingrediente", ingrediente);
+		model.put("ingredientes", ingrediente);
 
 		return new ModelAndView("ingredientes", model);
 

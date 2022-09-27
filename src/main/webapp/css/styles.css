@@ -1,0 +1,80 @@
+@import url("https://fonts.googleapis.com/css2?family=Encode+Sans:wght@300;400;500;600;700&display=swap");
+body {
+    margin: 0;
+    padding: 0;
+    color: #030303;
+    box-sizing: border-box;
+    font-family: "Encode Sans", sans-serif;
+}
+.text-success {
+    color: #829302 !important;
+}
+.btn-success {
+    background-color: #829302;
+    border: 1px solid #829302;
+}
+
+.btn-success:hover {
+    background-color: #516f15 !important;
+}
+
+.nav_style {
+    height: 100px;
+    background-color: #000000;
+    color: #fff;
+}
+
+.nav_style a {
+    padding: 0px 26px;
+    font-size: 18px;
+    color: #fff;
+    text-decoration: none;
+    letter-spacing: 2px;
+    transition: 0.5s;
+}
+
+.nav_style a:hover {
+    text-decoration: underline;
+}
+
+.logo_style {
+    max-width: 80px;
+}
+
+#banner {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+#bannerTitulo {
+    position: absolute;
+    width: 100%;
+    margin: auto;
+    text-align: center;
+}
+
+#bannerTitulo h1 {
+    color: #ffff;
+    font-weight: bold;
+    font-size: 76px;
+    margin-bottom: 0px;
+    letter-spacing: 46px;
+    text-shadow: 2px 2px 6px #383535ad;
+}
+
+#bannerSubTitulo {
+    position: absolute;
+    width: 100%;
+    margin: auto;
+    margin-top: 120px;
+    text-align: center;
+}
+
+#bannerSubTitulo h2 {
+    color: #ffff;
+    font-weight: 400;
+    font-size: 22px;
+    letter-spacing: 1px;
+    text-shadow: 2px 2px 6px #000000ad;
+}

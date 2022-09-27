@@ -25,7 +25,7 @@ public class RepositorioIngredientesImplTest extends SpringTest {
     public void buscarIngredientePorNombre() {
         Ingrediente nuevo = primeroGeneramosUnIngrediente();
         this.repo.guardarIngrediente(nuevo);
-        List<Ingrediente> res = seBuscarElIngredienteSolicitado(nuevo.getDescripcion());
+        List<Ingrediente> res = seBuscarElIngredienteSolicitado(nuevo.getNombre());
         seVerificaQueLaBusquedaDioElResultadoEsperado(nuevo, res);
     }
 
@@ -40,7 +40,7 @@ public class RepositorioIngredientesImplTest extends SpringTest {
     private Ingrediente primeroGeneramosUnIngrediente() {
         Ingrediente nuevo = new Ingrediente();
         nuevo.setIdIngrediente(2L);
-        nuevo.setDescripcion("pan");
+        nuevo.setNombre("pan");
         nuevo.setPrecio(12F);
         nuevo.setPaso(2);
         return nuevo;
@@ -62,16 +62,16 @@ public class RepositorioIngredientesImplTest extends SpringTest {
     @Test @Transactional
     public void queAlBuscarPorUnPasoEspecificoMeRetorneAlgunValor(){
         List<Ingrediente> valor_esperado = new ArrayList<>();
-        Ingrediente n1 = new Ingrediente(1L,"Pan Centeno",123F,1);
-        Ingrediente n2 = new Ingrediente(2L,"Pan Negro",100F,1);
-        Ingrediente n3 = new Ingrediente(3L,"Pan Pizza",160F,1);
-        Ingrediente n4 = new Ingrediente(4L,"Pan Casero",200F,1);
+        Ingrediente n1 = new Ingrediente(5L,"Pan clasico",150F,1, "Pan lactal blanco");
+        Ingrediente n2 = new Ingrediente(6L,"Pan flauta",120F,1, "Pan de mesa blanco");
+        Ingrediente n3 = new Ingrediente(7L,"Pan de campo",250F,1, "Pan de campo blanco");
+        Ingrediente n4 = new Ingrediente(8L,"Pan integral",280F,1, "Pan lactal integral");
         valor_esperado.add(n1);
         valor_esperado.add(n2);
         valor_esperado.add(n3);
         valor_esperado.add(n4);
         List<Ingrediente> valor_obtenido = this.repo.obtenerIngredientePorPaso(1);
-        System.out.println(repo.obtenerIngredientePorId(1L).getDescripcion()+ "Datos esperados");
+        System.out.println(repo.obtenerIngredientePorId(1L).getNombre()+ "Datos esperados");
         assertThat(valor_esperado).isEqualTo(valor_obtenido);
     }
 }
