@@ -1,5 +1,5 @@
-
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 
@@ -17,9 +17,9 @@
     <nav class="nav_style d-flex align-items-center">
         <div class="container">
             <div class="text-center">
-                <a href="">Home</a>
+                <a href="home">Home</a>
                 <a href="">Menu</a>
-                <a href=""><img src="img/ganiclogo.png" class="img-fluid logo_style" alt="Logo"></a>
+                <a href="home"><img src="img/ganiclogo.png" class="img-fluid logo_style" alt="Logo"></a>
                 <a href="">Contacto</a>
                 <a href="">Nosotros</a>
             </div>
@@ -33,84 +33,26 @@
 
     <section>
         <div class="container py-5">
-            <div class="row">
-
-                <h4>Tercer ingrediente</h4>
-                <h5 class="pb-3">Selección de salsas u opcionales</h5>
-
-                <div class="col-6">
-                    <div class="card mb-3" style="max-width: 500px;">
-                        <div class="row g-0">
-                            <div class="col-md-4">
-                                <img src="img/salsa1.png" class="img-fluid" alt="...">
+            <div class="row g-3">
+                <h3 class="pt-5 pb-3">Tercer ingrediente</h3>
+                <h2>Selección de opcionales</h2>
+                <c:forEach var="opcionales" items="${ListaDeIngredientesOpcionales}" >
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-header bg-dark text-white">
+                                    ${opcionales.nombre}
                             </div>
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h5 class="card-title">Barbacoa</h5>
-                                    <p class="card-text">Tomate y barbacoa</p>
-                                    <button class="btn btn-success">Agregar</button>
-                                </div>
-                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">${opcionales.detalle}</li>
+                                <li class="list-group-item"><span class="text-primary">Precio:</span> ${opcionales.precio}</li>
+                                <li class="list-group-item"><button class="btn btn-success rounded-pill">Agregar</button></li>
+                            </ul>
                         </div>
                     </div>
-                </div>
-
-                <div class="col-6">
-                    <div class="card mb-3" style="max-width: 500px;">
-                        <div class="row g-0">
-                            <div class="col-md-4">
-                                <img src="img/salsa2.png" class="img-fluid" alt="...">
-                            </div>
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h5 class="card-title">Pure</h5>
-                                    <p class="card-text">Pure de papa</p>
-                                    <button class="btn btn-success">Agregar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-6">
-                    <div class="card mb-3" style="max-width: 500px;">
-                        <div class="row g-0">
-                            <div class="col-md-4">
-                                <img src="img/salsa3.png" class="img-fluid" alt="...">
-                            </div>
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h5 class="card-title">Mostayesa</h5>
-                                    <p class="card-text">Mix mostaza y mayonesa</p>
-                                    <button class="btn btn-success">Agregar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-6">
-                    <div class="card mb-3" style="max-width: 500px;">
-                        <div class="row g-0">
-                            <div class="col-md-4">
-                                <img src="img/salsa4.png" class="img-fluid" alt="...">
-                            </div>
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h5 class="card-title">La casa</h5>
-                                    <p class="card-text">Guacamole y mayonesa</p>
-                                    <button class="btn btn-success">Agregar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="text-center">
-                    <button class="btn btn-primary px-5 my-5">CONTINUAR</button>
-                </div>
-
+                </c:forEach>
             </div>
+            <a href="home" class="btn btn-primary px-5 my-5">Volver al Home</a>
+            <a href="confirmar" class="btn btn-success px-5 my-5">Confirmar</a>
 
 
 
@@ -122,6 +64,4 @@
         integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
         crossorigin="anonymous"></script>
 </body>
-
->>>>>>> 9b9835400d2335f52f6db004f7878a28adda3ad3
 </html>
