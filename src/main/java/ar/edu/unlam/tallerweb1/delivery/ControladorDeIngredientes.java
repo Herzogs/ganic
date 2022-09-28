@@ -69,7 +69,9 @@ public class ControladorDeIngredientes {
 		Ingrediente ingrediente = servicioDeIngrediente.obtenerIngredientePorId(id);
 
 		ingredientesDelUsuario.add(ingrediente);
-		//Todo : para ver si redirije a principal
+
+
+
 		return new ModelAndView("redirect:/principales", model);
 	}
 
@@ -101,7 +103,7 @@ public class ControladorDeIngredientes {
 		
 		ingredientesDelUsuario.add(ingrediente);
 
-		return new ModelAndView("redirect:/principales", model);
+		return new ModelAndView("redirect:/opcionales", model);
 	}
 
 	// IngredienteOpcional
@@ -144,7 +146,7 @@ public class ControladorDeIngredientes {
 		
 		model.put("IngredientesQueElUsuarioSelecciono", ingredientesDelUsuario);
 
-		return new ModelAndView("ingredientes-seleccionados", model);
+		return new ModelAndView("confirmar", model);
 	}
 
 }

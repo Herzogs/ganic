@@ -42,6 +42,70 @@ public class ControladorIngredientesTest extends SpringTest {
         entoncesEncuentro(modelAndView, 4);
         ebtoncesMeLLevaALaVista(modelAndView, "ingredientes");
     }
+    @Test
+    public void cuandoPidoPanesQueMelosMuestre(){
+        //preparacion
+        dadaQueExistenPanes(1);
+
+        //ejecucion
+        ModelAndView modelAndView = cuandoListoPanes();
+
+        // verificacion
+
+        entoncesEncuentroPanes(modelAndView, 1);
+        entoncesEncuentroLaVistaPanes(modelAndView,"panes");
+
+
+
+    }
+
+    private void entoncesEncuentroLaVistaPanes(ModelAndView modelAndView, String listaDePanes) {
+        List<Ingrediente> valor_esperado = new ArrayList<>();
+        Ingrediente n1 = new Ingrediente(5L, "Pan clasico", 150F, 1, "Pan lactal blanco");
+        Ingrediente n2 = new Ingrediente(6L, "Pan flauta", 120F, 1, "Pan de mesa blanco");
+        Ingrediente n3 = new Ingrediente(7L, "Pan de campo", 250F, 1, "Pan de campo blanco");
+        Ingrediente n4 = new Ingrediente(8L, "Pan integral", 280F, 1, "Pan lactal integral");
+        valor_esperado.add(n1);
+        valor_esperado.add(n2);
+        valor_esperado.add(n3);
+        valor_esperado.add(n4);
+        when(this.servicio.obtenerIngredientesPorPaso(1)).thenReturn(valor_esperado);
+
+
+    }
+
+    private void entoncesEncuentroPanes(ModelAndView mav, Integer pasoEsaperado) {
+        Integer paso=1;
+       List<Ingrediente> ingredienteList= (List<Ingrediente>)mav.getModel().get("ListaDePanes");
+       for(Ingrediente ing:ingredienteList){
+           if(ing.getPaso()!=paso){
+               paso= ing.getPaso();
+               System.out.println(paso+" el paso que esta en la lista");
+           }
+           System.out.println(paso+" el paso ");
+       }
+        System.out.println(paso+" el paso al finalizar");
+       assertThat(paso).isEqualTo(pasoEsaperado);
+    }
+
+    private ModelAndView cuandoListoPanes() {
+        return controladorDeIngredientes.tiposDePanes();
+    }
+
+    private void dadaQueExistenPanes(Integer codPasoPasn) {
+        List<Ingrediente> valor_esperado = new ArrayList<>();
+        Ingrediente n1 = new Ingrediente(5L, "Pan clasico", 150F, 1, "Pan lactal blanco");
+        Ingrediente n2 = new Ingrediente(6L, "Pan flauta", 120F, 1, "Pan de mesa blanco");
+        Ingrediente n3 = new Ingrediente(7L, "Pan de campo", 250F, 1, "Pan de campo blanco");
+        Ingrediente n4 = new Ingrediente(8L, "Pan integral", 280F, 1, "Pan lactal integral");
+        valor_esperado.add(n1);
+        valor_esperado.add(n2);
+        valor_esperado.add(n3);
+        valor_esperado.add(n4);
+
+        when(this.servicio.obtenerIngredientesPorPaso(codPasoPasn)).thenReturn(valor_esperado);
+    }
+
 
     private void ebtoncesMeLLevaALaVista(ModelAndView mav, String vistaEsperada) {
         assertThat(mav.getViewName()).isEqualTo(vistaEsperada);
