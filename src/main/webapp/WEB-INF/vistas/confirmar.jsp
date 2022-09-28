@@ -35,7 +35,7 @@
                             <p class="card-text">Su pedido</p>
                             <c:forEach var="ing" items="${IngredientesQueElUsuarioSelecciono}" >
                             <p class="card-text fw-bold">${ing.nombre}</p>
-                                <p class="card-text">${ing.nombre}</p>
+                                <p class="card-text">${ing.detalle}</p>
                                 <p class="card-text">Precio por unidad $${ing.precio}</p>
                             </c:forEach>
                             <p class="card-text fw-bold">Monto a pagar <span class="text-primary">$xxx</span> </p>
