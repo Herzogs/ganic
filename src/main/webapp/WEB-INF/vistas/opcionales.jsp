@@ -35,7 +35,7 @@
         <div class="container py-5">
             <div class="row g-3">
                 <h3 class="pt-5 pb-3">Tercer ingrediente</h3>
-                <h2>Selección de opcionales</h2>
+                <h2>Selección de opcionales - Puede elegir mas de uno !</h2>
                 <c:forEach var="opcionales" items="${ListaDeIngredientesOpcionales}" >
                     <div class="col-6">
                         <div class="card">

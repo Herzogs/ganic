@@ -53,7 +53,6 @@
                 </c:forEach>
             </div>
             <a href="home" class="btn btn-primary px-5 my-5">Volver al Home</a>
-            <a href="principales" class="btn btn-success px-5 my-5">Confirmar</a>
         </div>
     </section>
 </main>

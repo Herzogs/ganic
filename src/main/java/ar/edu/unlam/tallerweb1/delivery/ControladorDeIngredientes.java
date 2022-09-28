@@ -70,7 +70,7 @@ public class ControladorDeIngredientes {
 
 		ingredientesDelUsuario.add(ingrediente);
 
-		return new ModelAndView("redirect:/panes", model);
+		return new ModelAndView("redirect:/principales", model);
 	}
 
 	// IngredientePrincipal
@@ -101,7 +101,7 @@ public class ControladorDeIngredientes {
 		
 		ingredientesDelUsuario.add(ingrediente);
 
-		return new ModelAndView("redirect:/principales", model);
+		return new ModelAndView("redirect:/opcionales", model);
 	}
 
 	// IngredienteOpcional
@@ -144,7 +144,7 @@ public class ControladorDeIngredientes {
 		
 		model.put("IngredientesQueElUsuarioSelecciono", ingredientesDelUsuario);
 
-		return new ModelAndView("ingredientes-seleccionados", model);
+		return new ModelAndView("confirmar", model);
 	}
 
 }
