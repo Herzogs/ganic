@@ -42,8 +42,9 @@ public class ControladorIngredientesTest extends SpringTest {
         entoncesEncuentro(modelAndView, 4);
         ebtoncesMeLLevaALaVista(modelAndView, "ingredientes");
     }
+
     @Test
-    public void cuandoPidoPanesQueMelosMuestre(){
+    public void cuandoPidoPanesQueMelosMuestre() {
         //preparacion
         dadaQueExistenPanes(1);
 
@@ -53,8 +54,7 @@ public class ControladorIngredientesTest extends SpringTest {
         // verificacion
 
         entoncesEncuentroPanes(modelAndView, 1);
-        entoncesEncuentroLaVistaPanes(modelAndView,"panes");
-
+        entoncesEncuentroLaVistaPanes(modelAndView, "panes");
 
 
     }
@@ -75,17 +75,17 @@ public class ControladorIngredientesTest extends SpringTest {
     }
 
     private void entoncesEncuentroPanes(ModelAndView mav, Integer pasoEsaperado) {
-        Integer paso=1;
-       List<Ingrediente> ingredienteList= (List<Ingrediente>)mav.getModel().get("ListaDePanes");
-       for(Ingrediente ing:ingredienteList){
-           if(ing.getPaso()!=paso){
-               paso= ing.getPaso();
-               System.out.println(paso+" el paso que esta en la lista");
-           }
-           System.out.println(paso+" el paso ");
-       }
-        System.out.println(paso+" el paso al finalizar");
-       assertThat(paso).isEqualTo(pasoEsaperado);
+        Integer paso = 1;
+        List<Ingrediente> ingredienteList = (List<Ingrediente>) mav.getModel().get("ListaDePanes");
+        for (Ingrediente ing : ingredienteList) {
+            if (ing.getPaso() != paso) {
+                paso = ing.getPaso();
+
+            }
+            System.out.println(paso + " el paso ");
+        }
+
+        assertThat(paso).isEqualTo(pasoEsaperado);
     }
 
     private ModelAndView cuandoListoPanes() {
