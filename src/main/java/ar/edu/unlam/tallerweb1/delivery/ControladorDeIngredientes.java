@@ -69,8 +69,8 @@ public class ControladorDeIngredientes {
 		Ingrediente ingrediente = servicioDeIngrediente.obtenerIngredientePorId(id);
 
 		ingredientesDelUsuario.add(ingrediente);
-
-		return new ModelAndView("redirect:/panes", model);
+		//Todo : para ver si redirije a principal
+		return new ModelAndView("redirect:/principales", model);
 	}
 
 	// IngredientePrincipal
