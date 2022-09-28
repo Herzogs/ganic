@@ -40,7 +40,7 @@
 			<div class="row">
 				<div class="col-6 text-center">
 					<h4 class="pt-5 pb-3">Comenzá a prepararlo <span class="text-success">YA</span> !</h4>
-					<a href="tipos-de-panes" class="btn btn-success rounded-pill px-5">CREAR PEDIDO</a>
+					<a href="panes" class="btn btn-success rounded-pill px-5">CREAR PEDIDO</a>
 				</div>
 				<div class="col-6 text-center">
 					<h4 class="pt-5 pb-3">Ver <span class="text-success">TODOS</span> los ingredientes !</h4>
