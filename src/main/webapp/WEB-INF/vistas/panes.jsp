@@ -46,7 +46,7 @@
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">${pan.detalle}</li>
                                 <li class="list-group-item"><span class="text-primary">Precio:</span> ${pan.precio}</li>
-                                <li class="list-group-item"><button class="btn btn-success rounded-pill">Agregar</button></li>
+                                <li class="list-group-item"><a href="agregar-ingrediente-pan?id=${pan.idIngrediente}" class="btn btn-success px-5 my-5">Agregar</a></li>
                             </ul>
                         </div>
                     </div>

@@ -9,6 +9,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
@@ -60,14 +61,16 @@ public class ControladorDeIngredientes {
 
 	}
 
-	@RequestMapping(path = "/agregar-ingrediente-pan", method = RequestMethod.POST)
-	public ModelAndView confirmarIngredientePan(@ModelAttribute("ingredienteSeleccionado") Ingrediente ingrediente) {
+	@RequestMapping(path = "/agregar-ingrediente-pan", method = RequestMethod.GET)
+	public ModelAndView confirmarIngredientePan(@RequestParam("id")Long id) {
 
 		ModelMap model = new ModelMap();
+		
+		Ingrediente ingrediente = servicioDeIngrediente.obtenerIngredientePorId(id);
 
 		ingredientesDelUsuario.add(ingrediente);
 
-		return new ModelAndView("principales", model);
+		return new ModelAndView("redirect:/panes", model);
 	}
 
 	// IngredientePrincipal
@@ -89,14 +92,16 @@ public class ControladorDeIngredientes {
 		return new ModelAndView("volver-a-tipos-de-panes");
 	}
 
-	@RequestMapping(path = "/agregar-ingrediente-principal", method = RequestMethod.POST)
-	public ModelAndView confirmarIngredientePrincipal(@ModelAttribute("ingredienteSeleccionado") Ingrediente ingrediente) {
+	@RequestMapping(path = "/agregar-ingrediente-principal", method = RequestMethod.GET)
+	public ModelAndView confirmarIngredientePrincipal(@RequestParam("id")Long id) {
 
 		ModelMap model = new ModelMap();
-
+		
+		Ingrediente ingrediente = servicioDeIngrediente.obtenerIngredientePorId(id);
+		
 		ingredientesDelUsuario.add(ingrediente);
 
-		return new ModelAndView("opcionales", model);
+		return new ModelAndView("redirect:/principales", model);
 	}
 
 	// IngredienteOpcional
@@ -118,17 +123,28 @@ public class ControladorDeIngredientes {
 		return new ModelAndView("volver-a-ingrediente-principal");
 	}
 
-	@RequestMapping(path = "/agregar-ingrediente-opcional", method = RequestMethod.POST)
-	public ModelAndView confirmarIngredienteOpcional(@ModelAttribute("ingredienteSeleccionado") Ingrediente ingrediente) {
+	@RequestMapping(path = "/agregar-ingrediente-opcional", method = RequestMethod.GET)
+	public ModelAndView confirmarIngredienteOpcional(@RequestParam("id")Long id) {
 
 		ModelMap model = new ModelMap();
+		
+		Ingrediente ingrediente = servicioDeIngrediente.obtenerIngredientePorId(id);
 
 		ingredientesDelUsuario.add(ingrediente);
 		
 		model.put("IngredientesQueElUsuarioSelecciono", ingredientesDelUsuario);
 
+		return new ModelAndView("redirect:/opcionales", model);
+	}
+	@RequestMapping(path = "/confirmar", method = RequestMethod.GET)
+	public ModelAndView confirmarIngredientesSeleccionados() {
+
+		ModelMap model = new ModelMap();
+
+		
+		model.put("IngredientesQueElUsuarioSelecciono", ingredientesDelUsuario);
+
 		return new ModelAndView("ingredientes-seleccionados", model);
 	}
-
 
 }
