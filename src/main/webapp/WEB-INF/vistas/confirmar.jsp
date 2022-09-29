@@ -38,7 +38,7 @@
                                 <p class="card-text">${ing.detalle}</p>
                                 <p class="card-text">Precio por unidad $${ing.precio}</p>
                             </c:forEach>
-                            <p class="card-text fw-bold">Monto a pagar <span class="text-primary">$xxx</span> </p>
+                            <p class="card-text fw-bold">Monto a pagar <span class="text-primary">$${montoFinal}</span> </p>
                         </div>
                     </div>
                 </div>

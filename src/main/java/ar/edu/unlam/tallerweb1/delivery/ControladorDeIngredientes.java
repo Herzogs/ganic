@@ -143,7 +143,12 @@ public class ControladorDeIngredientes {
 
 		ModelMap model = new ModelMap();
 
-		//Todo AGREGAR BUSCAR PRECIO
+		Float precioFinal=0.0F;
+		for(Ingrediente precio:ingredientesDelUsuario){
+			precioFinal+= precio.getPrecio();
+		}
+
+		model.put("montoFinal", precioFinal);
 		model.put("IngredientesQueElUsuarioSelecciono", ingredientesDelUsuario);
 
 		return new ModelAndView("confirmar", model);
