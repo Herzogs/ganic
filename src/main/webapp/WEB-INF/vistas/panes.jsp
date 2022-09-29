@@ -34,9 +34,9 @@
 
     <section>
         <div class="container py-5">
-            <div class="row g-3">
-                <h3 class="pt-5 pb-3">Primer ingrediente</h3>
-                <h2>Selección del pan</h2>
+            <div class="row g-4">
+                <h3>Primer ingrediente</h3>
+                <h4>Selección del pan</h4>
                 <c:forEach var="pan" items="${ListaDePanes}" >
                     <div class="col-6">
                         <div class="card">
@@ -46,7 +46,7 @@
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">${pan.detalle}</li>
                                 <li class="list-group-item"><span class="text-primary">Precio:</span> ${pan.precio}</li>
-                                <li class="list-group-item"><a href="agregar-ingrediente-pan?id=${pan.idIngrediente}" class="btn btn-success px-5 my-5">Agregar</a></li>
+                                <li class="list-group-item"><a href="agregar-ingrediente-pan?id=${pan.idIngrediente}" class="btn btn-success px-3 my-3">Agregar</a></li>
                             </ul>
                         </div>
                     </div>

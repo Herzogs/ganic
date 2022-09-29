@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,9 +13,9 @@
     <nav class="nav_style d-flex align-items-center">
         <div class="container">
             <div class="text-center">
-                <a href="home">Home</a>
+                <a href="">Home</a>
                 <a href="">Menu</a>
-                <a href="home"><img src="img/ganiclogo.png" class="img-fluid logo_style" alt="Logo"></a>
+                <a href=""><img src="img/ganiclogo.png" class="img-fluid logo_style" alt="Logo"></a>
                 <a href="">Contacto</a>
                 <a href="">Nosotros</a>
             </div>
@@ -38,20 +37,11 @@
 
     <section>
         <div class="container">
-            <div class="row g-3">
-                <h2 class="pt-5 pb-3">Ingredientes seleccionados:</h2>
-                <c:forEach var="ing" items="${IngredientesQueElUsuarioSelecciono}" >
-                    <div class="col-3">
-                    <div class="card" style="width: 250px;">
-                        <div class="card-header bg-dark text-white">
-                                ${ing.nombre}
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">${ing.detalle}</li>
-                        </ul>
-                    </div>
-                    </div>
-                </c:forEach>
+            <div class="alert alert-success mt-5" role="alert">
+                <h4 class="alert-heading">Gracias por realizar su pedido!</h4>
+                <p>Nuestro equipo ya esta trabajando en su Sandwich</p>
+                <hr>
+                <p class="mb-0">Recibira un email con la información del estado de su pedido.</p>
             </div>
             <a href="home" class="btn btn-primary px-5 my-5">Volver al Home</a>
         </div>

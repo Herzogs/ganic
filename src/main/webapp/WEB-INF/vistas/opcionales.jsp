@@ -33,9 +33,9 @@
 
     <section>
         <div class="container py-5">
-            <div class="row g-3">
-                <h3 class="pt-5 pb-3">Tercer ingrediente</h3>
-                <h2>Selección de opcionales - Puede elegir mas de uno !</h2>
+            <div class="row g-4">
+                <h3>Tercer ingrediente</h3>
+                <h4>Selección de opcionales - Puede elegir mas de uno !</h4>
                 <c:forEach var="opcionales" items="${ListaDeIngredientesOpcionales}" >
                     <div class="col-6">
                         <div class="card">
@@ -45,7 +45,7 @@
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">${opcionales.detalle}</li>
                                 <li class="list-group-item"><span class="text-primary">Precio:</span> ${opcionales.precio}</li>
-<li class="list-group-item"><a href="agregar-ingrediente-opcional?id=${opcionales.idIngrediente}" class="btn btn-success px-5 my-5">Agregar</a></li>                            </ul>
+                                <li class="list-group-item"><a href="agregar-ingrediente-opcional?id=${opcionales.idIngrediente}" class="btn btn-success px-3 my-3">Agregar</a></li>                            </ul>
                         </div>
                     </div>
                 </c:forEach>

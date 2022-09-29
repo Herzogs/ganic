@@ -32,13 +32,13 @@
                     <div class="card" style="max-width: 400px;">
                         <img src="img/pedido.png" class="card-img-top img-fluid" alt="...">
                         <div class="card-body">
-                            <p class="card-text text-center text-succes">Su pedido</p>
+                            <p class="card-text text-center text-succes">Tu Sandwich</p>
                             <c:forEach var="ing" items="${IngredientesQueElUsuarioSelecciono}" >
                             <p class="card-text fw-bold">${ing.nombre}</p>
                                 <p class="card-text">${ing.detalle}</p>
                                 <p class="card-text">Precio por unidad $${ing.precio}</p>
                             </c:forEach>
-                            <p class="card-text fw-bold">Monto a pagar <span class="text-primary">$${montoFinal}</span> </p>
+                            <p class="card-text fw-bold text-end">Monto a pagar <span class="text-primary">$${montoFinal}</span> </p>
                         </div>
                     </div>
                 </div>
@@ -46,7 +46,7 @@
                     <h4 class="pb-3">Confirmar dirección</h4>
                     <input class="form-control mb-5" name="direccion" id="direccion" placeholder="Ingresar dirección de envio" />
                     <h4 class="pb-3">Confirmar pago</h4>
-                    <button class="btn btn-success px-5 mb-5">Confirmar</button>
+                    <a href="exito" class="btn btn-success px-5 mb-5">Confirmar</a>
                     <div><a href="home" class="btn btn-primary px-5 my-5">Volver al Home</a></div>
                 </div>
             </div>

@@ -34,11 +34,9 @@
 
     <section>
         <div class="container py-5">
-            <div class="row">
-
-                <h4>Segundo ingrediente</h4>
-                <h5 class="pb-3">Selección de carne o vegetal principal</h5>
-
+            <div class="row g-4">
+                <h3>Segundo ingrediente</h3>
+                <h4>Selección de carne o vegetal principal</h4>
                 <c:forEach var="principales" items="${ListaDeIngredientesPrincipales}" >
                     <div class="col-6">
                         <div class="card">
@@ -48,7 +46,7 @@
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">${principales.detalle}</li>
                                 <li class="list-group-item"><span class="text-primary">Precio:</span> ${principales.precio}</li>
-<li class="list-group-item"><a href="agregar-ingrediente-principal?id=${principales.idIngrediente}" class="btn btn-success px-5 my-5">Agregar</a></li>                            </ul>
+                                <li class="list-group-item"><a href="agregar-ingrediente-principal?id=${principales.idIngrediente}" class="btn btn-success px-3 my-3">Agregar</a></li>                            </ul>
                         </div>
                     </div>
                 </c:forEach>
