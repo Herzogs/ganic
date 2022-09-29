@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,7 +26,7 @@ public class ControladorDeIngredientes {
         super();
         this.servicioDeIngrediente = servicioDeIngrediente;
         this.ingredientesDelUsuario = new ArrayList<>();
-        this.sandwich=new datosDelSandwich();
+        this.sandwich = new datosDelSandwich();
     }
 
     @RequestMapping(path = "/ingredientes", method = RequestMethod.GET)
@@ -63,7 +62,7 @@ public class ControladorDeIngredientes {
 
         Ingrediente ingrediente = servicioDeIngrediente.obtenerIngredientePorId(id);
         Integer paso = ingrediente.getPaso();
-        if(paso.equals(1)){
+        if (paso.equals(1)) {
             sandwich.cargarIngredienteAlSandwich(ingrediente);
             List<Ingrediente> principal = servicioDeIngrediente.obtenerIngredientesPorPaso(2);
 
@@ -78,34 +77,22 @@ public class ControladorDeIngredientes {
 
         }
         List<Ingrediente> principal = servicioDeIngrediente.obtenerIngredientesPorPaso(3);
-
         model.put("opcionales", principal);
-        ingredientesDelUsuario.add(ingrediente);
+        sandwich.cargarIngredienteAlSandwich(ingrediente);
         return new ModelAndView("opcionales", model);
 
     }
-
-
-
-
-
-
-
-
-
 
     @RequestMapping(path = "/confirmar", method = RequestMethod.GET)
     public ModelAndView confirmarIngredientesSeleccionados() {
 
         ModelMap model = new ModelMap();
+        Float precioFinal = sandwich.getMonto();
 
-        Float precioFinal = 0.0F;
-        for (Ingrediente precio : ingredientesDelUsuario) {
-            precioFinal += precio.getPrecio();
-        }
 
         model.put("montoFinal", precioFinal);
-        model.put("IngredientesQueElUsuarioSelecciono", ingredientesDelUsuario);
+
+        model.put("IngredientesQueElUsuarioSelecciono", sandwich.getIngredientesSandwich());
 
         return new ModelAndView("confirmar", model);
     }
