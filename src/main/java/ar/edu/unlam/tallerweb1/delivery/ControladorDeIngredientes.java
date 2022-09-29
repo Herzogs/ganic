@@ -143,7 +143,7 @@ public class ControladorDeIngredientes {
 
 		ModelMap model = new ModelMap();
 
-		
+		//Todo AGREGAR BUSCAR PRECIO
 		model.put("IngredientesQueElUsuarioSelecciono", ingredientesDelUsuario);
 
 		return new ModelAndView("confirmar", model);
