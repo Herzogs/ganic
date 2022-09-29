@@ -46,7 +46,7 @@
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">${pan.detalle}</li>
                                 <li class="list-group-item"><span class="text-primary">Precio:</span> ${pan.precio}</li>
-                                <li class="list-group-item"><a href="agregar-ingrediente-pan?id=${pan.idIngrediente}" class="btn btn-success px-3 my-3">Agregar</a></li>
+                                <li class="list-group-item"><a href="agregarIngredientesAlSandwich?id=${pan.idIngrediente}" class="btn btn-success px-3 my-3">Agregar</a></li>
                             </ul>
                         </div>
                     </div>

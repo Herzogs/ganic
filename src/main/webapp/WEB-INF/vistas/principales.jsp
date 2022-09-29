@@ -37,7 +37,7 @@
             <div class="row g-4">
                 <h3>Segundo ingrediente</h3>
                 <h4>Selección de carne o vegetal principal</h4>
-                <c:forEach var="principales" items="${ListaDeIngredientesPrincipales}" >
+                <c:forEach var="principales" items="${principales}" >
                     <div class="col-6">
                         <div class="card">
                             <div class="card-header bg-dark text-white">
@@ -46,7 +46,7 @@
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">${principales.detalle}</li>
                                 <li class="list-group-item"><span class="text-primary">Precio:</span> ${principales.precio}</li>
-                                <li class="list-group-item"><a href="agregar-ingrediente-principal?id=${principales.idIngrediente}" class="btn btn-success px-3 my-3">Agregar</a></li>                            </ul>
+                                <li class="list-group-item"><a href="agregarIngredientesAlSandwich?id=${principales.idIngrediente}" class="btn btn-success px-3 my-3">Agregar</a></li>                            </ul>
                         </div>
                     </div>
                 </c:forEach>
