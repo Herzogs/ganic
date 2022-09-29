@@ -67,8 +67,7 @@ public class ControladorIngredientesTest extends SpringTest {
         Ingrediente n4 = new Ingrediente(8L, "Pan integral", 280F, 1, "Pan lactal integral");
         valor_esperado.add(n1);
         valor_esperado.add(n2);
-        valor_esperado.add(n3);
-        valor_esperado.add(n4);
+        valor_esperado.add(n3);valor_esperado.add(n4);
         when(this.servicio.obtenerIngredientesPorPaso(1)).thenReturn(valor_esperado);
 
 
