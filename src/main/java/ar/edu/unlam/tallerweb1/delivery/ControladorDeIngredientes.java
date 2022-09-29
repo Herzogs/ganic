@@ -57,7 +57,7 @@ public class ControladorDeIngredientes {
     }
 
     @RequestMapping(path = "/agregarIngredientesAlSandwich", method = RequestMethod.GET)
-    public ModelAndView confirmarIngredientePan(@RequestParam("id") Long id) {
+    public ModelAndView agregarIngredientes(@RequestParam("id") Long id) {
 
         ModelMap model = new ModelMap();
 
