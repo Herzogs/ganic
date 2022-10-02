@@ -18,7 +18,7 @@ import static org.mockito.Mockito.when;
 
 public class ControladorIngredientesTest extends SpringTest {
 
-    private ServicioDeIngrediente servicio;
+    /*private ServicioDeIngrediente servicio;
     private ControladorDeIngredientes controladorDeIngredientes;
     private RepositorioIngredientes repositorioIngredientes;
 
@@ -160,6 +160,6 @@ public class ControladorIngredientesTest extends SpringTest {
         ingredienteList.add(n13);
         return ingredienteList;
     }
-
+*/
 
 }

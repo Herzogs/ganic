@@ -29,14 +29,14 @@
 </header>
 <main>
     <section class="text-center">
-        <img src="img/bannerpan.png" class="img-fluid" alt="bannerganccic">
+        <img src="img/${paso}.png" class="img-fluid" alt="bannerganccic">
     </section>
 
     <section>
         <div class="container py-5">
             <div class="row g-4">
-                <h3>Genere su Pedido</h3>
-                <h4>Seleccione Ingrediente</h4>
+                <h3>Primer ingrediente</h3>
+                <h4>Selección del pan</h4>
                 <c:forEach var="pan" items="${ListaDePanes}" >
                     <div class="col-6">
                         <div class="card">
@@ -52,7 +52,16 @@
                     </div>
                 </c:forEach>
             </div>
+            <div class="toast align-items-center text-white bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <p>${error}</p>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
             <a href="home" class="btn btn-primary px-5 my-5">Volver al Home</a>
+            <a href="confirmar?paso=${paso}" class="btn btn-success px-5 my-5">Finalizar</a>
         </div>
     </section>
 </main>
