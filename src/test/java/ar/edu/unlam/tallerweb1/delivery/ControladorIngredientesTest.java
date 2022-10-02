@@ -1,7 +1,6 @@
-package ar.edu.unlam.tallerweb1.delibery;
+package ar.edu.unlam.tallerweb1.delivery;
 
 import ar.edu.unlam.tallerweb1.SpringTest;
-import ar.edu.unlam.tallerweb1.delivery.ControladorDeIngredientes;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.RepositorioIngredientes;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.ServicioDeIngrediente;

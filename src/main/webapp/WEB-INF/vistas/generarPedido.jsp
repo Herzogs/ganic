@@ -35,8 +35,8 @@
     <section>
         <div class="container py-5">
             <div class="row g-4">
-                <h3>Primer ingrediente</h3>
-                <h4>Selección del pan</h4>
+                <h3>Genere su pedido</h3>
+                <h4>Seleccone ingrediente</h4>
                 <c:forEach var="pan" items="${ListaDePanes}" >
                     <div class="col-6">
                         <div class="card">
