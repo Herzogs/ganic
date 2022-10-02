@@ -18,14 +18,13 @@ import ar.edu.unlam.tallerweb1.domain.ingredientes.ServicioDeIngrediente;
 public class ControladorDeIngredientes {
 
     private ServicioDeIngrediente servicioDeIngrediente;
-    private List<Ingrediente> ingredientesDelUsuario;
+
     private datosDelSandwich sandwich;
 
     @Autowired
     public ControladorDeIngredientes(ServicioDeIngrediente servicioDeIngrediente) {
         super();
         this.servicioDeIngrediente = servicioDeIngrediente;
-        this.ingredientesDelUsuario = new ArrayList<>();
         this.sandwich = new datosDelSandwich();
     }
 
@@ -57,6 +56,7 @@ public class ControladorDeIngredientes {
 
     @RequestMapping(path = "/agregarIngredientesAlSandwich", method = RequestMethod.GET)
     public ModelAndView agregarIngredientes(@RequestParam("id") Long id) {
+
 
         ModelMap model = new ModelMap();
 

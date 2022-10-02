@@ -24,6 +24,7 @@ public class ServicioDeIngredienteImpl implements ServicioDeIngrediente {
 
 	@Override
 	public Ingrediente obtenerIngredientePorId(Long id) {
+
 		return this.repo.obtenerIngredientePorId(id);
 	}
 
