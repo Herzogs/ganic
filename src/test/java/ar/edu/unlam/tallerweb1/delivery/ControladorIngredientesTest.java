@@ -17,7 +17,14 @@ import static org.mockito.Mockito.when;
 
 public class ControladorIngredientesTest extends SpringTest {
 
-    /*private ServicioDeIngrediente servicio;
+    //TODO: Listar los ingrediente
+    //TODO: Cuando quiero generar un sandwich genere panes
+    //TODO: Cuando elijo un panme muestre los de ingrediente principal
+    //TODO: Cuando elijo un principal me muestre los de ingrediente opcionales
+    //TODO: Cuando elijo un opcionales me muestre los de ingrediente opcionales
+
+    /*
+   private ServicioDeIngrediente servicio;
     private ControladorDeIngredientes controladorDeIngredientes;
     private RepositorioIngredientes repositorioIngredientes;
 

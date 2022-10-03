@@ -45,14 +45,17 @@ public class ControladorDeIngredientes {
     }
 
     @RequestMapping(path = "/generarPedido", method = RequestMethod.GET)
-    public ModelAndView cargarPagina(@RequestParam(value = "id", defaultValue = "1", required = false) Integer id, @RequestParam(value = "paso", defaultValue = "1") Integer paso) {
+    public ModelAndView cargarPagina(@RequestParam(value = "id", defaultValue = "1", required = false) Integer paso) {
         ModelMap mod = new ModelMap();
-        List<Ingrediente> lista = this.servicioDeIngrediente.obtenerIngredientesPorPaso(id);
-        if(!lista.isEmpty()) {
+        List<Ingrediente> lista = this.servicioDeIngrediente.obtenerIngredientesPorPaso(paso);
+        if(!lista.isEmpty() && paso <= ControladorDeIngredientes.MAX_PASOS_PERMITIDOS) {
             mod.put("ListaDePanes", lista);
-            mod.put("paso", id);
+            mod.put("paso", paso);
         }else {
             mod.put("error","Paso Incorrecto");
+            System.out.println(new ModelAndView("redirect:/generarPedido?id=1",mod).getModel().get("error").equals("Paso Incorrecto"));
+            return new ModelAndView("redirect:/generarPedido?id=1",mod);
+
         }
         return new ModelAndView("generarPedido",mod);
     }
@@ -64,45 +67,6 @@ public class ControladorDeIngredientes {
         Integer nuevoPaso = (paso < ControladorDeIngredientes.MAX_PASOS_PERMITIDOS)?paso+1:paso;
         return new ModelAndView(String.format("redirect:/generarPedido?id=%d",nuevoPaso));
     }
-
-
-
-    /*@RequestMapping(path = "/panes", method = RequestMethod.GET)
-    public ModelAndView tiposDePanes() {
-
-        ModelMap model = new ModelMap();
-
-        List<Ingrediente> panes = servicioDeIngrediente.obtenerIngredientesPorPaso(1);
-
-        model.put("ListaDePanes", panes);
-
-        return new ModelAndView("panes", model);
-
-    }
-
-    @RequestMapping(path = "/agregarIngredientesAlSandwich", method = RequestMethod.GET)
-    public ModelAndView agregarIngredientes(@RequestParam("id") Long id) {
-        ModelMap model = new ModelMap();
-
-        Ingrediente ingrediente = servicioDeIngrediente.obtenerIngredientePorId(id);
-        Integer paso = ingrediente.getPaso();
-        if (paso.equals(1)) {
-            sandwich.cargarIngredienteAlSandwich(ingrediente);
-            List<Ingrediente> principal = servicioDeIngrediente.obtenerIngredientesPorPaso(2);
-            model.put("principales", principal);
-            return new ModelAndView("principales", model);
-        } else if (paso.equals(2)) {
-            sandwich.cargarIngredienteAlSandwich(ingrediente);
-            List<Ingrediente> principal = servicioDeIngrediente.obtenerIngredientesPorPaso(3);
-            model.put("opcionales", principal);
-            return new ModelAndView("opcionales", model);
-        }
-        List<Ingrediente> principal = servicioDeIngrediente.obtenerIngredientesPorPaso(3);
-        model.put("opcionales", principal);
-        sandwich.cargarIngredienteAlSandwich(ingrediente);
-        return new ModelAndView("opcionales", model);
-
-    }*/
 
     @RequestMapping(path = "/confirmar", method = RequestMethod.GET)
     public ModelAndView confirmarIngredientesSeleccionados(@RequestParam(value = "paso", required = false) Integer paso) {
