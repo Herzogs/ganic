@@ -3,6 +3,7 @@ package ar.edu.unlam.tallerweb1.delivery;
 import java.util.ArrayList;
 import java.util.List;
 
+import ar.edu.unlam.tallerweb1.domain.Email.ServicioEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -20,7 +21,7 @@ import ar.edu.unlam.tallerweb1.domain.ingredientes.ServicioDeIngrediente;
 public class ControladorDeIngredientes {
 
     private ServicioDeIngrediente servicioDeIngrediente;
-
+    private ServicioEmail se;
     private datosDelSandwich sandwich;
     private static final Integer MAX_PASOS_PERMITIDOS = 3;
 
@@ -29,6 +30,7 @@ public class ControladorDeIngredientes {
         super();
         this.servicioDeIngrediente = servicioDeIngrediente;
         this.sandwich = new datosDelSandwich();
+        this.se = new ServicioEmail();
     }
 
     @RequestMapping(path = "/ingredientes", method = RequestMethod.GET)
@@ -78,13 +80,17 @@ public class ControladorDeIngredientes {
             model.put("error", "Para poder seguir, debe seleccionar minimante 2 ingredientes");
             return new ModelAndView(String.format("redirect:/generarPedido?id=%d",paso), model);
         }
+
+
         model.put("montoFinal", sandwich.getMonto());
         model.put("IngredientesQueElUsuarioSelecciono", sandwich.getIngredientesSandwich());
         return new ModelAndView("confirmar", model);
     }
 
     @RequestMapping(path = "/exito", method = RequestMethod.GET)
+
     public ModelAndView exito() {
+        se.sendEmail("crisefeld@gmail.com","Pedido Exitoso", "Se le estara enviando su pedido en unos momentos");
         return new ModelAndView("alerta_exitosa");
     }
 
