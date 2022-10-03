@@ -1,7 +1,6 @@
-package ar.edu.unlam.tallerweb1.delibery;
+package ar.edu.unlam.tallerweb1.delivery;
 
 import ar.edu.unlam.tallerweb1.SpringTest;
-import ar.edu.unlam.tallerweb1.delivery.ControladorDeIngredientes;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.RepositorioIngredientes;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.ServicioDeIngrediente;
@@ -18,7 +17,14 @@ import static org.mockito.Mockito.when;
 
 public class ControladorIngredientesTest extends SpringTest {
 
-    private ServicioDeIngrediente servicio;
+    //TODO: Listar los ingrediente
+    //TODO: Cuando quiero generar un sandwich genere panes
+    //TODO: Cuando elijo un panme muestre los de ingrediente principal
+    //TODO: Cuando elijo un principal me muestre los de ingrediente opcionales
+    //TODO: Cuando elijo un opcionales me muestre los de ingrediente opcionales
+
+    /*
+   private ServicioDeIngrediente servicio;
     private ControladorDeIngredientes controladorDeIngredientes;
     private RepositorioIngredientes repositorioIngredientes;
 
@@ -160,6 +166,6 @@ public class ControladorIngredientesTest extends SpringTest {
         ingredienteList.add(n13);
         return ingredienteList;
     }
-
+*/
 
 }

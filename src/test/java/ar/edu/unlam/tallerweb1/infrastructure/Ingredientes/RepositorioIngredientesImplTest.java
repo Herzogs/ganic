@@ -1,6 +1,5 @@
 package ar.edu.unlam.tallerweb1.infrastructure.Ingredientes;
 
-
 import ar.edu.unlam.tallerweb1.SpringTest;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.RepositorioIngredientes;
