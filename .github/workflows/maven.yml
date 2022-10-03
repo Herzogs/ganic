@@ -7,11 +7,9 @@ on:
   push:
     branches:
     - sprint
-    - trash
   pull_request:
     branches:
     - sprint
-    - trash
 
 jobs:
   test:

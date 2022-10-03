@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.unlam.tallerweb1.domain.Email.ServicioEmail;
+import ar.edu.unlam.tallerweb1.domain.Email.ServicioEmailImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -16,6 +17,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.ServicioDeIngrediente;
+
+import javax.mail.MessagingException;
+import javax.mail.SendFailedException;
 
 @Controller
 public class ControladorDeIngredientes {
@@ -30,7 +34,7 @@ public class ControladorDeIngredientes {
         super();
         this.servicioDeIngrediente = servicioDeIngrediente;
         this.sandwich = new datosDelSandwich();
-        this.se = new ServicioEmail();
+        this.se = new ServicioEmailImp();
     }
 
     @RequestMapping(path = "/ingredientes", method = RequestMethod.GET)
@@ -47,7 +51,7 @@ public class ControladorDeIngredientes {
     }
 
     @RequestMapping(path = "/generarPedido", method = RequestMethod.GET)
-    public ModelAndView cargarPagina(@RequestParam(value = "id", defaultValue = "1", required = false) Integer paso) {
+    public ModelAndView cargarPagina(@RequestParam(value = "paso", defaultValue = "1", required = false) Integer paso) {
         ModelMap mod = new ModelMap();
         List<Ingrediente> lista = this.servicioDeIngrediente.obtenerIngredientesPorPaso(paso);
         if(!lista.isEmpty() && paso <= ControladorDeIngredientes.MAX_PASOS_PERMITIDOS) {
@@ -55,19 +59,22 @@ public class ControladorDeIngredientes {
             mod.put("paso", paso);
         }else {
             mod.put("error","Paso Incorrecto");
-            System.out.println(new ModelAndView("redirect:/generarPedido?id=1",mod).getModel().get("error").equals("Paso Incorrecto"));
-            return new ModelAndView("redirect:/generarPedido?id=1",mod);
+            System.out.println(new ModelAndView("redirect:/generarPedido?paso=1",mod).getModel().get("error").equals("Paso Incorrecto"));
+            return new ModelAndView("redirect:/generarPedido?paso=1",mod);
 
         }
         return new ModelAndView("generarPedido",mod);
     }
 
     @RequestMapping(path = "/agregarIngrediente", method = RequestMethod.GET)
-    public ModelAndView agregarIngredientes(@RequestParam(value = "id") Long id, @RequestParam(value = "paso") Integer paso) {
-        Ingrediente ing = this.servicioDeIngrediente.obtenerIngredientePorId(id);
+    public ModelAndView agregarIngredientes(@RequestParam(value = "id") Long idIng, @RequestParam(value = "paso") Integer paso) {
+        Ingrediente ing = this.servicioDeIngrediente.obtenerIngredientePorId(idIng);
+        if(ing == null){
+            return new ModelAndView(String.format("redirect:/generarPedido?paso=%d",paso),new ModelMap("error","Ingrediente Inexistente"));
+        }
         this.sandwich.cargarIngredienteAlSandwich(ing);
         Integer nuevoPaso = (paso < ControladorDeIngredientes.MAX_PASOS_PERMITIDOS)?paso+1:paso;
-        return new ModelAndView(String.format("redirect:/generarPedido?id=%d",nuevoPaso));
+        return new ModelAndView(String.format("redirect:/generarPedido?paso=%d",nuevoPaso));
     }
 
     @RequestMapping(path = "/confirmar", method = RequestMethod.GET)
@@ -89,8 +96,8 @@ public class ControladorDeIngredientes {
 
     @RequestMapping(path = "/exito", method = RequestMethod.GET)
 
-    public ModelAndView exito() {
-        se.sendEmail("crisefeld@gmail.com","Pedido Exitoso", "Se le estara enviando su pedido en unos momentos");
+    public ModelAndView exito(){
+        se.sendEmail("crisefeld@gmail.com", "Pedido Exitoso", "Se le estara enviando su pedido en unos momentos");
         return new ModelAndView("alerta_exitosa");
     }
 
