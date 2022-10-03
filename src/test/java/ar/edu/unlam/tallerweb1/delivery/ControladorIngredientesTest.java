@@ -166,7 +166,7 @@ public class ControladorIngredientesTest extends SpringTest {
      @Test
      public void cuandoQuieraGenerarUnSandwichMeGenereLosPanes(){
          // Preparación
-         String vista_solicitada = "redirect:/generarPedido?paso=2";
+         String vista_solicitada = "redirect:/generarPedido?paso=1";
          dadaQueExistenPanes(1);
 
          // Ejecución

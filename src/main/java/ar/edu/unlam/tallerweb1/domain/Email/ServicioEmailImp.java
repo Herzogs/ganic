@@ -16,8 +16,8 @@ public class ServicioEmailImp implements ServicioEmail {
     private void init() {
         /*this.password = System.getenv().get("PASSWORD_TALLER_WEB");
         this.username = System.getenv().get("USERNAME_TALLER_WEB");*/
-        this.username="example@example.net";
-        this.password="test";
+        this.username="sandwich.ganic@gmail.com";
+        this.password="tallerweb1";
 
         System.err.println(username + " "+ password);
         props.put("mail.smtp.auth", "true");
