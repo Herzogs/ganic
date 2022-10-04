@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.domain.Ingredientes;
 
 import ar.edu.unlam.tallerweb1.SpringTest;
+import ar.edu.unlam.tallerweb1.domain.Excepciones.*;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.RepositorioIngredientes;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.ServicioDeIngrediente;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.assertj.core.api.Java6Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 public class ServicioIngredienteTest extends SpringTest {
@@ -42,17 +44,16 @@ public class ServicioIngredienteTest extends SpringTest {
         assertThat(this.repo.obtenerIngredientePorId(1L)).isNotEqualTo(n2);
     }
 
-    @Test
-    public void siPidoUnIngredienteConPasoQueNoExistaDevuelvaListaVacia() {
+    @Test (expected = PasoInvalidoException.class)
+    public void siPidoUnIngredienteConPasoQueNoExistaDevuelvaListaVacia() throws PasoInvalidoException {
         Integer paso_invalido = 7;
         obtenerTodosLosIngredientesDelPaso1();
         List<Ingrediente> valor_obtenido = this.servicio.obtenerIngredientesPorPaso(paso_invalido);
         System.out.println("VALOR DEL SERVICIO: " + this.servicio.obtenerIngredientesPorPaso(7));
-        assertThat(valor_obtenido).isEmpty();
     }
 
     @Test
-    public void siPidoUnaListaDeIngredientesConPasoValidoDevuelvaListaNoVacia() {
+    public void siPidoUnaListaDeIngredientesConPasoValidoDevuelvaListaNoVacia() throws PasoInvalidoException {
         Integer paso_valido = 1;
         obtenerTodosLosIngredientesDelPaso1();
         List<Ingrediente> valor_obtenido = this.servicio.obtenerIngredientesPorPaso(paso_valido);
@@ -60,7 +61,7 @@ public class ServicioIngredienteTest extends SpringTest {
         assertThat(valor_obtenido).isNotEqualTo(new ArrayList<>());
     }
 
-    private void obtenerIngredientePorID(Long id){
+    private void obtenerIngredientePorID(Long id) {
         Ingrediente ejemplo = new Ingrediente(1L, "Pan Centeno", 123F, 1, "detalle");
         when(this.repo.obtenerIngredientePorId(id)).thenReturn(ejemplo);
     }

@@ -1,5 +1,7 @@
 package ar.edu.unlam.tallerweb1.domain.ingredientes;
 
+import ar.edu.unlam.tallerweb1.domain.Excepciones.IngredienteInvalidoException;
+import ar.edu.unlam.tallerweb1.domain.Excepciones.PasoInvalidoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,14 +20,19 @@ public class ServicioDeIngredienteImpl implements ServicioDeIngrediente {
 	}
 
 	@Override
-	public List<Ingrediente> obtenerIngredientesPorPaso(Integer paso) {
-		return this.repo.obtenerIngredientePorPaso(paso);
+	public List<Ingrediente> obtenerIngredientesPorPaso(Integer paso) throws PasoInvalidoException {
+		List<Ingrediente> lista = this.repo.obtenerIngredientePorPaso(paso);
+		if(lista.isEmpty())
+			throw new PasoInvalidoException("No existe paso");
+		return lista;
 	}
 
 	@Override
-	public Ingrediente obtenerIngredientePorId(Long id) {
-
-		return this.repo.obtenerIngredientePorId(id);
+	public Ingrediente obtenerIngredientePorId(Long id) throws IngredienteInvalidoException {
+		Ingrediente ing = this.repo.obtenerIngredientePorId(id);
+		if (ing == null)
+			throw new IngredienteInvalidoException("No Existe El Ingrediente solicitado");
+		return ing;
 	}
 
 	@Override

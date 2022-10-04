@@ -1,10 +1,11 @@
 package ar.edu.unlam.tallerweb1.delivery;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.unlam.tallerweb1.domain.Email.ServicioEmail;
 import ar.edu.unlam.tallerweb1.domain.Email.ServicioEmailImp;
+import ar.edu.unlam.tallerweb1.domain.Excepciones.IngredienteInvalidoException;
+import ar.edu.unlam.tallerweb1.domain.Excepciones.PasoInvalidoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -17,9 +18,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.ServicioDeIngrediente;
-
-import javax.mail.MessagingException;
-import javax.mail.SendFailedException;
 
 @Controller
 public class ControladorDeIngredientes {
@@ -51,7 +49,7 @@ public class ControladorDeIngredientes {
     }
 
     @RequestMapping(path = "/generarPedido", method = RequestMethod.GET)
-    public ModelAndView cargarPagina(@RequestParam(value = "paso", defaultValue = "1", required = false) Integer paso) {
+    public ModelAndView cargarPagina(@RequestParam(value = "paso", defaultValue = "1", required = false) Integer paso) throws PasoInvalidoException {
         ModelMap mod = new ModelMap();
         List<Ingrediente> lista = this.servicioDeIngrediente.obtenerIngredientesPorPaso(paso);
         if(!lista.isEmpty() && paso <= ControladorDeIngredientes.MAX_PASOS_PERMITIDOS) {
@@ -59,7 +57,6 @@ public class ControladorDeIngredientes {
             mod.put("paso", paso);
         }else {
             mod.put("error","Paso Incorrecto");
-            System.out.println(new ModelAndView("redirect:/generarPedido?paso=1",mod).getModel().get("error").equals("Paso Incorrecto"));
             return new ModelAndView("redirect:/generarPedido?paso=1",mod);
 
         }
@@ -67,11 +64,9 @@ public class ControladorDeIngredientes {
     }
 
     @RequestMapping(path = "/agregarIngrediente", method = RequestMethod.GET)
-    public ModelAndView agregarIngredientes(@RequestParam(value = "id") Long idIng, @RequestParam(value = "paso") Integer paso) {
+    public ModelAndView agregarIngredientes(@RequestParam(value = "id") Long idIng) throws IngredienteInvalidoException {
         Ingrediente ing = this.servicioDeIngrediente.obtenerIngredientePorId(idIng);
-        if(ing == null){
-            return new ModelAndView(String.format("redirect:/generarPedido?paso=%d",paso),new ModelMap("error","Ingrediente Inexistente"));
-        }
+        Integer paso = ing.getPaso();
         this.sandwich.cargarIngredienteAlSandwich(ing);
         Integer nuevoPaso = (paso < ControladorDeIngredientes.MAX_PASOS_PERMITIDOS)?paso+1:paso;
         return new ModelAndView(String.format("redirect:/generarPedido?paso=%d",nuevoPaso));
