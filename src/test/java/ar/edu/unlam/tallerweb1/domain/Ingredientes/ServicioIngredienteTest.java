@@ -47,9 +47,10 @@ public class ServicioIngredienteTest extends SpringTest {
     @Test (expected = PasoInvalidoException.class)
     public void siPidoUnIngredienteConPasoQueNoExistaDevuelvaListaVacia() throws PasoInvalidoException {
         Integer paso_invalido = 7;
-        obtenerTodosLosIngredientesDelPaso1();
+        /*obtenerTodosLosIngredientesDelPaso1();*/
+        when(this.servicio.obtenerIngredientesPorPaso(paso_invalido)).thenThrow(new PasoInvalidoException("Paso Invalido"));
         List<Ingrediente> valor_obtenido = this.servicio.obtenerIngredientesPorPaso(paso_invalido);
-        System.out.println("VALOR DEL SERVICIO: " + this.servicio.obtenerIngredientesPorPaso(7));
+        /*System.out.println("VALOR DEL SERVICIO: " + this.servicio.obtenerIngredientesPorPaso(7));*/
     }
 
     @Test
