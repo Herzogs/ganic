@@ -49,26 +49,35 @@ public class ControladorDeIngredientes {
     }
 
     @RequestMapping(path = "/generarPedido", method = RequestMethod.GET)
-    public ModelAndView cargarPagina(@RequestParam(value = "paso", defaultValue = "1", required = false) Integer paso) throws PasoInvalidoException {
+    public ModelAndView cargarPagina(@RequestParam(value = "paso", defaultValue = "1", required = false) Integer paso) {
         ModelMap mod = new ModelMap();
-        List<Ingrediente> lista = this.servicioDeIngrediente.obtenerIngredientesPorPaso(paso);
-        if(!lista.isEmpty() && paso <= ControladorDeIngredientes.MAX_PASOS_PERMITIDOS) {
+        List<Ingrediente> lista = null;
+        try{
+            lista = this.servicioDeIngrediente.obtenerIngredientesPorPaso(paso);
             mod.put("ListaDePanes", lista);
             mod.put("paso", paso);
-        }else {
+        }catch(PasoInvalidoException e) {
             mod.put("error","Paso Incorrecto");
-            return new ModelAndView("redirect:/generarPedido?paso=1",mod);
-
+            this.sandwich.borrarDatosDelSandwich();
+            return new ModelAndView("redirect:/error404",mod);
         }
         return new ModelAndView("generarPedido",mod);
     }
 
     @RequestMapping(path = "/agregarIngrediente", method = RequestMethod.GET)
-    public ModelAndView agregarIngredientes(@RequestParam(value = "id") Long idIng) throws IngredienteInvalidoException {
-        Ingrediente ing = this.servicioDeIngrediente.obtenerIngredientePorId(idIng);
-        Integer paso = ing.getPaso();
-        this.sandwich.cargarIngredienteAlSandwich(ing);
-        Integer nuevoPaso = (paso < ControladorDeIngredientes.MAX_PASOS_PERMITIDOS)?paso+1:paso;
+    public ModelAndView agregarIngredientes(@RequestParam(value = "id") Long idIng) {
+        Ingrediente ing = null;
+        Integer nuevoPaso=1;
+        try {
+            ing = this.servicioDeIngrediente.obtenerIngredientePorId(idIng);
+
+            Integer paso = ing.getPaso();
+            this.sandwich.cargarIngredienteAlSandwich(ing);
+            nuevoPaso = (paso < ControladorDeIngredientes.MAX_PASOS_PERMITIDOS) ? paso + 1 : paso;
+        }catch(IngredienteInvalidoException excepcion){
+            this.sandwich.borrarDatosDelSandwich();
+            return new ModelAndView("redirect:/error404",new ModelMap("error",excepcion.getMessage()));
+        }
         return new ModelAndView(String.format("redirect:/generarPedido?paso=%d",nuevoPaso));
     }
 
@@ -93,4 +102,9 @@ public class ControladorDeIngredientes {
         return new ModelAndView("alerta_exitosa");
     }
 
+    @RequestMapping(path = "/home", method = RequestMethod.GET)
+    public ModelAndView irAHome() {
+        this.sandwich.borrarDatosDelSandwich();
+        return new ModelAndView("home");
+    }
 }

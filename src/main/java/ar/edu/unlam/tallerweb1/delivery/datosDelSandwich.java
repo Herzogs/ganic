@@ -37,5 +37,10 @@ public class datosDelSandwich {
         this.monto = monto;
 
     }
+
+    public void borrarDatosDelSandwich(){
+        this.ingredientesSandwich.clear();
+        this.monto = 0;
+    }
 }
 

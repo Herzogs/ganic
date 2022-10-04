@@ -24,7 +24,6 @@ public class ControladorIngredientesTest extends SpringTest {
     public void init() {
         this.servicio = mock(ServicioDeIngrediente.class);
         this.controladorDeIngredientes = new ControladorDeIngredientes(this.servicio);
-
     }
 
     @Test
@@ -43,7 +42,7 @@ public class ControladorIngredientesTest extends SpringTest {
     @Test
     public void cuandoQuieraGenerarUnSandwichMeGenereLosPanes() throws PasoInvalidoException {
         // Preparación
-        String vista_solicitada = "redirect:/generarPedido?paso=1";
+        String vista_solicitada = "generarPedido";
 
         // Ejecución
         ModelAndView mod = this.cuandoSeleccionoGenerarPedido(1);
@@ -138,7 +137,7 @@ public class ControladorIngredientesTest extends SpringTest {
         return ingredienteList;
     }
 
-    private ModelAndView cuandoSeleccionoGenerarPedido(Integer i) throws PasoInvalidoException {
+    private ModelAndView cuandoSeleccionoGenerarPedido(Integer i) {
         return this.controladorDeIngredientes.cargarPagina(i);
     }
 
