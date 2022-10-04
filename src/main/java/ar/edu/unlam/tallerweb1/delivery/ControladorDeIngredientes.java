@@ -82,15 +82,12 @@ public class ControladorDeIngredientes {
             model.put("error", "Para poder seguir, debe seleccionar minimante 2 ingredientes");
             return new ModelAndView(String.format("redirect:/generarPedido?id=%d",paso), model);
         }
-
-
         model.put("montoFinal", sandwich.getMonto());
         model.put("IngredientesQueElUsuarioSelecciono", sandwich.getIngredientesSandwich());
         return new ModelAndView("confirmar", model);
     }
 
     @RequestMapping(path = "/exito", method = RequestMethod.GET)
-
     public ModelAndView exito(){
         se.sendEmail("crisefeld@gmail.com", "Pedido Exitoso", "Se le estara enviando su pedido en unos momentos");
         return new ModelAndView("alerta_exitosa");

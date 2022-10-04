@@ -27,8 +27,6 @@ public class ControladorIngredientesTest extends SpringTest {
 
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //TODO: Listar los ingrediente
     @Test
     public void queAlPedirUnaListaDeIngredientesMeLoMuestre() {
         //preparacion
