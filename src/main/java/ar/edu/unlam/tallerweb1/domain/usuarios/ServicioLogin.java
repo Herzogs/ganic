@@ -7,4 +7,6 @@ public interface ServicioLogin {
 
 	Usuario consultarUsuario(String email, String password);
 	void crearUsuario(Usuario usuario);
+
+	Usuario consultarUsuario(String email);
 }

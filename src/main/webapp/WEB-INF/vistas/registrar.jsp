@@ -23,6 +23,7 @@
 					<form:input path="password" type="password" id="password" class="form-control"/>     		  
 					
 					<button class="btn btn-lg btn-primary btn-block" Type="Submit"/>Crear</button>
+					<p>${msj}</p>
 				</form:form>
 				<a href="registrar-usuario"	>Registrarme</a>
 				<%--Bloque que es visible si el elemento error no esta vacio	--%>

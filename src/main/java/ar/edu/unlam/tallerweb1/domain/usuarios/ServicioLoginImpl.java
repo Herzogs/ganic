@@ -30,4 +30,10 @@ public class ServicioLoginImpl implements ServicioLogin {
 	public void crearUsuario(Usuario usuario) {
 		this.servicioLoginDao.guardar(usuario);
 	}
+
+	@Override
+	public Usuario consultarUsuario(String email) {
+		Usuario buscado= this.servicioLoginDao.buscar(email);
+		return buscado;
+	}
 }

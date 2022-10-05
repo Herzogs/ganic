@@ -13,24 +13,31 @@ import org.springframework.web.servlet.ModelAndView;
 public class ControladorRegistro {
 
     private ServicioLogin servicioLogin;
+
     @Autowired
     public ControladorRegistro(ServicioLogin servicioLogin) {
         this.servicioLogin = servicioLogin;
     }
 
     @RequestMapping(path = "/registrar", method = RequestMethod.GET)
-    public ModelAndView registrarUsuario(){
+    public ModelAndView registrarUsuario() {
         ModelMap model = new ModelMap();
-        model.put("datosLogin",new DatosLogin());
-        return new ModelAndView("registrar",model);
+        model.put("datosLogin", new DatosLogin());
+        return new ModelAndView("registrar", model);
     }
 
     @RequestMapping(path = "/crearUsuario", method = RequestMethod.POST)
     public ModelAndView crearRegistro(DatosLogin datosLogin) {
         ModelMap model = new ModelMap();
-        Usuario usuarioRegistrado = new Usuario(datosLogin.getEmail(),datosLogin.getPassword());
-        model.put("estado","Registro Exitoso");
-        this.servicioLogin.crearUsuario(usuarioRegistrado);
-        return new ModelAndView("home",model);
+
+        Usuario usuarioGenerado = servicioLogin.consultarUsuario(datosLogin.getEmail());
+        if (usuarioGenerado == null) {
+            Usuario usuarioRegistrado = new Usuario(datosLogin.getEmail(), datosLogin.getPassword());
+            model.put("estado", "Registro Exitoso");
+            this.servicioLogin.crearUsuario(usuarioRegistrado);
+            return new ModelAndView("home", model);
+        }
+        model.put("msg", "El mail ya se encuentrta registrado");
+        return new ModelAndView("registrar", model);
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 public class ControladorDeRegistroTest {
@@ -40,5 +41,25 @@ public class ControladorDeRegistroTest {
         Usuario usuarioEsperado = new Usuario(datosLogin.getEmail(),datosLogin.getPassword());
         ModelAndView model = this.controladorDeRegistro.crearRegistro(this.datosLogin);
         assertThat(model.getViewName()).isEqualTo(vista_destino);
+    }
+    @Test
+    public void queNSePuedaGuardarUnUsusrioConMamilYaRegistrado(){
+        String vista_destino ="registrar";
+        this.datosLogin = new DatosLogin();
+        this.datosLogin.setEmail("test@test.com");
+        this.datosLogin.setPassword("123");
+        DatosLogin nuevoDatosLogin= datosLogin;
+        ModelAndView model;
+        buscarUnUsuarioPorEmailConMokito();
+        model = this.controladorDeRegistro.crearRegistro(nuevoDatosLogin);
+        assertThat(model.getViewName()).isEqualTo(vista_destino);
+
+    }
+    public void buscarUnUsuarioPorEmailConMokito(){
+        this.datosLogin = new DatosLogin();
+        this.datosLogin.setEmail("test@test.com");
+        this.datosLogin.setPassword("123");
+        Usuario usuarioEsperado = new Usuario(datosLogin.getEmail(),datosLogin.getPassword());
+        when(servicioLogin.consultarUsuario("test@test.com")).thenReturn(usuarioEsperado);
     }
 }
