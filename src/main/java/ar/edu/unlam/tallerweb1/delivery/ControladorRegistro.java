@@ -29,15 +29,27 @@ public class ControladorRegistro {
     @RequestMapping(path = "/crearUsuario", method = RequestMethod.POST)
     public ModelAndView crearRegistro(DatosLogin datosLogin) {
         ModelMap model = new ModelMap();
-
-        Usuario usuarioGenerado = servicioLogin.consultarUsuario(datosLogin.getEmail());
-        if (usuarioGenerado == null) {
-            Usuario usuarioRegistrado = new Usuario(datosLogin.getEmail(), datosLogin.getPassword());
-            model.put("estado", "Registro Exitoso");
-            this.servicioLogin.crearUsuario(usuarioRegistrado);
-            return new ModelAndView("home", model);
+        if (esValido(datosLogin.getEmail())) {
+            Usuario usuarioGenerado = servicioLogin.consultarUsuario(datosLogin.getEmail());
+            if (usuarioGenerado == null) {
+                Usuario usuarioRegistrado = new Usuario(datosLogin.getEmail(), datosLogin.getPassword());
+                model.put("estado", "Registro Exitoso");
+                this.servicioLogin.crearUsuario(usuarioRegistrado);
+                return new ModelAndView("home", model);
+            }
+            model.put("msg", "El mail ya se encuentrta registrado");
+            return new ModelAndView("registrar", model);
         }
-        model.put("msg", "El mail ya se encuentrta registrado");
+        model.put("msg", "El mail debe ser de formato valido");
         return new ModelAndView("registrar", model);
+
+
     }
+
+
+
+    private boolean esValido(String email) {
+        return email.endsWith(".com") && email.contains("@");
+    }
+
 }

@@ -53,8 +53,16 @@ public class ControladorDeRegistroTest {
 
     }
 
-
-
+    @Test
+    public void queNoMeDejeGuardarUnUsusrioConFormatoDeMAilInavlido(){
+        String vista_destino ="registrar";
+        this.datosLogin = new DatosLogin();
+        this.datosLogin.setEmail("test@test");
+        this.datosLogin.setPassword("123");
+        ModelAndView model = this.controladorDeRegistro.crearRegistro(this.datosLogin);
+        assertThat(model.getViewName()).isEqualTo(vista_destino);
+        assertThat(model.getModel().get("msg")).isEqualTo("El mail debe ser de formato valido");
+    }
 
     public void buscarUnUsuarioPorEmailConMokito(String mail){
         this.datosLogin = new DatosLogin();
