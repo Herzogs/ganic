@@ -7,10 +7,11 @@ on:
   push:
     branches:
     - sprint
+    - dev
   pull_request:
     branches:
     - sprint
-
+    - dev
 jobs:
   test:
 
