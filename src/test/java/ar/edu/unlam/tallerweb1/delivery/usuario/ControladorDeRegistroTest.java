@@ -45,21 +45,29 @@ public class ControladorDeRegistroTest {
     @Test
     public void queNSePuedaGuardarUnUsusrioConMamilYaRegistrado(){
         String vista_destino ="registrar";
-        this.datosLogin = new DatosLogin();
-        this.datosLogin.setEmail("test@test.com");
-        this.datosLogin.setPassword("123");
-        DatosLogin nuevoDatosLogin= datosLogin;
+        DatosLogin nuevoDatosLogin = obtenerUnDatosLogin();
         ModelAndView model;
-        buscarUnUsuarioPorEmailConMokito();
+        buscarUnUsuarioPorEmailConMokito("test@test.com");
         model = this.controladorDeRegistro.crearRegistro(nuevoDatosLogin);
         assertThat(model.getViewName()).isEqualTo(vista_destino);
 
     }
-    public void buscarUnUsuarioPorEmailConMokito(){
+
+
+
+
+    public void buscarUnUsuarioPorEmailConMokito(String mail){
         this.datosLogin = new DatosLogin();
         this.datosLogin.setEmail("test@test.com");
         this.datosLogin.setPassword("123");
         Usuario usuarioEsperado = new Usuario(datosLogin.getEmail(),datosLogin.getPassword());
-        when(servicioLogin.consultarUsuario("test@test.com")).thenReturn(usuarioEsperado);
+        when(servicioLogin.consultarUsuario(mail)).thenReturn(usuarioEsperado);
+    }
+    private DatosLogin obtenerUnDatosLogin() {
+        this.datosLogin = new DatosLogin();
+        this.datosLogin.setEmail("test@test.com");
+        this.datosLogin.setPassword("123");
+        DatosLogin nuevoDatosLogin= datosLogin;
+        return nuevoDatosLogin;
     }
 }
