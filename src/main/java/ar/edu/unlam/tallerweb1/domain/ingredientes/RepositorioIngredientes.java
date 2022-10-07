@@ -9,4 +9,5 @@ public interface RepositorioIngredientes {
     public List<Ingrediente> obtenerIngredientePorNombre (String desc);
     public void guardarIngrediente(Ingrediente ing);
     List<Ingrediente> obtenerIngredientePorPaso(Integer paso);
+    List<Ingrediente> obtenerIngredienteSiEsApto(String esApto);
 }

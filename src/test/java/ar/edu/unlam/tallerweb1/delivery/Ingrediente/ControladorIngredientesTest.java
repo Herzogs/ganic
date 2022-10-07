@@ -1,6 +1,7 @@
-package ar.edu.unlam.tallerweb1.delivery;
+package ar.edu.unlam.tallerweb1.delivery.Ingrediente;
 
 import ar.edu.unlam.tallerweb1.SpringTest;
+import ar.edu.unlam.tallerweb1.delivery.ControladorDeIngredientes;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.IngredienteInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.PasoInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
@@ -17,7 +18,7 @@ import static org.mockito.Mockito.when;
 
 public class ControladorIngredientesTest extends SpringTest {
 
-   private ServicioDeIngrediente servicio;
+    private ServicioDeIngrediente servicio;
     private ControladorDeIngredientes controladorDeIngredientes;
 
     @Before
@@ -55,7 +56,7 @@ public class ControladorIngredientesTest extends SpringTest {
     public void cuandoElijaUnPanMeRedirijaHaciaLosIngredientesPrincipal() throws IngredienteInvalidoException {
         // Preparación
         String vista_solicitada = "redirect:/generarPedido?paso=2";
-        Ingrediente pan = new Ingrediente(5L, "Pan clasico", 150F, 1, "Pan lactal blanco");
+        Ingrediente pan = new Ingrediente(5L, "Pan clasico", 150F, 1, "Pan lactal blanco","SinRestriccion");
         Long idIngrediente = 5L;
         dadoQueSeleccioneUnIngrediente(pan);
         // Ejecución
@@ -69,7 +70,7 @@ public class ControladorIngredientesTest extends SpringTest {
         // Preparación
         String vista_solicitada = "redirect:/generarPedido?paso=3";
         Long idIngredienteSeleccionado = 9L;
-        Ingrediente ing = new Ingrediente (9L,"Medallo de carne",450F,2,"Carne de ternera a la parrilla");
+        Ingrediente ing = new Ingrediente (9L,"Medallo de carne",450F,2,"Carne de ternera a la parrilla","SinRestriccion");
         dadoQueSeleccioneUnIngrediente(ing);
         // Ejecución
         ModelAndView mod = this.cuandoSeleccioneIngrediente(idIngredienteSeleccionado);
@@ -82,12 +83,16 @@ public class ControladorIngredientesTest extends SpringTest {
         // Preparación
         String vista_solicitada = "redirect:/generarPedido?paso=3";
         Long idIngredienteSeleccionado = 12L;
-        Ingrediente ing = new Ingrediente(12L,"Vegetalizima",40F,3,"Milanesa de soja");
+        Ingrediente ing = dadoQueExisteUnIngrediente();
         dadoQueSeleccioneUnIngrediente(ing);
         // Ejecución
         ModelAndView mod = this.cuandoSeleccioneIngrediente(idIngredienteSeleccionado);
         // Verificación
         entoncesMeLLevaALaVista(mod,vista_solicitada);
+    }
+
+    private Ingrediente dadoQueExisteUnIngrediente() {
+        return new Ingrediente(12L,"Vegetalizima",40F,3,"Milanesa de soja","SinRestriccion");
     }
 
     private void entoncesMeLLevaALaVista(ModelAndView mav, String vistaEsperada) {
@@ -108,19 +113,19 @@ public class ControladorIngredientesTest extends SpringTest {
     private List<Ingrediente> generarLaListaDeIngredientes(){
         List<Ingrediente> ingredienteList= new ArrayList<>();
 
-        Ingrediente n1 = new Ingrediente(5L, "Pan clasico", 150F, 1, "Pan lactal blanco");
-        Ingrediente n2 = new Ingrediente(6L, "Pan flauta", 120F, 1, "Pan de mesa blanco");
-        Ingrediente n3 = new Ingrediente(7L, "Pan de campo", 250F, 1, "Pan de campo blanco");
-        Ingrediente n4 = new Ingrediente(8L, "Pan integral", 280F, 1, "Pan lactal integral");
-        Ingrediente n5 = new Ingrediente (9L,"Medallo de carne",450F,2,"Carne de ternera a la parrilla");
-        Ingrediente n6 = new Ingrediente (10L,"Cerdo",450F,2,"Bondiola de cerdo a la parrilla");
-        Ingrediente n7 = new Ingrediente(11L,"Mila-pollo",450F,2,"Milanesa de pollo");
-        Ingrediente n8 = new Ingrediente(12L,"Vegetalizima",40F,2,"Milanesa de soja");
-        Ingrediente n9 = new Ingrediente(13L,"Mix verde",38F,2,"Salteado de verduras");
-        Ingrediente n10 = new Ingrediente (14L,"Barbacoa",15F,3,"Salsa de barbacoa");
-        Ingrediente n11 = new Ingrediente(15L,"Pure",200F,3,"Pure de papas");
-        Ingrediente n12 = new Ingrediente(16L,"Mostayesa",150F,3,"Mix mostaza y mayonesa");
-        Ingrediente n13 = new Ingrediente (17L,"La casa",250F,3,"Guacamo y mayonesa");
+        Ingrediente n1 = new Ingrediente(5L, "Pan clasico", 150F, 1, "Pan lactal blanco","SinRestriccion");
+        Ingrediente n2 = new Ingrediente(6L, "Pan flauta", 120F, 1, "Pan de mesa blanco","SinRestriccion");
+        Ingrediente n3 = new Ingrediente(7L, "Pan de campo", 250F, 1, "Pan de campo blanco","SinRestriccion");
+        Ingrediente n4 = new Ingrediente(8L, "Pan integral", 280F, 1, "Pan lactal integral","SinRestriccion");
+        Ingrediente n5 = new Ingrediente (9L,"Medallo de carne",450F,2,"Carne de ternera a la parrilla","SinRestriccion");
+        Ingrediente n6 = new Ingrediente (10L,"Cerdo",450F,2,"Bondiola de cerdo a la parrilla","SinRestriccion");
+        Ingrediente n7 = new Ingrediente(11L,"Mila-pollo",450F,2,"Milanesa de pollo","SinRestriccion");
+        Ingrediente n8 = new Ingrediente(12L,"Vegetalizima",40F,2,"Milanesa de soja","SinRestriccion");
+        Ingrediente n9 = new Ingrediente(13L,"Mix verde",38F,2,"Salteado de verduras","SinRestriccion");
+        Ingrediente n10 = new Ingrediente (14L,"Barbacoa",15F,3,"Salsa de barbacoa","SinRestriccion");
+        Ingrediente n11 = new Ingrediente(15L,"Pure",200F,3,"Pure de papas","SinRestriccion");
+        Ingrediente n12 = new Ingrediente(16L,"Mostayesa",150F,3,"Mix mostaza y mayonesa","SinRestriccion");
+        Ingrediente n13 = new Ingrediente (17L,"La casa",250F,3,"Guacamo y mayonesa","SinRestriccion");
         ingredienteList.add(n1);
         ingredienteList.add(n2);
         ingredienteList.add(n3);

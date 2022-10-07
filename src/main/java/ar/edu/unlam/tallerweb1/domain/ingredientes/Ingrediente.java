@@ -1,32 +1,47 @@
 package ar.edu.unlam.tallerweb1.domain.ingredientes;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
+
+import javax.persistence.*;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class Ingrediente {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	
+
 	private Long idIngrediente;
 	private String nombre;
 	private Float precio;
 	private Integer paso;
 	private String detalle;
 
+	private String esApto;
+
+	@ManyToMany(mappedBy = "ingrediente")
+	private Set<Sandwich> sandwiches = new LinkedHashSet<>();
+
+	public Set<Sandwich> getSandwiches() {
+		return sandwiches;
+	}
+
+	public void setSandwiches(Set<Sandwich> sandwiches) {
+		this.sandwiches = sandwiches;
+	}
+
 	public Ingrediente() {
 	}
 
-	public Ingrediente(Long idIngrediente, String nombre, Float precio, Integer paso, String detalle) {
+	public Ingrediente(Long idIngrediente, String nombre, Float precio, Integer paso, String detalle, String esApto) {
 		this.idIngrediente = idIngrediente;
 		this.nombre = nombre;
 		this.precio = precio;
 		this.paso = paso;
 		this.detalle = detalle;
+		this.esApto = esApto;
 	}
 
 	public Long getIdIngrediente() {
@@ -69,6 +84,15 @@ public class Ingrediente {
 		this.paso = paso;
 	}
 
+
+	public String getEsApto() {
+		return esApto;
+	}
+
+	public void setEsApto(String esApto) {
+		this.esApto = esApto;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)
@@ -83,5 +107,18 @@ public class Ingrediente {
 	@Override
 	public int hashCode() {
 		return Objects.hash(getIdIngrediente(), getNombre(), getDetalle(), getPrecio(), getPaso());
+	}
+
+	@Override
+	public String toString() {
+		return "Ingrediente{" +
+				"idIngrediente=" + idIngrediente +
+				", nombre='" + nombre + '\'' +
+				", precio=" + precio +
+				", paso=" + paso +
+				", detalle='" + detalle + '\'' +
+				", esApto='" + esApto + '\'' +
+				", sandwiches=" + sandwiches +
+				'}';
 	}
 }

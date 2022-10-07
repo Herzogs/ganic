@@ -58,4 +58,12 @@ public class RepositorioIngredientesImp implements RepositorioIngredientes {
                 .add(Restrictions.eq("paso",paso))
                 .list();
     }
+
+    @Override
+    public List<Ingrediente> obtenerIngredienteSiEsApto(String esApto) {
+        final Session session = this.sessionFactory.getCurrentSession();
+        return (List<Ingrediente>) session.createCriteria(Ingrediente.class)
+                .add(Restrictions.eq("esApto",esApto))
+                .list();
+    }
 }

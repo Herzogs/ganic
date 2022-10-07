@@ -39,4 +39,9 @@ public class ServicioDeIngredienteImpl implements ServicioDeIngrediente {
 	public List<Ingrediente> obtenerTodosLosIngredientes() {
 		return this.repo.obtenerIngrediente();
 	}
+
+	@Override
+	public List<Ingrediente> obtenerIngredienteSiEsApto(String esApto) {
+		return this.repo.obtenerIngredienteSiEsApto(esApto);
+	}
 }
