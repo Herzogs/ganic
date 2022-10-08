@@ -18,3 +18,5 @@ hs_err_pid*
 *.iml
 *.DS_Store
 /.java-version`
+/src/main/resources
+/src/test/resources
