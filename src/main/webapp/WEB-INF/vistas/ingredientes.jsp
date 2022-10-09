@@ -19,6 +19,7 @@
                 <a href="home"><img src="img/ganiclogo.png" class="img-fluid logo_style" alt="Logo"></a>
                 <a href="">Contacto</a>
                 <a href="">Nosotros</a>
+                <a class="bg-warning text-white" href="verificar">Perfil</a>
             </div>
         </div>
     </nav>

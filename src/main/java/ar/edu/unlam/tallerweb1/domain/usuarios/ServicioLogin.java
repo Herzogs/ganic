@@ -8,5 +8,9 @@ public interface ServicioLogin {
 	Usuario consultarUsuario(String email, String password);
 	void crearUsuario(Usuario usuario);
 
+	void actualizarUsuario(Usuario usuario);
+
+	Usuario consultarPorID(Long id);
+
 	Usuario consultarUsuario(String email);
 }

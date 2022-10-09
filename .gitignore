@@ -12,11 +12,11 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 /target/
+/src/main/resources
+/src/test/resources
 /classes/
 /out/
 .idea/*
 *.iml
 *.DS_Store
 /.java-version`
-/src/main/resources
-/src/test/resources

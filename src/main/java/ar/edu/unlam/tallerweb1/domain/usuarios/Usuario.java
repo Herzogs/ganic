@@ -36,6 +36,13 @@ public class Usuario {
 		this.nombre = this.apellido = this.direccion = this.preferencia = "";
 	}
 
+	public Usuario(String nombre, String apellido, String direccion, String preferencia) {
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.direccion = direccion;
+		this.preferencia = preferencia;
+	}
+
 	public Long getId() {
 		return id;
 	}

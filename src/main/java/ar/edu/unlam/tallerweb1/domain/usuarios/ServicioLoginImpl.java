@@ -27,8 +27,19 @@ public class ServicioLoginImpl implements ServicioLogin {
 	}
 
 	@Override
+	public Usuario consultarPorID (Long id) {
+		Usuario buscado = servicioLoginDao.buscarPorId(id);
+		return buscado;
+	}
+
+	@Override
 	public void crearUsuario(Usuario usuario) {
 		this.servicioLoginDao.guardar(usuario);
+	}
+
+	@Override
+	public void actualizarUsuario(Usuario usuario) {
+		this.servicioLoginDao.modificar(usuario);
 	}
 
 	@Override

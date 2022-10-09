@@ -7,6 +7,9 @@ import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 import static org.mockito.Mockito.mock;
@@ -32,13 +35,13 @@ public class ControladorDeRegistroTest {
         assertThat(mod.getViewName()).isEqualTo(vistaDestino);
     }
 
-    @Test
+  @Test
     public void alIngresarLosDatosSeGuardenEnLaBaseDeDatos(){
-        String vista_destino ="home";
+        String vista_destino ="login";
         this.datosLogin = new DatosLogin();
         this.datosLogin.setEmail("test@test.com");
         this.datosLogin.setPassword("123");
-        Usuario usuarioEsperado = new Usuario(datosLogin.getEmail(),datosLogin.getPassword());
+
         ModelAndView model = this.controladorDeRegistro.crearRegistro(this.datosLogin);
         assertThat(model.getViewName()).isEqualTo(vista_destino);
     }
