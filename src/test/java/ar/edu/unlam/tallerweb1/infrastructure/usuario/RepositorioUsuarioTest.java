@@ -1,0 +1,79 @@
+package ar.edu.unlam.tallerweb1.infrastructure.usuario;
+
+import ar.edu.unlam.tallerweb1.SpringTest;
+import ar.edu.unlam.tallerweb1.domain.usuarios.RepositorioUsuario;
+import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
+
+import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+public class RepositorioUsuarioTest extends SpringTest {
+    @Autowired
+    RepositorioUsuario repositorioUsuario;
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queLuegoDeCrearUnUsusrioLoPuedaEncontar() {
+        dadoQueExisteUnUsuario();
+        Boolean existeUsusrio = entoncesEncuento("pablo@gmail.com");
+        entoncesVerificoQueNoSeaNull(existeUsusrio);
+    }
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedaActualizarUnUsuarioQueExista(){
+        dadoQueExisteUnUsuario();
+        entoncesActualizo();
+        Usuario usuarioAModificar= obtenerUsuario();
+        String nombre = "Pablo";
+        entoncesVerificoQueSeHaYaMOdificado(usuarioAModificar,nombre);
+    }
+/*
+    @Test
+    @Transactional
+    @Rollback
+    public void queSiPidoActualizarUnUsuarioQueNoExistaLanseUnaExepcion(){
+
+
+    }
+*/
+    private void entoncesVerificoQueSeHaYaMOdificado(Usuario usuarioAModificar, String nombre) {
+        assertThat(usuarioAModificar.getNombre()).isEqualTo(nombre);
+    }
+
+    private void entoncesActualizo() {
+        Usuario usuario = obtenerUsuario();
+        usuario.setNombre("Pablo");
+        usuario.setApellido("Aimar");
+        usuario.setDireccion("calleFalsa 123");
+        usuario.setPreferencia("SinRestriccion");
+        repositorioUsuario.modificar(usuario);
+        
+    }
+
+    private Usuario obtenerUsuario() {
+        Usuario usuario = repositorioUsuario.buscarUsuario("pablo@gmail.com","123");
+        return usuario;
+    }
+
+
+    private void entoncesVerificoQueNoSeaNull(Boolean usuarioBuscado) {
+        assertEquals(true, usuarioBuscado);
+    }
+
+    private Boolean entoncesEncuento(String email) {
+        return repositorioUsuario.estaRegistrado(email);
+    }
+    private void dadoQueExisteUnUsuario() {
+        Usuario usuario = new Usuario("pablo@gmail.com", "123");
+        repositorioUsuario.guardar(usuario);
+    }
+
+
+}

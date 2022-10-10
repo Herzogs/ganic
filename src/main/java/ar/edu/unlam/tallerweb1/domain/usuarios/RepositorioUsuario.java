@@ -10,4 +10,6 @@ public interface RepositorioUsuario {
     Usuario buscar(String email);
 	Usuario buscarPorId(Long id);
 	void modificar(Usuario usuario);
+
+    Boolean estaRegistrado(String email);
 }

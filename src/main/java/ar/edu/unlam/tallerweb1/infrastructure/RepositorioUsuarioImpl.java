@@ -55,9 +55,19 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 				.uniqueResult();
 	}
 
+
+
 	@Override
 	public void modificar(Usuario usuario) {
 		sessionFactory.getCurrentSession().update(usuario);
+	}
+
+	@Override
+	public Boolean estaRegistrado(String email) {
+		Usuario usuario =buscar(email);
+		if(!usuario.equals(null))
+			return true;
+		return false;
 	}
 
 }
