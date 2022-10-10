@@ -62,7 +62,7 @@ public class RepositorioIngredientesImplTest extends SpringTest {
         assertThat(valor_obtenido).isNotEmpty();
     }
 
-    private List<Ingrediente> cuandoLePidaAlRepositorioQueTraigaLosIngredientesPorUnPasoEspecifico(Integer pasoEspecifico) {
+    private List<Ingrediente> cuandoLePidaAlRepositorioQueTraigaLosIngredientesPorUnPasoEspecifico(Integer pasoEspecifico){
         return this.repo.obtenerIngredientePorPaso(pasoEspecifico);
     }
 
@@ -94,7 +94,7 @@ public class RepositorioIngredientesImplTest extends SpringTest {
         return this.repo.obtenerIngredienteSiEsApto("SinRestriccion");
     }
 
-    private static List<Ingrediente> dadoQueTengoEstosIngredientesEnLaBaseDeDatos(Ingrediente n1, Ingrediente n2, Ingrediente n3, Ingrediente n4, Ingrediente n5, Ingrediente n6, Ingrediente n7, Ingrediente n8, Ingrediente n9, Ingrediente n10, Ingrediente n11, Ingrediente n12, Ingrediente n13) {
+    private List<Ingrediente> dadoQueTengoEstosIngredientesEnLaBaseDeDatos(Ingrediente n1, Ingrediente n2, Ingrediente n3, Ingrediente n4, Ingrediente n5, Ingrediente n6, Ingrediente n7, Ingrediente n8, Ingrediente n9, Ingrediente n10, Ingrediente n11, Ingrediente n12, Ingrediente n13) {
         List<Ingrediente> valorEsperado= new ArrayList<>();
         valorEsperado.add(n1);
         valorEsperado.add(n2);
@@ -112,7 +112,7 @@ public class RepositorioIngredientesImplTest extends SpringTest {
         return valorEsperado;
     }
 
-    private static Ingrediente dadoQueExisteUnIngrediente(long idIngrediente, String Pan_clasico, float precio, int paso, String Pan_lactal_blanco, String esApto) {
+    private Ingrediente dadoQueExisteUnIngrediente(long idIngrediente, String Pan_clasico, float precio, int paso, String Pan_lactal_blanco, String esApto) {
         return new Ingrediente(idIngrediente, Pan_clasico, precio, paso, Pan_lactal_blanco,esApto);
     }
 

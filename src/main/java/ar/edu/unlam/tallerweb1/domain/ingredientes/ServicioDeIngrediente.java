@@ -12,4 +12,6 @@ public interface ServicioDeIngrediente {
 
     List<Ingrediente> obtenerTodosLosIngredientes();
     List<Ingrediente> obtenerIngredienteSiEsApto(String esApto);
+
+    List<Ingrediente> obtenerIngredientesFiltradoPorPasoYPreferencia(Integer paso, String preferencia);
 }
