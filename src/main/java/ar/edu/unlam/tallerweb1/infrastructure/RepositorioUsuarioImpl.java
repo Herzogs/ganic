@@ -44,6 +44,7 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 		sessionFactory.getCurrentSession().save(usuario);
 	}
 
+
 	@Override
 	public Usuario buscar(String email) throws UsuarioNoRegistradoExepcion {
 		Usuario buscado=(Usuario) sessionFactory.getCurrentSession().createCriteria(Usuario.class)

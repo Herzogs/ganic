@@ -13,5 +13,5 @@ public interface ServicioLogin {
 
 	Usuario consultarPorID(Long id);
 
-	Usuario consultarUsuario(String email);
+	Usuario consultarUsuario(String email) throws UsuarioNoRegistradoExepcion;
 }

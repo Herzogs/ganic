@@ -44,7 +44,7 @@ public class ServicioLoginImpl implements ServicioLogin {
 	}
 
 	@Override
-	public Usuario consultarUsuario(String email) {
+	public Usuario consultarUsuario(String email) throws UsuarioNoRegistradoExepcion {
 		Usuario buscado= this.servicioLoginDao.buscar(email);
 		return buscado;
 	}

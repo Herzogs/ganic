@@ -31,7 +31,8 @@ public class RepositorioUsuarioTest extends SpringTest {
     public void queSePuedaActualizarUnUsuarioQueExista() throws UsuarioNoRegistradoExepcion {
         dadoQueExisteUnUsuario();
         entoncesActualizo();
-        Usuario usuarioAModificar= obtenerUsuario("pablo@gmail.com", "123");
+        Usuario usuarioAModificar=obtenerUsuario("pablo@gmail.com", "123");
+                obtenerUsuario("pablo@gmail.com", "123");
         String nombre = "Pablo";
         entoncesVerificoQueSeHaYaMOdificado(usuarioAModificar,nombre);
     }
