@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.delivery;
 
+import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioNoRegistradoExepcion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -43,7 +44,7 @@ public class ControladorLogin {
 	// El metodo recibe un objeto Usuario el que tiene los datos ingresados en el form correspondiente y se corresponde con el modelAttribute definido en el
 	// tag form:form
 	@RequestMapping(path = "/validar-login", method = RequestMethod.POST)
-	public ModelAndView validarLogin(@ModelAttribute("datosLogin") DatosLogin datosLogin, HttpServletRequest request) {
+	public ModelAndView validarLogin(@ModelAttribute("datosLogin") DatosLogin datosLogin, HttpServletRequest request) throws UsuarioNoRegistradoExepcion {
 		ModelMap model = new ModelMap();
 
 		// invoca el metodo consultarUsuario del servicio y hace un redirect a la URL /home, esto es, en lugar de enviar a una vista

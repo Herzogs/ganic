@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.domain.usuarios;
 
+import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioNoRegistradoExepcion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +23,7 @@ public class ServicioLoginImpl implements ServicioLogin {
 	}
 
 	@Override
-	public Usuario consultarUsuario (String email, String password) {
+	public Usuario consultarUsuario (String email, String password) throws UsuarioNoRegistradoExepcion {
 		return servicioLoginDao.buscarUsuario(email, password);
 	}
 

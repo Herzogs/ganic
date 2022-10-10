@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.infrastructure.usuario;
 
 import ar.edu.unlam.tallerweb1.SpringTest;
+import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioNoRegistradoExepcion;
 import ar.edu.unlam.tallerweb1.domain.usuarios.RepositorioUsuario;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.junit.Test;
@@ -19,7 +20,7 @@ public class RepositorioUsuarioTest extends SpringTest {
     @Test
     @Transactional
     @Rollback
-    public void queLuegoDeCrearUnUsusrioLoPuedaEncontar() {
+    public void queLuegoDeCrearUnUsusrioLoPuedaEncontar() throws UsuarioNoRegistradoExepcion {
         dadoQueExisteUnUsuario();
         Boolean existeUsusrio = entoncesEncuento("pablo@gmail.com");
         entoncesVerificoQueNoSeaNull(existeUsusrio);
@@ -27,28 +28,35 @@ public class RepositorioUsuarioTest extends SpringTest {
     @Test
     @Transactional
     @Rollback
-    public void queSePuedaActualizarUnUsuarioQueExista(){
+    public void queSePuedaActualizarUnUsuarioQueExista() throws UsuarioNoRegistradoExepcion {
         dadoQueExisteUnUsuario();
         entoncesActualizo();
-        Usuario usuarioAModificar= obtenerUsuario();
+        Usuario usuarioAModificar= obtenerUsuario("pablo@gmail.com", "123");
         String nombre = "Pablo";
         entoncesVerificoQueSeHaYaMOdificado(usuarioAModificar,nombre);
     }
-/*
-    @Test
+
+    @Test(expected =UsuarioNoRegistradoExepcion.class )
     @Transactional
     @Rollback
-    public void queSiPidoActualizarUnUsuarioQueNoExistaLanseUnaExepcion(){
-
+    public void queSiPidoActualizarUnUsuarioQueNoExistaLanseUnaExepcion() throws UsuarioNoRegistradoExepcion {
+        dadoUnUsuarioNoRegistradoEnLABAseDeDatos();
+        Usuario usuarioAModificar= obtenerUsuario("noestoyregistrado@gmail.com", "123");
+        String nombre = "Pablo";
 
     }
-*/
+
+    private void dadoUnUsuarioNoRegistradoEnLABAseDeDatos() {
+        Usuario usuarioQueNoExiste= new Usuario("noestoyregistrado@gmail.com", "123");
+
+    }
+
     private void entoncesVerificoQueSeHaYaMOdificado(Usuario usuarioAModificar, String nombre) {
         assertThat(usuarioAModificar.getNombre()).isEqualTo(nombre);
     }
 
-    private void entoncesActualizo() {
-        Usuario usuario = obtenerUsuario();
+    private void entoncesActualizo() throws UsuarioNoRegistradoExepcion {
+        Usuario usuario = obtenerUsuario("pablo@gmail.com", "123");
         usuario.setNombre("Pablo");
         usuario.setApellido("Aimar");
         usuario.setDireccion("calleFalsa 123");
@@ -57,8 +65,8 @@ public class RepositorioUsuarioTest extends SpringTest {
         
     }
 
-    private Usuario obtenerUsuario() {
-        Usuario usuario = repositorioUsuario.buscarUsuario("pablo@gmail.com","123");
+    private Usuario obtenerUsuario(String email, String password) throws UsuarioNoRegistradoExepcion {
+        Usuario usuario = repositorioUsuario.buscarUsuario(email,password);
         return usuario;
     }
 
@@ -67,7 +75,7 @@ public class RepositorioUsuarioTest extends SpringTest {
         assertEquals(true, usuarioBuscado);
     }
 
-    private Boolean entoncesEncuento(String email) {
+    private Boolean entoncesEncuento(String email) throws UsuarioNoRegistradoExepcion {
         return repositorioUsuario.estaRegistrado(email);
     }
     private void dadoQueExisteUnUsuario() {

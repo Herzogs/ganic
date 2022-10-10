@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.delivery;
 
+import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioNoRegistradoExepcion;
 import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class ControladorRegistro {
     }
 
     @RequestMapping(path = "/crearUsuario", method = RequestMethod.POST)
-    public ModelAndView crearRegistro(DatosLogin datosLogin) {
+    public ModelAndView crearRegistro(DatosLogin datosLogin) throws UsuarioNoRegistradoExepcion {
         ModelMap model = new ModelMap();
         if (esValido(datosLogin.getEmail())) {
             Usuario usuarioGenerado = servicioLogin.consultarUsuario(datosLogin.getEmail());

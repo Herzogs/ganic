@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.infrastructure;
 
+import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioNoRegistradoExepcion;
 import ar.edu.unlam.tallerweb1.domain.usuarios.RepositorioUsuario;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.hibernate.Session;
@@ -24,16 +25,18 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 	}
 
 	@Override
-	public Usuario buscarUsuario(String email, String password) {
+	public Usuario buscarUsuario(String email, String password) throws UsuarioNoRegistradoExepcion {
 
-		// Se obtiene la sesion asociada a la transaccion iniciada en el servicio que invoca a este metodo y se crea un criterio
-		// de busqueda de Usuario donde el email y password sean iguales a los del objeto recibido como parametro
-		// uniqueResult da error si se encuentran mas de un resultado en la busqueda.
-		final Session session = sessionFactory.getCurrentSession();
-		return (Usuario) session.createCriteria(Usuario.class)
-				.add(Restrictions.eq("email", email))
-				.add(Restrictions.eq("password", password))
-				.uniqueResult();
+		if(estaRegistrado(email)){
+			final Session session = sessionFactory.getCurrentSession();
+			return (Usuario) session.createCriteria(Usuario.class)
+					.add(Restrictions.eq("email", email))
+					.add(Restrictions.eq("password", password))
+					.uniqueResult();
+		}
+		throw new UsuarioNoRegistradoExepcion("No se encuentra registrado el Usuario");
+
+
 	}
 
 	@Override
@@ -42,10 +45,17 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 	}
 
 	@Override
-	public Usuario buscar(String email) {
-		return (Usuario) sessionFactory.getCurrentSession().createCriteria(Usuario.class)
+	public Usuario buscar(String email) throws UsuarioNoRegistradoExepcion {
+		Usuario buscado=(Usuario) sessionFactory.getCurrentSession().createCriteria(Usuario.class)
 				.add(Restrictions.eq("email", email))
 				.uniqueResult();
+		if(buscado!=null) {
+			return buscado;
+
+		}
+		throw new UsuarioNoRegistradoExepcion("Usuario no registrado");
+
+
 	}
 
 	@Override
@@ -63,7 +73,7 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 	}
 
 	@Override
-	public Boolean estaRegistrado(String email) {
+	public Boolean estaRegistrado(String email) throws UsuarioNoRegistradoExepcion {
 		Usuario usuario =buscar(email);
 		if(!usuario.equals(null))
 			return true;

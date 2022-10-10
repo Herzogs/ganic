@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.delivery.usuario;
 
 import ar.edu.unlam.tallerweb1.delivery.ControladorRegistro;
 import ar.edu.unlam.tallerweb1.delivery.DatosLogin;
+import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioNoRegistradoExepcion;
 import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.junit.Before;
@@ -36,7 +37,7 @@ public class ControladorDeRegistroTest {
     }
 
   @Test
-    public void alIngresarLosDatosSeGuardenEnLaBaseDeDatos(){
+    public void alIngresarLosDatosSeGuardenEnLaBaseDeDatos() throws UsuarioNoRegistradoExepcion {
         String vista_destino ="login";
         this.datosLogin = new DatosLogin();
         this.datosLogin.setEmail("test@test.com");
@@ -46,7 +47,7 @@ public class ControladorDeRegistroTest {
         assertThat(model.getViewName()).isEqualTo(vista_destino);
     }
     @Test
-    public void queNSePuedaGuardarUnUsusrioConMamilYaRegistrado(){
+    public void queNSePuedaGuardarUnUsusrioConMamilYaRegistrado() throws UsuarioNoRegistradoExepcion {
         String vista_destino ="registrar";
         DatosLogin nuevoDatosLogin = obtenerUnDatosLogin();
         ModelAndView model;
@@ -57,7 +58,7 @@ public class ControladorDeRegistroTest {
     }
 
     @Test
-    public void queNoMeDejeGuardarUnUsusrioConFormatoDeMAilInavlido(){
+    public void queNoMeDejeGuardarUnUsusrioConFormatoDeMAilInavlido() throws UsuarioNoRegistradoExepcion {
         String vista_destino ="registrar";
         this.datosLogin = new DatosLogin();
         this.datosLogin.setEmail("test@test");
@@ -67,7 +68,7 @@ public class ControladorDeRegistroTest {
         assertThat(model.getModel().get("msg")).isEqualTo("El mail debe ser de formato valido");
     }
 
-    public void buscarUnUsuarioPorEmailConMokito(String mail){
+    public void buscarUnUsuarioPorEmailConMokito(String mail) throws UsuarioNoRegistradoExepcion {
         this.datosLogin = new DatosLogin();
         this.datosLogin.setEmail("test@test.com");
         this.datosLogin.setPassword("123");
