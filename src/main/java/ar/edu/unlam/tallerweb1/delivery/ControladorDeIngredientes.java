@@ -19,6 +19,8 @@ import org.springframework.web.servlet.ModelAndView;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.ServicioDeIngrediente;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 public class ControladorDeIngredientes {
 
@@ -82,23 +84,26 @@ public class ControladorDeIngredientes {
     }
 
     @RequestMapping(path = "/confirmar", method = RequestMethod.GET)
-    public ModelAndView confirmarIngredientesSeleccionados(@RequestParam(value = "paso", required = false) Integer paso) {
-
-        ModelMap model = new ModelMap();
-        List<Ingrediente> ingredientesSeleccionados = this.sandwich.getIngredientesSandwich();
-        System.err.println(ingredientesSeleccionados.size());
-        if(ingredientesSeleccionados.size() <= 1){
-            model.put("error", "Para poder seguir, debe seleccionar minimante 2 ingredientes");
-            return new ModelAndView(String.format("redirect:/generarPedido?id=%d",paso), model);
+    public ModelAndView confirmarIngredientesSeleccionados(@RequestParam(value = "paso", required = false) Integer paso,HttpServletRequest request) {
+        Long idLogeado = (Long) request.getSession().getAttribute("id");
+        if ( idLogeado != null) {
+            ModelMap model = new ModelMap();
+            List<Ingrediente> ingredientesSeleccionados = this.sandwich.getIngredientesSandwich();
+            if (ingredientesSeleccionados.size() <= 1) {
+                model.put("error", "Para poder seguir, debe seleccionar minimante 2 ingredientes");
+                return new ModelAndView(String.format("redirect:/generarPedido?id=%d", paso), model);
+            }
+            model.put("montoFinal", sandwich.getMonto());
+            model.put("IngredientesQueElUsuarioSelecciono", sandwich.getIngredientesSandwich());
+            return new ModelAndView("confirmar", model);
         }
-        model.put("montoFinal", sandwich.getMonto());
-        model.put("IngredientesQueElUsuarioSelecciono", sandwich.getIngredientesSandwich());
-        return new ModelAndView("confirmar", model);
+        return new ModelAndView("redirect:/login");
     }
 
     @RequestMapping(path = "/exito", method = RequestMethod.GET)
-    public ModelAndView exito(){
-        se.sendEmail("crisefeld@gmail.com", "Pedido Exitoso", "Se le estara enviando su pedido en unos momentos");
+    public ModelAndView exito(HttpServletRequest request){
+        String email = (String) request.getSession().getAttribute("email");
+        se.sendEmail(email, "Pedido Exitoso", "Se le estara enviando su pedido en unos momentos");
         return new ModelAndView("alerta_exitosa");
     }
 

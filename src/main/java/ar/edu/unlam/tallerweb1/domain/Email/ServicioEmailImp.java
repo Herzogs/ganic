@@ -15,7 +15,7 @@ public class ServicioEmailImp implements ServicioEmail {
     private void init() {
 
         this.username="sandwich.ganic@gmail.com";
-        this.password="tallerweb1";
+        this.password="xvosdojilrlxegco";
 
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.host", "smtp.gmail.com");
