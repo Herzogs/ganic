@@ -10,4 +10,6 @@ public interface RepositorioIngredientes {
     public void guardarIngrediente(Ingrediente ing);
     List<Ingrediente> obtenerIngredientePorPaso(Integer paso);
     List<Ingrediente> obtenerIngredienteSiEsApto(String esApto);
+
+    List<Ingrediente> obtenerIngredientesPorPasoYPorPreferencia(Integer paso, String preferencia);
 }

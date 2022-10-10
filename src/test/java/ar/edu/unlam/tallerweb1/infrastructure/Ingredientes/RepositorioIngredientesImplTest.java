@@ -18,80 +18,84 @@ public class RepositorioIngredientesImplTest extends SpringTest {
     @Autowired
     private RepositorioIngredientes repo;
 
-    @Test
-    @Transactional
-    @Rollback
-    public void buscarIngredientePorNombre() {
-        Ingrediente nuevo = primeroGeneramosUnIngrediente();
-        this.repo.guardarIngrediente(nuevo);
-        List<Ingrediente> res = seBuscarElIngredienteSolicitado(nuevo.getNombre());
+    @Test @Transactional @Rollback
+    public void buscarIngredientePorID() {
+        Ingrediente nuevo = dadoQueExisteUnIngrediente(50L,"Pan",12F,1,"pan","SinRestriccion");
+        entoncesGuardoElIngredienteExistenteEnLaBaseDeDatos(nuevo);
+        Ingrediente res = entoncesBuscoElIngredienteEnLaBaseDeDAtos(nuevo);
         seVerificaQueLaBusquedaDioElResultadoEsperado(nuevo, res);
     }
 
-    private List<Ingrediente> seBuscarElIngredienteSolicitado(String desc) {
-        return repo.obtenerIngredientePorNombre(desc);
+    private Ingrediente entoncesBuscoElIngredienteEnLaBaseDeDAtos(Ingrediente ing) {
+        return this.repo.obtenerIngredientePorId(ing.getIdIngrediente());
     }
 
-    private void seVerificaQueLaBusquedaDioElResultadoEsperado(Ingrediente nuevo, List<Ingrediente> res) {
-        assertThat(res.get(0)).isEqualTo(nuevo);
+    private void entoncesGuardoElIngredienteExistenteEnLaBaseDeDatos(Ingrediente nuevo) {
+        this.repo.guardarIngrediente(nuevo);
     }
 
-    private Ingrediente primeroGeneramosUnIngrediente() {
-        Ingrediente nuevo = new Ingrediente();
-        nuevo.setIdIngrediente(2L);
-        nuevo.setNombre("pan");
-        nuevo.setPrecio(12F);
-        nuevo.setPaso(2);
-        return nuevo;
+    private void seVerificaQueLaBusquedaDioElResultadoEsperado(Ingrediente nuevo, Ingrediente res) {
+        assertThat(res).isEqualTo(nuevo);
     }
 
     @Test @Transactional @Rollback
-    public void queAlBuscarPorUnIngredienteEsteNoExista(){
-        String producto_no_existente = "carne";
-        List<Ingrediente> retorno_busqueda = seBuscarElIngredienteSolicitado(producto_no_existente);
-        seVerificaQueLaBusquedaDioElResultadoEsperado(retorno_busqueda);
+    public void queCuandoSeIntenteBuscarUnIngredienteQueNoExistaDevuelvaUnNULL(){
+        Ingrediente nuevo = dadoQueExisteUnIngrediente(1L,"Pan",12F,1,"pan","SinRestriccion");
+        entoncesGuardoElIngredienteExistenteEnLaBaseDeDatos(nuevo);
+        Ingrediente ingredienteInexistente = dadoQueExisteUnIngrediente(2L,"Error",12F,2,"error","SinRestriccion");
+        Ingrediente retorno_busqueda = entoncesBuscoElIngredienteEnLaBaseDeDAtos(ingredienteInexistente);
+        entoncesVerificoQueElIgredienteNoExistaEnLaBaseDeDatos(retorno_busqueda);
     }
 
-    private void seVerificaQueLaBusquedaDioElResultadoEsperado(List<Ingrediente> retorno_busqueda) {
-        List<Ingrediente> valor_esperado = new ArrayList<>();
-        assertThat(retorno_busqueda).isEqualTo(valor_esperado);
+    private static void entoncesVerificoQueElIgredienteNoExistaEnLaBaseDeDatos(Ingrediente retorno_busqueda) {
+        assertThat(retorno_busqueda).isNull();
     }
-
 
     @Test @Transactional
-    public void queAlBuscarPorUnPasoEspecificoMeRetorneAlgunValor(){
-        /*List<Ingrediente> valor_esperado = new ArrayList<>();
-        Ingrediente n1 = new Ingrediente(5L,"Pan clasico",150F,1, "Pan lactal blanco","SinRestriccion");
-        Ingrediente n2 = new Ingrediente(6L,"Pan flauta",120F,1, "Pan de mesa blanco","SinRestriccion");
-        Ingrediente n3 = new Ingrediente(7L,"Pan de campo",250F,1, "Pan de campo blanco","SinRestriccion");
-        Ingrediente n4 = new Ingrediente(8L,"Pan integral",280F,1, "Pan lactal integral","SinRestriccion");
-        valor_esperado.add(n1);
-        valor_esperado.add(n2);
-        valor_esperado.add(n3);
-        valor_esperado.add(n4);*/
-        List<Ingrediente> valor_obtenido = this.repo.obtenerIngredientePorPaso(1);
-        /*assertThat(valor_esperado).isEqualTo(valor_obtenido);*/
+    public void queAlBuscarPorUnPasoEspecificoValidoMeRetorneUnaListaNoVacia(){
+        List<Ingrediente> valor_obtenido = cuandoLePidaAlRepositorioQueTraigaLosIngredientesPorUnPasoEspecifico(1);
+        entoncesVerificoQueLaListaNoSeaNula(valor_obtenido);
+    }
+
+    private static void entoncesVerificoQueLaListaNoSeaNula(List<Ingrediente> valor_obtenido) {
         assertThat(valor_obtenido).isNotNull();
         assertThat(valor_obtenido).isNotEmpty();
     }
 
+    private List<Ingrediente> cuandoLePidaAlRepositorioQueTraigaLosIngredientesPorUnPasoEspecifico(Integer pasoEspecifico) {
+        return this.repo.obtenerIngredientePorPaso(pasoEspecifico);
+    }
+
     @Test @Transactional
     public void queAlBuscarSiEsAptoMeRetorneAlgunValor(){
-        List<Ingrediente> valorEsperado= new ArrayList<>();
+        Ingrediente n1 = dadoQueExisteUnIngrediente(5L, "Pan clasico", 150F, 1, "Pan lactal blanco","SinRestriccion");
+        Ingrediente n2 = dadoQueExisteUnIngrediente(6L, "Pan flauta", 120F, 1, "Pan de mesa blanco","SinRestriccion");
+        Ingrediente n3 = dadoQueExisteUnIngrediente(7L, "Pan de campo", 250F, 1, "Pan de campo blanco","SinRestriccion");
+        Ingrediente n4 = dadoQueExisteUnIngrediente(8L, "Pan integral", 280F, 1, "Pan lactal integral","SinRestriccion");
+        Ingrediente n5 = dadoQueExisteUnIngrediente(9L, "Medallo de carne", 450F, 2, "Carne de ternera a la parrilla","SinRestriccion");
+        Ingrediente n6 = dadoQueExisteUnIngrediente(10L, "Cerdo", 450F, 2, "Bondiola de cerdo a la parrilla","SinRestriccion");
+        Ingrediente n7 = dadoQueExisteUnIngrediente(11L, "Mila-pollo", 450F, 2, "Milanesa de pollo","SinRestriccion");
+        Ingrediente n8 = dadoQueExisteUnIngrediente(12L, "Vegetalizima", 400F, 2, "Milanesa de soja","SinRestriccion");
+        Ingrediente n9 = dadoQueExisteUnIngrediente(13L, "Mix verde", 380F, 2, "Salteado de verduras","SinRestriccion");
+        Ingrediente n10 = dadoQueExisteUnIngrediente(14L, "Barbacoa", 150F, 3, "Salsa de barbacoa","SinRestriccion");
+        Ingrediente n11 = dadoQueExisteUnIngrediente(15L, "Pure", 200F, 3, "Pure de papas","SinRestriccion");
+        Ingrediente n12 = dadoQueExisteUnIngrediente(16L, "Mostayesa", 150F, 3, "Mix mostaza y mayonesa","SinRestriccion");
+        Ingrediente n13 = dadoQueExisteUnIngrediente(17L, "La casa", 250F, 3, "Guacamole y mayonesa","SinRestriccion");
+        List<Ingrediente> valorEsperado = dadoQueTengoEstosIngredientesEnLaBaseDeDatos(n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13);
+        List<Ingrediente> valor_obtenido = entoncesLeDigoAlRepositorioQueMeTraigaTodosLosIngredientesQueNoTenganRestriccion();
+        entoncesVerificoQueLasListasSeanIguales(valorEsperado, valor_obtenido);
+    }
 
-        Ingrediente n1 = new Ingrediente(5L, "Pan clasico", 150F, 1, "Pan lactal blanco","SinRestriccion");
-        Ingrediente n2 = new Ingrediente(6L, "Pan flauta", 120F, 1, "Pan de mesa blanco","SinRestriccion");
-        Ingrediente n3 = new Ingrediente(7L, "Pan de campo", 250F, 1, "Pan de campo blanco","SinRestriccion");
-        Ingrediente n4 = new Ingrediente(8L, "Pan integral", 280F, 1, "Pan lactal integral","SinRestriccion");
-        Ingrediente n5 = new Ingrediente (9L,"Medallo de carne",450F,2,"Carne de ternera a la parrilla","SinRestriccion");
-        Ingrediente n6 = new Ingrediente (10L,"Cerdo",450F,2,"Bondiola de cerdo a la parrilla","SinRestriccion");
-        Ingrediente n7 = new Ingrediente(11L,"Mila-pollo",450F,2,"Milanesa de pollo","SinRestriccion");
-        Ingrediente n8 = new Ingrediente(12L,"Vegetalizima",400F,2,"Milanesa de soja","SinRestriccion");
-        Ingrediente n9 = new Ingrediente(13L,"Mix verde",380F,2,"Salteado de verduras","SinRestriccion");
-        Ingrediente n10 = new Ingrediente (14L,"Barbacoa",150F,3,"Salsa de barbacoa","SinRestriccion");
-        Ingrediente n11 = new Ingrediente(15L,"Pure",200F,3,"Pure de papas","SinRestriccion");
-        Ingrediente n12 = new Ingrediente(16L,"Mostayesa",150F,3,"Mix mostaza y mayonesa","SinRestriccion");
-        Ingrediente n13 = new Ingrediente (17L,"La casa",250F,3,"Guacamole y mayonesa","SinRestriccion");
+    private void entoncesVerificoQueLasListasSeanIguales(List<Ingrediente> valorEsperado, List<Ingrediente> valor_obtenido) {
+        assertThat(valorEsperado).isEqualTo(valor_obtenido);
+    }
+
+    private List<Ingrediente> entoncesLeDigoAlRepositorioQueMeTraigaTodosLosIngredientesQueNoTenganRestriccion() {
+        return this.repo.obtenerIngredienteSiEsApto("SinRestriccion");
+    }
+
+    private static List<Ingrediente> dadoQueTengoEstosIngredientesEnLaBaseDeDatos(Ingrediente n1, Ingrediente n2, Ingrediente n3, Ingrediente n4, Ingrediente n5, Ingrediente n6, Ingrediente n7, Ingrediente n8, Ingrediente n9, Ingrediente n10, Ingrediente n11, Ingrediente n12, Ingrediente n13) {
+        List<Ingrediente> valorEsperado= new ArrayList<>();
         valorEsperado.add(n1);
         valorEsperado.add(n2);
         valorEsperado.add(n3);
@@ -105,8 +109,22 @@ public class RepositorioIngredientesImplTest extends SpringTest {
         valorEsperado.add(n11);
         valorEsperado.add(n12);
         valorEsperado.add(n13);
-        List<Ingrediente> valor_obtenido = this.repo.obtenerIngredienteSiEsApto("SinRestriccion");
-        assertThat(valorEsperado).isEqualTo(valor_obtenido);
+        return valorEsperado;
+    }
+
+    private static Ingrediente dadoQueExisteUnIngrediente(long idIngrediente, String Pan_clasico, float precio, int paso, String Pan_lactal_blanco, String esApto) {
+        return new Ingrediente(idIngrediente, Pan_clasico, precio, paso, Pan_lactal_blanco,esApto);
+    }
+
+    @Test @Transactional
+    public void queAlPedirUnaListaDeIngredientesDeLaBaseDeDatosSeFiltrePorPasoYPreferencia(){
+        List<Ingrediente> listaFiltrada = entoncesLeSolicitoALaBaseDeDatosQueMeTraigaTodosLosIngredientesFiltradosPor(1,"SinRestriccion");
+        System.err.println(listaFiltrada);
+        entoncesVerificoQueLaListaNoSeaNula(listaFiltrada);
+    }
+
+    private List<Ingrediente> entoncesLeSolicitoALaBaseDeDatosQueMeTraigaTodosLosIngredientesFiltradosPor(Integer i, String preferencia) {
+        return this.repo.obtenerIngredientesPorPasoYPorPreferencia(i,preferencia);
     }
 
 

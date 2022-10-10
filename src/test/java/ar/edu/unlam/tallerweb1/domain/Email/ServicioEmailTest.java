@@ -3,14 +3,7 @@ package ar.edu.unlam.tallerweb1.domain.Email;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.junit.Before;
 import org.junit.Test;
-
-import javax.mail.MessageRemovedException;
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class ServicioEmailTest {
 
