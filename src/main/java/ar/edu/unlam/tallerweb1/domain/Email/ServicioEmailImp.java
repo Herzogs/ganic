@@ -31,7 +31,7 @@ public class ServicioEmailImp implements ServicioEmail {
     }
 
     @Override
-    public void sendEmail(String recptor, String subject, String cuerpo) {
+    public Boolean sendEmail(String recptor, String subject, String cuerpo){
         init();
         try {
             MimeMessage message = new MimeMessage(session);
@@ -43,8 +43,9 @@ public class ServicioEmailImp implements ServicioEmail {
             t.connect(username, password);
             t.sendMessage(message, message.getAllRecipients());
             t.close();
-        }catch (MessagingException e){
-            System.err.println(e.getMessage());
+        } catch (MessagingException e){
+            return false;
         }
+        return true;
     }
 }

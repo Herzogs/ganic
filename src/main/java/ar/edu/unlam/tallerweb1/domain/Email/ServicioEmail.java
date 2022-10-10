@@ -4,5 +4,5 @@ import javax.mail.MessagingException;
 
 public interface ServicioEmail {
 
-    void sendEmail(String recptor, String subject, String cuerpo);
+    Boolean sendEmail(String recptor, String subject, String cuerpo);
 }
