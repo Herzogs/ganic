@@ -39,8 +39,11 @@ public class ServicioLoginImpl implements ServicioLogin {
 	}
 
 	@Override
-	public void actualizarUsuario(Usuario usuario) {
+	public void actualizarUsuario(Usuario usuario) throws UsuarioNoRegistradoExepcion {
+	if(this.servicioLoginDao.estaRegistrado(usuario.getEmail())){
 		this.servicioLoginDao.modificar(usuario);
+	}throw new UsuarioNoRegistradoExepcion("usuario no registrado");
+
 	}
 
 	@Override
