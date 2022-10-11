@@ -51,4 +51,9 @@ public class ServicioLoginImpl implements ServicioLogin {
 		Usuario buscado= this.servicioLoginDao.buscar(email);
 		return buscado;
 	}
+
+	@Override
+	public Boolean estaRegistrado(String email) {
+		return this.servicioLoginDao.estaRegistrado(email);
+	}
 }

@@ -30,11 +30,10 @@ public class ControladorRegistro {
     }
 
     @RequestMapping(path = "/crearUsuario", method = RequestMethod.POST)
-    public ModelAndView crearRegistro(DatosLogin datosLogin) throws UsuarioNoRegistradoExepcion {
+    public ModelAndView crearRegistro(DatosLogin datosLogin)  {
         ModelMap model = new ModelMap();
         if (esValido(datosLogin.getEmail())) {
-            Usuario usuarioGenerado = servicioLogin.consultarUsuario(datosLogin.getEmail());
-            if (usuarioGenerado == null) {
+            if (!servicioLogin.estaRegistrado(datosLogin.getEmail())) {
                 Usuario usuarioRegistrado = new Usuario(datosLogin.getEmail(), datosLogin.getPassword());
                 model.put("estado", "Registro Exitoso");
                 this.servicioLogin.crearUsuario(usuarioRegistrado);
