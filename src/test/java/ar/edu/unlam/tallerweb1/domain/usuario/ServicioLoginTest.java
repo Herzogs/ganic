@@ -8,6 +8,8 @@ import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLoginImpl;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.exceptions.base.MockitoException;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -26,15 +28,31 @@ public class ServicioLoginTest extends SpringTest {
 
     @Test
     public void queLuegoDeCrearUnUsuarioSePuedaVerificarSiSeGuardo() throws UsuarioNoRegistradoExepcion {
-        Usuario usuarioBuscado=  dadoQueExisteUnUsuario();
-    cuandoLLamoAlRepositorioYbusco(usuarioBuscado);
+        Usuario usuarioBuscado = dadoQueExisteUnUsuario();
+        cuandoLLamoAlRepositorioYbusco(usuarioBuscado);
 
-    verificoQueNoSeaNull(usuarioBuscado);
+        verificoQueNoSeaNull(usuarioBuscado);
 
     }
 
+    @Test(expected = UsuarioNoRegistradoExepcion.class )
+    public void queSiQuieroActualizarUnUsuarioQueNoExistaMeLAnseUNaExepcion() throws UsuarioNoRegistradoExepcion {
+    Usuario usuario=usuarioQueNoExisteEnLAbase();
+    actualizarDatosDelUSuario(usuario,"Juan","calleFalsa123");
+
+    }
+
+    private void actualizarDatosDelUSuario(Usuario usuario, String nombre, String direccion) throws UsuarioNoRegistradoExepcion {
+
+        this.servicioLogin.actualizarUsuario(usuario);
+    }
+
+    private Usuario usuarioQueNoExisteEnLAbase() {
+        return new Usuario("juan@gmail.com","123");
+    }
+
     private void cuandoLLamoAlRepositorioYbusco(Usuario usuarioBuscado) throws UsuarioNoRegistradoExepcion {
-        when(repositorioUsuario.buscarUsuario(usuarioBuscado.getEmail(),usuarioBuscado.getPassword())).
+        when(repositorioUsuario.buscarUsuario(usuarioBuscado.getEmail(), usuarioBuscado.getPassword())).
                 thenReturn(usuarioBuscado);
     }
 
@@ -42,14 +60,9 @@ public class ServicioLoginTest extends SpringTest {
         assertThat(usuarioBuscado).isNotNull();
     }
 
-    private Usuario buscarUsuario(String email, String pasword) throws UsuarioNoRegistradoExepcion {
-        Usuario usuarioBuscado= servicioLogin.consultarUsuario(email,pasword);
-
-        return usuarioBuscado;
-    }
 
     private Usuario dadoQueExisteUnUsuario() {
-       return new Usuario("pablo@gmail.com", "123");
+        return new Usuario("pablo@gmail.com", "123");
     }
 
 }

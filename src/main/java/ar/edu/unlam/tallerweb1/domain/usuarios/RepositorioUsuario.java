@@ -12,5 +12,5 @@ public interface RepositorioUsuario {
 	Usuario buscarPorId(Long id);
 	void modificar(Usuario usuario);
 
-    Boolean estaRegistrado(String email) throws UsuarioNoRegistradoExepcion;
+    Boolean estaRegistrado(String email) ;
 }

@@ -62,7 +62,7 @@ public class ControladorRegistro {
 
     // TODO: realizar test , ver si se puede simplificar el seteo de datos
     @RequestMapping(path = "/verificarDatos", method = RequestMethod.POST)
-    public ModelAndView envioDeVerificacion(DatosUsuario datosUsuario,HttpServletRequest request) {
+    public ModelAndView envioDeVerificacion(DatosUsuario datosUsuario,HttpServletRequest request) throws UsuarioNoRegistradoExepcion {
         ModelMap model = new ModelMap();
 
         Long idLogeado = (Long) request.getSession().getAttribute("id");

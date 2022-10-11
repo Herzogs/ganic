@@ -19,15 +19,15 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 	// el mismo esta difinido en el archivo hibernateContext.xml
 	private SessionFactory sessionFactory;
 
-    @Autowired
-	public RepositorioUsuarioImpl(SessionFactory sessionFactory){
+	@Autowired
+	public RepositorioUsuarioImpl(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
 
 	@Override
 	public Usuario buscarUsuario(String email, String password) throws UsuarioNoRegistradoExepcion {
 
-		if(estaRegistrado(email)){
+		if (estaRegistrado(email)) {
 			final Session session = sessionFactory.getCurrentSession();
 			return (Usuario) session.createCriteria(Usuario.class)
 					.add(Restrictions.eq("email", email))
@@ -47,10 +47,10 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 
 	@Override
 	public Usuario buscar(String email) throws UsuarioNoRegistradoExepcion {
-		Usuario buscado=(Usuario) sessionFactory.getCurrentSession().createCriteria(Usuario.class)
+		Usuario buscado = (Usuario) sessionFactory.getCurrentSession().createCriteria(Usuario.class)
 				.add(Restrictions.eq("email", email))
 				.uniqueResult();
-		if(buscado!=null) {
+		if (buscado != null) {
 			return buscado;
 
 		}
@@ -67,18 +67,21 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 	}
 
 
-
 	@Override
 	public void modificar(Usuario usuario) {
 		sessionFactory.getCurrentSession().update(usuario);
 	}
 
 	@Override
-	public Boolean estaRegistrado(String email) throws UsuarioNoRegistradoExepcion {
-		Usuario usuario =buscar(email);
-		if(!usuario.equals(null))
+	public Boolean estaRegistrado(String email) {
+		Usuario buscado = (Usuario) sessionFactory.getCurrentSession().createCriteria(Usuario.class)
+				.add(Restrictions.eq("email", email))
+				.uniqueResult();
+		if (buscado != null) {
 			return true;
-		return false;
-	}
+		}
+			return false;
+		}
+
 
 }
