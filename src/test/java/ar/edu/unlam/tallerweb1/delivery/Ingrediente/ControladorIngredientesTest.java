@@ -1,15 +1,21 @@
 package ar.edu.unlam.tallerweb1.delivery.Ingrediente;
-
 import ar.edu.unlam.tallerweb1.SpringTest;
 import ar.edu.unlam.tallerweb1.delivery.ControladorDeIngredientes;
+import ar.edu.unlam.tallerweb1.delivery.datosDelSandwich;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.IngredienteInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.PasoInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.ServicioDeIngrediente;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.springframework.web.servlet.ModelAndView;
+
+
+import javax.servlet.http.HttpServletRequest;
+
 import java.util.ArrayList;
+
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,94 +27,147 @@ public class ControladorIngredientesTest extends SpringTest {
     private ServicioDeIngrediente servicio;
     private ControladorDeIngredientes controladorDeIngredientes;
 
+    private datosDelSandwich sandwich;
+
+
     @Before
     public void init() {
         this.servicio = mock(ServicioDeIngrediente.class);
         this.controladorDeIngredientes = new ControladorDeIngredientes(this.servicio);
+        this.sandwich = mock(datosDelSandwich.class);
     }
 
     @Test
     public void queAlPedirUnaListaDeIngredientesMeLoMuestre() {
         //preparacion
-        dadoQueExistenIngredientes();
+        List<Ingrediente> ingredientes = generarLaListaDeIngredientes();
+        cuandoLeSolicitenAlServicioQueDevuelaLaListaCompletaDeLosIngredientesDevuelva(ingredientes);
 
         //ejecucion
-        ModelAndView modelAndView = cuandoListoIngredientes();
+        ModelAndView modelAndView = cuandoLePidaAlControladorQueListeTodosLosIngrediente();
 
         // verificacion
-        entoncesEncuentro(modelAndView, 13);
-        entoncesMeLLevaALaVista(modelAndView, "ingredientes");
+        entoncesVerificoQueSeLeMandenLaCantidadDeIngredientesSolicitados(modelAndView, 13);
+        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(modelAndView, "ingredientes");
     }
 
     @Test
     public void cuandoQuieraGenerarUnSandwichMeGenereLosPanes() throws PasoInvalidoException {
         // Preparación
-        String vista_solicitada = "generarPedido";
 
         // Ejecución
-        ModelAndView mod = this.cuandoSeleccionoGenerarPedido(1);
+        ModelAndView mod = cuandoLePidaAlControladorQueMeRedirijaALaVistaDeIngredienteDelPaso(1);
         // Verificación
 
-        entoncesMeLLevaALaVista(mod, vista_solicitada);
+        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(mod, "generarPedido");
     }
 
     @Test
     public void cuandoElijaUnPanMeRedirijaHaciaLosIngredientesPrincipal() throws IngredienteInvalidoException {
         // Preparación
         String vista_solicitada = "redirect:/generarPedido?paso=2";
-        Ingrediente pan = new Ingrediente(5L, "Pan clasico", 150F, 1, "Pan lactal blanco","SinRestriccion");
-        Long idIngrediente = 5L;
-        dadoQueSeleccioneUnIngrediente(pan);
+        Ingrediente ingredienteSeleccionado = dadoQueExisteUnIngrediente(5L, "Pan clasico", 150F, 1, "Pan lactal blanco","SinRestriccion");
+        cuandoLePidoAlServicioQueMeDevuelvaUnIngredientePorID(ingredienteSeleccionado);
         // Ejecución
-        ModelAndView mod = this.cuandoSeleccioneUnPan(idIngrediente);
+        ModelAndView mod = cuandoSeleccioneUnIngredienteEntoncesElControladorLoAgregueALaListaDeIngredientes(ingredienteSeleccionado);
         // Verificación
-        entoncesMeLLevaALaVista(mod,vista_solicitada);
+        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(mod,vista_solicitada);
     }
 
     @Test
     public void cuandoElijaUnPrincipalMeRedirijaHaciaLosIngredientesOpcionales() throws IngredienteInvalidoException {
         // Preparación
         String vista_solicitada = "redirect:/generarPedido?paso=3";
-        Long idIngredienteSeleccionado = 9L;
-        Ingrediente ing = new Ingrediente (9L,"Medallo de carne",450F,2,"Carne de ternera a la parrilla","SinRestriccion");
-        dadoQueSeleccioneUnIngrediente(ing);
+        Ingrediente ingredienteSeleccionado = dadoQueExisteUnIngrediente (9L,"Medallo de carne",450F,2,"Carne de ternera a la parrilla","SinRestriccion");
+        cuandoLePidoAlServicioQueMeDevuelvaUnIngredientePorID(ingredienteSeleccionado);
         // Ejecución
-        ModelAndView mod = this.cuandoSeleccioneIngrediente(idIngredienteSeleccionado);
+        ModelAndView mod = cuandoSeleccioneUnIngredienteEntoncesElControladorLoAgregueALaListaDeIngredientes(ingredienteSeleccionado);
         // Verificación
-        entoncesMeLLevaALaVista(mod,vista_solicitada);
+        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(mod,vista_solicitada);
     }
 
     @Test
     public void cuandoElijaUnOpcionalMeRedirijaOtraVezHaciaLosIngredientesOpcionales() throws IngredienteInvalidoException {
         // Preparación
         String vista_solicitada = "redirect:/generarPedido?paso=3";
-        Long idIngredienteSeleccionado = 12L;
-        Ingrediente ing = dadoQueExisteUnIngrediente();
-        dadoQueSeleccioneUnIngrediente(ing);
+        Ingrediente ingredienteSeleccionado = dadoQueExisteUnIngrediente(13L,"Mix verde",38F,2,"Salteado de verduras","SinRestriccion");
+        cuandoLePidoAlServicioQueMeDevuelvaUnIngredientePorID(ingredienteSeleccionado);
         // Ejecución
-        ModelAndView mod = this.cuandoSeleccioneIngrediente(idIngredienteSeleccionado);
+        ModelAndView mod = cuandoSeleccioneUnIngredienteEntoncesElControladorLoAgregueALaListaDeIngredientes(ingredienteSeleccionado);
         // Verificación
-        entoncesMeLLevaALaVista(mod,vista_solicitada);
+        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(mod,vista_solicitada);
     }
 
-    private Ingrediente dadoQueExisteUnIngrediente() {
-        return new Ingrediente(12L,"Vegetalizima",40F,3,"Milanesa de soja","SinRestriccion");
+   /* @Test
+    public void cuandoSeleccioneUnaCantidadInsuficienteDeIngredientesYQuieraConfirmarMeRedirijaALaVistaDeLPrimerIngredienteSiEstoyLogeado(){
+        String vistaEsperada = "redirect:/generarPedido?paso=1";
+        ModelAndView model = cuandoElControladorVerifiqueQueNoSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(1,this.request);
+        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model.getViewName(),vistaEsperada);
     }
 
-    private void entoncesMeLLevaALaVista(ModelAndView mav, String vistaEsperada) {
+    public ModelAndView cuandoElControladorVerifiqueQueNoSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich (Integer paso, HttpServerlet req){
+        return this.controladorDeIngredientes.confirmarIngredientesSeleccionados(paso, req);
+    }
+
+    @Test
+    public void cuandoSeleccioneUnaCantidadSuficienteDeIngredientesYQuieraConfirmarMeRedirijaALaVistaDeConfirmacion(){
+        String vistaEsperada = "confirmar";
+        Lista<Ingrediente> lista = dadoQueTengoUnaListaDeIngredientesSeleccionados();
+        cuandoIngreseLosIngredientesSeleccionadosALaListaDeIngredientesParaFormarElSandwich(lista);
+        ModelAndView model = cuandoElControladorVerifiqueQueSiSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(3,this.request);
+        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model.getViewName(),vistaEsperada);
+    }
+
+    public ModelAndView cuandoElControladorVerifiqueQueSiSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich (Integer paso, HttpServerlet req){
+        return this.controladorDeIngredientes.confirmarIngredientesSeleccionados(paso, req);
+
+    private void cuandoIngreseLosIngredientesSeleccionadosALaListaDeIngredientesParaFormarElSandwich(Lista<Ingrediente> lista){
+        when(this.sandwich.getIngredientesSandwich()).thenReturn(lista);
+    }
+
+    private List<Ingrediente> dadoQueTengoUnaListaDeIngredientesSeleccionados(){
+        Ingrediente ing1 = dadoQueExisteUnIngrediente(5L, "Pan clasico", 150F, 1, "Pan lactal blanco","SinRestriccion");
+        Ingrediente ing2 = dadoQueExisteUnIngrediente (9L,"Medallo de carne",450F,2,"Carne de ternera a la parrilla","SinRestriccion");
+        Ingrediente ing3 = dadoQueExisteUnIngrediente(13L,"Mix verde",38F,2,"Salteado de verduras","SinRestriccion");
+        List<Ingrediente> lista = new ArrayList<>();
+        lista.add(ing1);
+        lista.add(ing1);
+        lista.add(ing1);
+        return lista;
+    }
+
+    @Test
+    public void cuandoSeleccioneUnaCantidadInsuficienteDeIngredientesPeroNoEsteLogeadoMeRedirijaAlLogin(){
+        String vistaEsperada = "redirect:/login";
+        Lista<Ingrediente> lista = dadoQueTengoUnaListaDeIngredientesSeleccionados();
+        ModelAndView model = cuandoElControladorVerifiqueQueNoSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(1,this.request);
+        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model.getViewName(),vistaEsperada);
+    }
+
+     @Test
+     public void cuandoSeleccioneUnaCantidadSuficienteDeIngredientesYEsteLogeadoMeRedirijaAlaPantallaDeExito(){
+        String vistaEsperada = "exito";
+        Lista<Ingrediente> lista = dadoQueTengoUnaListaDeIngredientesSeleccionados();
+        cuandoIngreseLosIngredientesSeleccionadosALaListaDeIngredientesParaFormarElSandwich(lista);
+        ModelAndView model = tcuandoElControladorVerifiqueQueSiSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(3,this.request);
+        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model.getViewName(),vistaEsperada);
+    }*/
+
+
+    private void entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(ModelAndView mav, String vistaEsperada) {
         assertThat(mav.getViewName()).isEqualTo(vistaEsperada);
     }
 
-    private void entoncesEncuentro(ModelAndView mav, int cantidadIngredientesEsperado) {
+    private void entoncesVerificoQueSeLeMandenLaCantidadDeIngredientesSolicitados(ModelAndView mav, int cantidadIngredientesEsperado) {
         assertThat((List<Ingrediente>) mav.getModel().get("ingredientes")).hasSize(cantidadIngredientesEsperado);
     }
 
-    private ModelAndView cuandoListoIngredientes() {
+    private ModelAndView cuandoLePidaAlControladorQueListeTodosLosIngrediente() {
         return controladorDeIngredientes.ingredientes();
     }
 
-    private void dadoQueExistenIngredientes() {
-        when(this.servicio.obtenerTodosLosIngredientes()).thenReturn(generarLaListaDeIngredientes());
+    private void cuandoLeSolicitenAlServicioQueDevuelaLaListaCompletaDeLosIngredientesDevuelva(List<Ingrediente> listaIngredientesDisponibles) {
+        when(this.servicio.obtenerTodosLosIngredientes()).thenReturn(listaIngredientesDisponibles);
     }
     private List<Ingrediente> generarLaListaDeIngredientes(){
         List<Ingrediente> ingredienteList= new ArrayList<>();
@@ -142,21 +201,25 @@ public class ControladorIngredientesTest extends SpringTest {
         return ingredienteList;
     }
 
-    private ModelAndView cuandoSeleccionoGenerarPedido(Integer i) {
-        return this.controladorDeIngredientes.cargarPagina(i);
+    private ModelAndView cuandoLePidaAlControladorQueMeRedirijaALaVistaDeIngredienteDelPaso(Integer paso) {
+        return this.controladorDeIngredientes.cargarPagina(paso);
     }
 
-    private void dadoQueSeleccioneUnIngrediente(Ingrediente ing) throws IngredienteInvalidoException {
+    private void cuandoLePidoAlServicioQueMeDevuelvaUnIngredientePorID(Ingrediente ing) throws IngredienteInvalidoException {
         when(this.servicio.obtenerIngredientePorId(ing.getIdIngrediente())).thenReturn(ing);
     }
 
-    private ModelAndView cuandoSeleccioneUnPan(Long idIngrediente) throws IngredienteInvalidoException {
+    private ModelAndView cuandoSeleccioneUnIngredienteEntoncesElControladorLoAgregueALaListaDeIngredientes(Ingrediente ing) throws IngredienteInvalidoException {
 
-        return this.controladorDeIngredientes.agregarIngredientes(idIngrediente);
+        return this.controladorDeIngredientes.agregarIngredientes(ing.getIdIngrediente());
     }
 
     private ModelAndView cuandoSeleccioneIngrediente(Long idIngrediente) throws IngredienteInvalidoException {
         return this.controladorDeIngredientes.agregarIngredientes(idIngrediente);
+    }
+
+    private Ingrediente dadoQueExisteUnIngrediente(long idIngrediente, String nombre, float precio, int paso, String desc, String esApto) {
+        return new Ingrediente(idIngrediente, nombre, precio, paso, desc,esApto);
     }
 
 /*

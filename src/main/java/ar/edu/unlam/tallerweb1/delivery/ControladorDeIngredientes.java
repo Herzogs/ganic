@@ -112,4 +112,9 @@ public class ControladorDeIngredientes {
         this.sandwich.borrarDatosDelSandwich();
         return new ModelAndView("home");
     }
+
+    public datosDelSandwich getSandwich() {
+        return sandwich;
+    }
+
 }
