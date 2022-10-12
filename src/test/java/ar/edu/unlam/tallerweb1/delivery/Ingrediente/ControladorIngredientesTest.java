@@ -8,12 +8,11 @@ import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.ServicioDeIngrediente;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 
-import javax.servlet.http.HttpServletRequest;
-
+import javax.servlet.ServletContext;
 import java.util.ArrayList;
 
 import java.util.List;
@@ -28,7 +27,6 @@ public class ControladorIngredientesTest extends SpringTest {
     private ControladorDeIngredientes controladorDeIngredientes;
 
     private datosDelSandwich sandwich;
-
 
     @Before
     public void init() {
@@ -98,14 +96,16 @@ public class ControladorIngredientesTest extends SpringTest {
         entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(mod,vista_solicitada);
     }
 
-   /* @Test
+    /*
+    @Test
     public void cuandoSeleccioneUnaCantidadInsuficienteDeIngredientesYQuieraConfirmarMeRedirijaALaVistaDeLPrimerIngredienteSiEstoyLogeado(){
         String vistaEsperada = "redirect:/generarPedido?paso=1";
+        this.request.addParameter("id", String.valueOf(1L));
         ModelAndView model = cuandoElControladorVerifiqueQueNoSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(1,this.request);
-        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model.getViewName(),vistaEsperada);
+        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model,vistaEsperada);
     }
 
-    public ModelAndView cuandoElControladorVerifiqueQueNoSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich (Integer paso, HttpServerlet req){
+    public ModelAndView cuandoElControladorVerifiqueQueNoSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich (Integer paso, MockHttpServletRequest req){
         return this.controladorDeIngredientes.confirmarIngredientesSeleccionados(paso, req);
     }
 

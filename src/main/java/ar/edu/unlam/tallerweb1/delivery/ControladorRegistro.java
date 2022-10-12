@@ -61,25 +61,28 @@ public class ControladorRegistro {
 
     // TODO: realizar test , ver si se puede simplificar el seteo de datos
     @RequestMapping(path = "/verificarDatos", method = RequestMethod.POST)
-    public ModelAndView envioDeVerificacion(DatosUsuario datosUsuario,HttpServletRequest request) throws UsuarioNoRegistradoExepcion {
+    public ModelAndView envioDeVerificacion(DatosUsuario datosUsuario,HttpServletRequest request){
         ModelMap model = new ModelMap();
+        Usuario miUsuario = null;
 
-        Long idLogeado = (Long) request.getSession().getAttribute("id");
-        Usuario miUsuario = this.servicioLogin.consultarPorID(idLogeado);
-
-        miUsuario.setNombre(datosUsuario.getNombre());
-        miUsuario.setApellido(datosUsuario.getApellido());
-        miUsuario.setDireccion(datosUsuario.getDireccion());
-        miUsuario.setPreferencia(datosUsuario.getPreferencia());
-
-        this.servicioLogin.actualizarUsuario(miUsuario);
-        return new ModelAndView("home", model);
-
+            Long idLogeado = (Long) request.getSession().getAttribute("id");
+            miUsuario = this.servicioLogin.consultarPorID(idLogeado);
+            if(miUsuario != null) {
+                miUsuario.setNombre(datosUsuario.getNombre());
+                miUsuario.setApellido(datosUsuario.getApellido());
+                miUsuario.setDireccion(datosUsuario.getDireccion());
+                miUsuario.setPreferencia(datosUsuario.getPreferencia());
+                this.servicioLogin.actualizarUsuario(miUsuario);
+                return new ModelAndView("home", model);
+            }
+            model.put("error","No Existe El Usuario a Actualizar");
+            return new ModelAndView("redirect:/login",model);
     }
 
 
     private boolean esValido(String email) {
-        return email.endsWith(".com") && email.contains("@");
+        /*return email.endsWith(".com") && email.contains("@");*/
+        return email.matches("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$");
     }
 
 }

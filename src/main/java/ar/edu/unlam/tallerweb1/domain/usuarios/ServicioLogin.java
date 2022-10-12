@@ -9,7 +9,7 @@ public interface ServicioLogin {
 	Usuario consultarUsuario(String email, String password) throws UsuarioNoRegistradoExepcion;
 	void crearUsuario(Usuario usuario);
 
-	void actualizarUsuario(Usuario usuario) throws UsuarioNoRegistradoExepcion;
+	void actualizarUsuario(Usuario usuario);
 
 	Usuario consultarPorID(Long id);
 

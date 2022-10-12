@@ -45,7 +45,7 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 	}
 
 
-	@Override
+	/*@Override
 	public Usuario buscar(String email) throws UsuarioNoRegistradoExepcion {
 		Usuario buscado = (Usuario) sessionFactory.getCurrentSession().createCriteria(Usuario.class)
 				.add(Restrictions.eq("email", email))
@@ -57,8 +57,16 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 		throw new UsuarioNoRegistradoExepcion("Usuario no registrado");
 
 
-	}
+	}*/
 
+	@Override
+	public Usuario buscar(String email){
+		Usuario buscado = (Usuario) sessionFactory.getCurrentSession().createCriteria(Usuario.class)
+				.add(Restrictions.eq("email", email))
+				.uniqueResult();
+			return buscado;
+
+	}
 	@Override
 	public Usuario buscarPorId(Long id) {
 		return (Usuario) sessionFactory.getCurrentSession().createCriteria(Usuario.class)
