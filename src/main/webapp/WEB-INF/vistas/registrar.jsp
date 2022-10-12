@@ -1,25 +1,47 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
-	<head>
-	<!-- Bootstrap core CSS -->
-	    <link href="css/bootstrap.min.css" rel="stylesheet" >
-	    <!-- Bootstrap theme -->
-	    <link href="css/bootstrap-theme.min.css" rel="stylesheet">
-	</head>
+<head>
+	<meta charset="utf-8">
+	<!-- CSS only -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+	<link href="css/styles.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+</head>
 	<body>
+	<header>
+		<nav class="nav_style d-flex align-items-center">
+			<div class="container">
+				<div class="text-center">
+					<a href="home">Home</a>
+					<a href="ingredientes">Menu</a>
+					<a href="home"><img src="img/ganiclogo.png" class="img-fluid logo_style" alt="Logo"></a>
+					<a href="contacto">Contacto</a>
+					<a href="nosotros">Nosotros</a>
+				</div>
+			</div>
+		</nav>
+	</header>
 		<div class = "container">
-			<div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-				<form:form action="crearUsuario" method="POST" modelAttribute="datosLogin">
-			    	<h3 class="form-signin-heading">Registrar usuario</h3>
-					<hr class="colorgraph"><br>
+			<div id="loginbox">
 
-					<form:input path="email" id="email" type="email" class="form-control" />
-					<form:input path="password" type="password" id="password" class="form-control"/>     		  
-					
-					<button class="btn btn-lg btn-primary btn-block" Type="Submit"/>Crear</button>
-				</form:form>
+				<div class="row justify-content-center">
+					<div class="col-6 mt-5" style="background-color: #f7f7f7; padding: 46px;">
+						<form:form action="crearUsuario" method="POST" modelAttribute="datosLogin">
+							<h3>Registrar usuario</h3>
+							<hr class="mb-5">
+							<label class="form-label">Email</label>
+							<form:input path="email" id="email" type="email" class="form-control" />
+							<label class="form-label mt-4">Contraseña</label>
+							<form:input path="password" type="password" id="password" class="form-control"/>
+							<div class="d-grid gap-2">
+								<button class="btn btn-success mt-5 mb-4" Type="Submit">Crear</button>
+							</div>
+						</form:form>
+					</div>
+				</div>
 
 				<%--Bloque que es visible si el elemento error no esta vacio	--%>
 				<c:if test="${not empty error}">

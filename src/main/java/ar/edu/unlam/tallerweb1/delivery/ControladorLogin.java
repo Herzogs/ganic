@@ -67,5 +67,15 @@ public class ControladorLogin {
 		return new ModelAndView("redirect:/home");
 	}
 
+	@RequestMapping(path = "/nosotros")
+	public ModelAndView nosotros() {
+		return new ModelAndView("nosotros");
+	}
+
+	@RequestMapping(path = "/contacto")
+	public ModelAndView contacto() {
+		return new ModelAndView("contacto");
+	}
+
 
 }

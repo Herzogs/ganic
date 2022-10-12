@@ -1,33 +1,59 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet" >
-    <!-- Bootstrap theme -->
-    <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+    <meta charset="utf-8">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <link href="css/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
 </head>
 <body>
+<header>
+    <nav class="nav_style d-flex align-items-center">
+        <div class="container">
+            <div class="text-center">
+                <a href="home">Home</a>
+                <a href="ingredientes">Menu</a>
+                <a href="home"><img src="img/ganiclogo.png" class="img-fluid logo_style" alt="Logo"></a>
+                <a href="contacto">Contacto</a>
+                <a href="nosotros">Nosotros</a>
+            </div>
+        </div>
+    </nav>
+</header>
 <div class = "container">
-    <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+    <div id="loginbox">
 
-        <form:form action="verificarDatos" method="POST" modelAttribute="datosUsuario">
-            <h3 class="form-signin-heading">Verificar datos del perfil</h3>
-            <hr class="colorgraph"><br>
-            <form:input path="nombre" type="text" id="nombre" class="form-control" placeholder="Ingresa tu nombre" required="required" />
-            <form:input path="apellido" type="text" id="apellido" class="form-control" placeholder="Ingresa tu apellido" required="required"/>
-            <form:input path="direccion" type="text" id="direccion" class="form-control" placeholder="Ingresa tu direccion" required="required"/>
-            <form:input path="preferencia" type="text" id="preferencia" class="form-control" placeholder="SinRestriccion Vegano SinTacc" required="required"/>
-            <button class="btn btn-lg btn-primary btn-block" Type="Submit"/>Guardar</button>
+        <div class="row justify-content-center my-5">
+            <div class="col-6">
+                <form:form action="verificarDatos" method="POST" modelAttribute="datosUsuario">
+                    <h3 class="text-center">Verificar datos del perfil</h3>
+                    <hr class="mb-4"><br>
+                    <label class="form-label">Nombre</label>
+                    <form:input path="nombre" type="text" id="nombre" class="form-control" required="required" />
+                    <label class="form-label mt-3">Apellido</label>
+                    <form:input path="apellido" type="text" id="apellido" class="form-control" required="required"/>
+                    <label class="form-label mt-3">Dirección</label>
+                    <form:input path="direccion" type="text" id="direccion" class="form-control" required="required"/>
+                    <label class="form-label mt-3">Preferencia</label>
+                    <form:input path="preferencia" type="text" id="preferencia" class="form-control" placeholder="SinRestriccion Vegano sin_TACC" required="required"/>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-success mt-5 mb-4" Type="Submit">Guardar</button>
+                    </div>
 
-        </form:form>
+                </form:form>
 
-        <a href="home" class="mt-5">Volver a la home</a>
-        <%--Bloque que es visible si el elemento error no esta vacio--%>
-        <c:if test="${not empty error}">
-            <h4>${error}</h4>
-        </c:if>
+                <a href="home" class="btn btn-primary px-5 mt-5">Volver a la home</a>
+                <%--Bloque que es visible si el elemento error no esta vacio--%>
+                <c:if test="${not empty error}">
+                    <h4>${error}</h4>
+                </c:if>
+            </div>
+        </div>
+
     </div>
 </div>
 

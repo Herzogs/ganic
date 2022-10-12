@@ -19,10 +19,10 @@
         <div class="container">
             <div class="text-center">
                 <a href="home">Home</a>
-                <a href="">Menu</a>
+                <a href="ingredientes">Menu</a>
                 <a href="home"><img src="img/ganiclogo.png" class="img-fluid logo_style" alt="Logo"></a>
-                <a href="">Contacto</a>
-                <a href="">Nosotros</a>
+                <a href="contacto">Contacto</a>
+                <a href="nosotros">Nosotros</a>
             </div>
         </div>
     </nav>
