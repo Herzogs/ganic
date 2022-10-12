@@ -35,12 +35,12 @@ public class ServicioLoginTest extends SpringTest {
 
     }
 
-    @Test(expected = UsuarioNoRegistradoExepcion.class )
+    /*@Test(expected = UsuarioNoRegistradoExepcion.class )
     public void queSiQuieroActualizarUnUsuarioQueNoExistaMeLAnseUNaExepcion() throws UsuarioNoRegistradoExepcion {
     Usuario usuario=usuarioQueNoExisteEnLAbase();
     actualizarDatosDelUSuario(usuario,"Juan","calleFalsa123");
 
-    }
+    }*/
 
     private void actualizarDatosDelUSuario(Usuario usuario, String nombre, String direccion) throws UsuarioNoRegistradoExepcion {
 
