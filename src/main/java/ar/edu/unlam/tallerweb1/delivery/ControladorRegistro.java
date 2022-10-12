@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.delivery;
 
+import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioNoRegistradoExepcion;
 import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
@@ -30,7 +31,7 @@ public class ControladorRegistro {
     }
 
     @RequestMapping(path = "/crearUsuario", method = RequestMethod.POST)
-    public ModelAndView crearRegistro(DatosLogin datosLogin)  {
+    public ModelAndView crearRegistro(DatosLogin datosLogin) {
         ModelMap model = new ModelMap();
         if (esValido(datosLogin.getEmail())) {
             if (!servicioLogin.estaRegistrado(datosLogin.getEmail())) {
@@ -46,11 +47,12 @@ public class ControladorRegistro {
         return new ModelAndView("registrar", model);
 
     }
+
     // TODO: realizar test
     @RequestMapping("/verificar")
     public ModelAndView verificarDatos(HttpServletRequest request) {
         Long idLogeado = (Long) request.getSession().getAttribute("id");
-        if ( idLogeado != null){
+        if (idLogeado != null) {
             ModelMap modelo = new ModelMap();
             modelo.put("datosUsuario", new DatosUsuario());
             return new ModelAndView("verificar", modelo);
@@ -61,22 +63,22 @@ public class ControladorRegistro {
 
     // TODO: realizar test , ver si se puede simplificar el seteo de datos
     @RequestMapping(path = "/verificarDatos", method = RequestMethod.POST)
-    public ModelAndView envioDeVerificacion(DatosUsuario datosUsuario,HttpServletRequest request){
+    public ModelAndView envioDeVerificacion(DatosUsuario datosUsuario, HttpServletRequest request) {
         ModelMap model = new ModelMap();
         Usuario miUsuario = null;
-
-            Long idLogeado = (Long) request.getSession().getAttribute("id");
+        Long idLogeado = (Long) request.getSession().getAttribute("id");
+        try {
             miUsuario = this.servicioLogin.consultarPorID(idLogeado);
-            if(miUsuario != null) {
-                miUsuario.setNombre(datosUsuario.getNombre());
-                miUsuario.setApellido(datosUsuario.getApellido());
-                miUsuario.setDireccion(datosUsuario.getDireccion());
-                miUsuario.setPreferencia(datosUsuario.getPreferencia());
-                this.servicioLogin.actualizarUsuario(miUsuario);
-                return new ModelAndView("home", model);
-            }
-            model.put("error","No Existe El Usuario a Actualizar");
-            return new ModelAndView("redirect:/login",model);
+            miUsuario.setNombre(datosUsuario.getNombre());
+            miUsuario.setApellido(datosUsuario.getApellido());
+            miUsuario.setDireccion(datosUsuario.getDireccion());
+            miUsuario.setPreferencia(datosUsuario.getPreferencia());
+            this.servicioLogin.actualizarUsuario(miUsuario);
+            return new ModelAndView("home", model);
+        } catch (UsuarioInvalidoException exc) {
+            model.put("error", exc.getMessage());
+            return new ModelAndView("redirect:/login", model);
+        }
     }
 
 

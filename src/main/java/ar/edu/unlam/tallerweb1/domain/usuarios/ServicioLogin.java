@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.domain.usuarios;
 
+import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioNoRegistradoExepcion;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 
@@ -11,7 +12,7 @@ public interface ServicioLogin {
 
 	void actualizarUsuario(Usuario usuario);
 
-	Usuario consultarPorID(Long id);
+	Usuario consultarPorID(Long id) throws UsuarioInvalidoException;
 
 	Usuario consultarUsuario(String email) throws UsuarioNoRegistradoExepcion;
 	Boolean estaRegistrado(String email) ;

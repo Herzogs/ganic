@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.domain.usuario;
 
 import ar.edu.unlam.tallerweb1.SpringTest;
+import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioNoRegistradoExepcion;
 import ar.edu.unlam.tallerweb1.domain.usuarios.RepositorioUsuario;
 import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
@@ -35,20 +36,29 @@ public class ServicioLoginTest extends SpringTest {
 
     }
 
-    /*@Test(expected = UsuarioNoRegistradoExepcion.class )
-    public void queSiQuieroActualizarUnUsuarioQueNoExistaMeLAnseUNaExepcion() throws UsuarioNoRegistradoExepcion {
+    @Test(expected = UsuarioInvalidoException.class )
+    public void queSiQuieroActualizarUnUsuarioQueNoExistaMeLAnseUNaExepcion() throws UsuarioInvalidoException {
     Usuario usuario=usuarioQueNoExisteEnLAbase();
+    cuandoLLameAlServicioParaConsultarQueElUSuarioExistaMeDevuelvaUnaExcepcion(usuario);
     actualizarDatosDelUSuario(usuario,"Juan","calleFalsa123");
 
-    }*/
+    }
 
-    private void actualizarDatosDelUSuario(Usuario usuario, String nombre, String direccion) throws UsuarioNoRegistradoExepcion {
+    private void cuandoLLameAlServicioParaConsultarQueElUSuarioExistaMeDevuelvaUnaExcepcion(Usuario usuario) throws UsuarioInvalidoException {
+        when(this.servicioLogin.consultarPorID(usuario.getId())).thenThrow(new UsuarioInvalidoException("error"));
+    }
+
+    private void actualizarDatosDelUSuario(Usuario usuario, String nombre, String direccion){
 
         this.servicioLogin.actualizarUsuario(usuario);
     }
 
     private Usuario usuarioQueNoExisteEnLAbase() {
-        return new Usuario("juan@gmail.com","123");
+        Usuario user = new Usuario();
+        user.setEmail("juan@gmail.com");
+        user.setPassword("123");
+        user.setId(100L);
+        return user;
     }
 
     private void cuandoLLamoAlRepositorioYbusco(Usuario usuarioBuscado) throws UsuarioNoRegistradoExepcion {

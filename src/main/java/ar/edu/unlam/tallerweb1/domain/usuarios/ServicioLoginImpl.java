@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.domain.usuarios;
 
+import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioNoRegistradoExepcion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,8 +29,10 @@ public class ServicioLoginImpl implements ServicioLogin {
 	}
 
 	@Override
-	public Usuario consultarPorID (Long id) {
+	public Usuario consultarPorID (Long id) throws UsuarioInvalidoException {
 		Usuario buscado = servicioLoginDao.buscarPorId(id);
+		if(buscado == null)
+			throw new UsuarioInvalidoException("No Existe Usuario Con Ese ID");
 		return buscado;
 	}
 
