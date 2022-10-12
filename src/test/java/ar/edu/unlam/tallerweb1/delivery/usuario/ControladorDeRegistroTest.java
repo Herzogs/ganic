@@ -9,8 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 import static org.mockito.Mockito.mock;
@@ -37,7 +35,7 @@ public class ControladorDeRegistroTest {
     }
 
   @Test
-    public void alIngresarLosDatosSeGuardenEnLaBaseDeDatos() throws UsuarioNoRegistradoExepcion {
+    public void alIngresarLosDatosSeGuardenEnLaBaseDeDatos()  {
         String vista_destino ="login";
         this.datosLogin = new DatosLogin();
         this.datosLogin.setEmail("test@test.com");
@@ -51,14 +49,14 @@ public class ControladorDeRegistroTest {
         String vista_destino ="registrar";
         DatosLogin nuevoDatosLogin = obtenerUnDatosLogin();
         ModelAndView model;
-        buscarUnUsuarioPorEmailConMokito("test@test.com");
+        cuandoUnUsuarioYaExiste("test@test.com");
         model = this.controladorDeRegistro.crearRegistro(nuevoDatosLogin);
         assertThat(model.getViewName()).isEqualTo(vista_destino);
 
     }
 
     @Test
-    public void queNoMeDejeGuardarUnUsusrioConFormatoDeMAilInavlido() throws UsuarioNoRegistradoExepcion {
+    public void queNoMeDejeGuardarUnUsusrioConFormatoDeMAilInavlido()  {
         String vista_destino ="registrar";
         this.datosLogin = new DatosLogin();
         this.datosLogin.setEmail("test@test");
@@ -81,5 +79,8 @@ public class ControladorDeRegistroTest {
         this.datosLogin.setPassword("123");
         DatosLogin nuevoDatosLogin= datosLogin;
         return nuevoDatosLogin;
+    }
+    private void cuandoUnUsuarioYaExiste(String mail){
+         when(this.servicioLogin.estaRegistrado(mail)).thenReturn(true);
     }
 }
