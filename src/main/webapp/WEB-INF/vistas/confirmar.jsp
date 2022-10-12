@@ -15,10 +15,10 @@
         <div class="container">
             <div class="text-center">
                 <a href="home">Home</a>
-                <a href="">Menu</a>
+                <a href="ingredientes">Menu</a>
                 <a href="home"><img src="img/ganiclogo.png" class="img-fluid logo_style" alt="Logo"></a>
-                <a href="">Contacto</a>
-                <a href="">Nosotros</a>
+                <a href="contacto">Contacto</a>
+                <a href="nosotros">Nosotros</a>
             </div>
         </div>
     </nav>
@@ -43,8 +43,6 @@
                     </div>
                 </div>
                 <div class="col-6">
-                    <h4 class="pb-3">Confirmar dirección</h4>
-                    <input class="form-control mb-5" name="direccion" id="direccion" placeholder="Ingresar dirección de envio" />
                     <h4 class="pb-3">Confirmar pago</h4>
                     <a href="exito" class="btn btn-success px-5 mb-5">Confirmar</a>
                     <div><a href="home" class="btn btn-primary px-5 my-5">Volver al Home</a></div>
