@@ -39,7 +39,12 @@
                     <label class="form-label mt-3">Dirección</label>
                     <form:input path="direccion" type="text" id="direccion" class="form-control" required="required"/>
                     <label class="form-label mt-3">Preferencia</label>
-                    <form:input path="preferencia" type="text" id="preferencia" class="form-control" placeholder="SinRestriccion Vegano sin_TACC" required="required"/>
+                    <form:select  path="preferencia" id="preferencia" class="form-select">
+                        <form:option value="SinRestriccion">SinRestriccion</form:option>
+                        <form:option value="Vegano">Vegano</form:option>
+                        <form:option value="sin_TACC">sin_TACC</form:option>
+                    </form:select>
+
                     <div class="d-grid gap-2">
                         <button class="btn btn-success mt-5 mb-4" Type="Submit">Guardar</button>
                     </div>

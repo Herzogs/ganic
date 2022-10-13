@@ -47,7 +47,7 @@ public class ControladorDeRegistroTest {
 
     @Test
     public void alIngresarLosDatosSeGuardenEnLaBaseDeDatos()  {
-        String vista_destino ="login";
+        String vista_destino ="redirect:/login";
         this.datosLogin = new DatosLogin();
         this.datosLogin.setEmail("test@test.com");
         this.datosLogin.setPassword("123");

@@ -38,7 +38,7 @@ public class ControladorRegistro {
                 Usuario usuarioRegistrado = new Usuario(datosLogin.getEmail(), datosLogin.getPassword());
                 model.put("estado", "Registro Exitoso");
                 this.servicioLogin.crearUsuario(usuarioRegistrado);
-                return new ModelAndView("login", model);
+                return new ModelAndView("redirect:/login", model);
             }
             model.put("msg", "El mail ya se encuentrta registrado");
             return new ModelAndView("registrar", model);

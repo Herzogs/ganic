@@ -39,7 +39,7 @@
 
 	<section>
 		<div class="container">
-			<div class="row">
+			<div class="row py-5">
 				<div class="col-6 text-center">
 					<h4 class="pt-5 pb-3">Comenzá a prepararlo <span class="text-success">YA</span> !</h4>
 					<a href="generarPedido?paso=1" class="btn btn-success rounded-pill px-5">CREAR PEDIDO</a>
@@ -94,6 +94,25 @@
 		</div>
 	</section>
 </main>
+
+<footer style="background-color: #000000; height: 100px">
+	<div class="container">
+		<div class="row pt-3 text-white">
+			<div class="col-6 pt-3">
+				<span class="ms-5">Seguinos en</span>
+				<i class="bi bi-facebook ms-3" style="font-size: 20px"></i>
+				<i class="bi bi-instagram ms-3" style="font-size: 20px"></i>
+			</div>
+			<div class="col-3 text-end pt-3">
+				<h2>GANIC</h2>
+			</div>
+			<div class="col-3 text-end">
+				<img src="img/ganiclogo.png" class="img-fluid logo_style" alt="Logo">
+			</div>
+		</div>
+	</div>
+</footer>
+
 <!-- JavaScript Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
 </body>
