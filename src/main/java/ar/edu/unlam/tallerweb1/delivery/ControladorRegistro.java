@@ -48,7 +48,6 @@ public class ControladorRegistro {
 
     }
 
-    // TODO: realizar test
     @RequestMapping("/verificar")
     public ModelAndView verificarDatos(HttpServletRequest request) {
         Long idLogeado = (Long) request.getSession().getAttribute("id");
@@ -61,7 +60,6 @@ public class ControladorRegistro {
 
     }
 
-    // TODO: realizar test , ver si se puede simplificar el seteo de datos
     @RequestMapping(path = "/verificarDatos", method = RequestMethod.POST)
     public ModelAndView envioDeVerificacion(DatosUsuario datosUsuario, HttpServletRequest request) {
         ModelMap model = new ModelMap();

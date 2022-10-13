@@ -24,12 +24,9 @@ public class ControladorDeRegistroTest {
     private ControladorRegistro controladorDeRegistro;
     private DatosLogin datosLogin;
 
-    @Autowired
-    private HttpServletRequest request;
     @Before
     public void inti() {
         this.servicioLogin = mock(ServicioLogin.class);
-      //  this.request=mock(HttpServletRequest.class);
         this.controladorDeRegistro = new ControladorRegistro(this.servicioLogin);
     }
 
