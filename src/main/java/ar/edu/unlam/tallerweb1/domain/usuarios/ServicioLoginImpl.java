@@ -41,13 +41,6 @@ public class ServicioLoginImpl implements ServicioLogin {
 		this.servicioLoginDao.guardar(usuario);
 	}
 
-	@Override
-	/*public void actualizarUsuario(Usuario usuario) throws UsuarioNoRegistradoExepcion {
-	if(this.servicioLoginDao.estaRegistrado(usuario.getEmail())){
-		this.servicioLoginDao.modificar(usuario);
-	}throw new UsuarioNoRegistradoExepcion("usuario no registrado");
-
-	}*/
 
 	public void actualizarUsuario(Usuario usuario){
 		this.servicioLoginDao.modificar(usuario);

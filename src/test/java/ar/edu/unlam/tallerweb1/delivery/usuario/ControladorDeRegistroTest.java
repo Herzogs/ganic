@@ -7,7 +7,10 @@ import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,9 +24,12 @@ public class ControladorDeRegistroTest {
     private ControladorRegistro controladorDeRegistro;
     private DatosLogin datosLogin;
 
+    @Autowired
+    private HttpServletRequest request;
     @Before
     public void inti() {
         this.servicioLogin = mock(ServicioLogin.class);
+      //  this.request=mock(HttpServletRequest.class);
         this.controladorDeRegistro = new ControladorRegistro(this.servicioLogin);
     }
 
@@ -71,13 +77,6 @@ public class ControladorDeRegistroTest {
         assertThat(model.getModel().get("msg")).isEqualTo("El mail debe ser de formato valido");
     }
 
-    public void buscarUnUsuarioPorEmailConMokito(String mail) throws UsuarioNoRegistradoExepcion {
-        this.datosLogin = new DatosLogin();
-        this.datosLogin.setEmail("test@test.com");
-        this.datosLogin.setPassword("123");
-        Usuario usuarioEsperado = new Usuario(datosLogin.getEmail(),datosLogin.getPassword());
-        when(servicioLogin.consultarUsuario(mail)).thenReturn(usuarioEsperado);
-    }
     private DatosLogin obtenerUnDatosLogin() {
         this.datosLogin = new DatosLogin();
         this.datosLogin.setEmail("test@test.com");
@@ -88,4 +87,5 @@ public class ControladorDeRegistroTest {
     private void cuandoUnUsuarioYaExiste(String mail){
          when(this.servicioLogin.estaRegistrado(mail)).thenReturn(true);
     }
+
 }
