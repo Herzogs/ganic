@@ -28,12 +28,21 @@ public class ServicioLoginTest extends SpringTest {
     }
 
     @Test
-    public void queLuegoDeCrearUnUsuarioSePuedaVerificarSiSeGuardo() throws UsuarioNoRegistradoExepcion {
+    public void queLuegoDeCrearUnUsuarioSePuedaVerificarSiSeGuardo() throws UsuarioNoRegistradoExepcion, UsuarioInvalidoException {
         Usuario usuarioBuscado = dadoQueExisteUnUsuario();
+         cuandoLLamoAlServicioMeDevuelvaElUsuarioBuscado(usuarioBuscado);
         cuandoLLamoAlRepositorioYbusco(usuarioBuscado);
+        Usuario usuarioServicio= cuandoLLamoAUnUSuarioDelServicio(usuarioBuscado);
+        verificoQueNoSeaNull(usuarioServicio);
 
-        verificoQueNoSeaNull(usuarioBuscado);
+    }
 
+    private Usuario cuandoLLamoAUnUSuarioDelServicio(Usuario usuarioBuscado) throws UsuarioNoRegistradoExepcion {
+        return  this.servicioLogin.consultarUsuario(usuarioBuscado.getEmail(),usuarioBuscado.getPassword());
+    }
+
+    private void cuandoLLamoAlServicioMeDevuelvaElUsuarioBuscado(Usuario usuarioBuscado) throws UsuarioInvalidoException {
+      this.servicioLogin.crearUsuario(usuarioBuscado);
     }
 
     @Test(expected = UsuarioInvalidoException.class )
@@ -72,6 +81,7 @@ public class ServicioLoginTest extends SpringTest {
 
 
     private Usuario dadoQueExisteUnUsuario() {
+
         return new Usuario("pablo@gmail.com", "123");
     }
 

@@ -83,7 +83,7 @@ public class ServicioIngredienteTest extends SpringTest {
         cuandoSeInvoqueAlRespositorioParaDevolverUnaListaDeIngredientesPorPreferencia(esApto);
         List<Ingrediente> valorObtenido = cuandoLLameAlServicioParaObtenerUnaListaDeIngredientesPorPreferencia(esApto);
         entoncesVerificoQueLoDevueltoTengaUnTamanioDe(valorObtenido, 4);
-    } //poner excepcioon
+    }
 
     private static void entoncesVerificoQueLoDevueltoTengaUnTamanioDe(List<Ingrediente> valorObtenido, Integer tamanio) {
         assertThat(valorObtenido).hasSize(tamanio);

@@ -33,6 +33,7 @@ public class ServicioEmailImp implements ServicioEmail {
     @Override
     public Boolean sendEmail(String recptor, String subject, String cuerpo){
         init();
+
         try {
             MimeMessage message = new MimeMessage(session);
             message.setFrom(username);

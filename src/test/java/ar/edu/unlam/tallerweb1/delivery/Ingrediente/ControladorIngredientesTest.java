@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 
 import java.util.List;
@@ -27,12 +28,13 @@ public class ControladorIngredientesTest extends SpringTest {
     private ControladorDeIngredientes controladorDeIngredientes;
 
     private datosDelSandwich sandwich;
-
+    private HttpServletRequest request;
     @Before
     public void init() {
         this.servicio = mock(ServicioDeIngrediente.class);
         this.controladorDeIngredientes = new ControladorDeIngredientes(this.servicio);
         this.sandwich = mock(datosDelSandwich.class);
+        request =mock(HttpServletRequest.class);
     }
 
     @Test
@@ -96,17 +98,19 @@ public class ControladorIngredientesTest extends SpringTest {
         entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(mod,vista_solicitada);
     }
 
-    /*
+/*
     @Test
     public void cuandoSeleccioneUnaCantidadInsuficienteDeIngredientesYQuieraConfirmarMeRedirijaALaVistaDeLPrimerIngredienteSiEstoyLogeado(){
         String vistaEsperada = "redirect:/generarPedido?paso=1";
-        this.request.addParameter("id", String.valueOf(1L));
-        ModelAndView model = cuandoElControladorVerifiqueQueNoSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(1,this.request);
+        this.request.setAttribute("id", String.valueOf(1L));
+        ModelAndView model = controladorDeIngredientes.confirmarIngredientesSeleccionados(1,request);
+
+                cuandoElControladorVerifiqueQueNoSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(1,this.request);
         entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model,vistaEsperada);
     }
 
-    public ModelAndView cuandoElControladorVerifiqueQueNoSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich (Integer paso, MockHttpServletRequest req){
-        return this.controladorDeIngredientes.confirmarIngredientesSeleccionados(paso, req);
+    public void cuandoElControladorVerifiqueQueNoSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich (Integer paso, HttpServletRequest req){
+       when(req.getSession().getAttribute("id")).thenCallRealMethod();
     }
 
     @Test

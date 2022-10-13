@@ -68,6 +68,22 @@ public class RepositorioIngredientesImplTest extends SpringTest {
 
     @Test @Transactional
     public void queAlBuscarSiEsAptoMeRetorneAlgunValor(){
+
+        List<Ingrediente> valorEsperado = dadoQueTengoEstosIngredientesEnLaBaseDeDatos();
+        List<Ingrediente> valor_obtenido = entoncesLeDigoAlRepositorioQueMeTraigaTodosLosIngredientesQueNoTenganRestriccion();
+        entoncesVerificoQueLasListasSeanIguales(valorEsperado, valor_obtenido);
+    }
+
+    private void entoncesVerificoQueLasListasSeanIguales(List<Ingrediente> valorEsperado, List<Ingrediente> valor_obtenido) {
+        assertThat(valorEsperado).isEqualTo(valor_obtenido);
+    }
+
+    private List<Ingrediente> entoncesLeDigoAlRepositorioQueMeTraigaTodosLosIngredientesQueNoTenganRestriccion() {
+        return this.repo.obtenerIngredienteSiEsApto("SinRestriccion");
+    }
+
+    private List<Ingrediente> dadoQueTengoEstosIngredientesEnLaBaseDeDatos() {
+        List<Ingrediente> valorEsperado= new ArrayList<>();
         Ingrediente n1 = dadoQueExisteUnIngrediente(5L, "Pan clasico", 150F, 1, "Pan lactal blanco","SinRestriccion");
         Ingrediente n2 = dadoQueExisteUnIngrediente(6L, "Pan flauta", 120F, 1, "Pan de mesa blanco","SinRestriccion");
         Ingrediente n3 = dadoQueExisteUnIngrediente(7L, "Pan de campo", 250F, 1, "Pan de campo blanco","SinRestriccion");
@@ -81,21 +97,6 @@ public class RepositorioIngredientesImplTest extends SpringTest {
         Ingrediente n11 = dadoQueExisteUnIngrediente(15L, "Pure", 200F, 3, "Pure de papas","SinRestriccion");
         Ingrediente n12 = dadoQueExisteUnIngrediente(16L, "Mostayesa", 150F, 3, "Mix mostaza y mayonesa","SinRestriccion");
         Ingrediente n13 = dadoQueExisteUnIngrediente(17L, "La casa", 250F, 3, "Guacamole y mayonesa","SinRestriccion");
-        List<Ingrediente> valorEsperado = dadoQueTengoEstosIngredientesEnLaBaseDeDatos(n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13);
-        List<Ingrediente> valor_obtenido = entoncesLeDigoAlRepositorioQueMeTraigaTodosLosIngredientesQueNoTenganRestriccion();
-        entoncesVerificoQueLasListasSeanIguales(valorEsperado, valor_obtenido);
-    }
-
-    private void entoncesVerificoQueLasListasSeanIguales(List<Ingrediente> valorEsperado, List<Ingrediente> valor_obtenido) {
-        assertThat(valorEsperado).isEqualTo(valor_obtenido);
-    }
-
-    private List<Ingrediente> entoncesLeDigoAlRepositorioQueMeTraigaTodosLosIngredientesQueNoTenganRestriccion() {
-        return this.repo.obtenerIngredienteSiEsApto("SinRestriccion");
-    }
-
-    private List<Ingrediente> dadoQueTengoEstosIngredientesEnLaBaseDeDatos(Ingrediente n1, Ingrediente n2, Ingrediente n3, Ingrediente n4, Ingrediente n5, Ingrediente n6, Ingrediente n7, Ingrediente n8, Ingrediente n9, Ingrediente n10, Ingrediente n11, Ingrediente n12, Ingrediente n13) {
-        List<Ingrediente> valorEsperado= new ArrayList<>();
         valorEsperado.add(n1);
         valorEsperado.add(n2);
         valorEsperado.add(n3);
