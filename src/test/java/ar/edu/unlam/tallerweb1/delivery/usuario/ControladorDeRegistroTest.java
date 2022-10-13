@@ -23,13 +23,12 @@ public class ControladorDeRegistroTest {
     private ServicioLogin servicioLogin;
     private ControladorRegistro controladorDeRegistro;
     private DatosLogin datosLogin;
-
-    @Autowired
     private HttpServletRequest request;
+
     @Before
     public void inti() {
         this.servicioLogin = mock(ServicioLogin.class);
-      //  this.request=mock(HttpServletRequest.class);
+        this.request=mock(HttpServletRequest.class);
         this.controladorDeRegistro = new ControladorRegistro(this.servicioLogin);
     }
 
@@ -75,6 +74,18 @@ public class ControladorDeRegistroTest {
         ModelAndView model = this.controladorDeRegistro.crearRegistro(this.datosLogin);
         assertThat(model.getViewName()).isEqualTo(vista_destino);
         assertThat(model.getModel().get("msg")).isEqualTo("El mail debe ser de formato valido");
+    }
+
+    // TODO no podemos evitar el null pointer del request
+    @Test
+    public void cuandoSeleccionoElBotonDeVerificarPerfilMeLlevaALaVistaVerificar() {
+        String vistaDestino = "verificar";
+
+        when(request.getSession().getAttribute("id")).thenReturn(1L);
+
+        ModelAndView mod = this.controladorDeRegistro.verificarDatos(this.request);
+
+        assertThat(mod.getViewName()).isEqualTo(vistaDestino);
     }
 
     private DatosLogin obtenerUnDatosLogin() {
