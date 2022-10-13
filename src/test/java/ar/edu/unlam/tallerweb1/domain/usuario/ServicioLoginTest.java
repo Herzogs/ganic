@@ -31,7 +31,6 @@ public class ServicioLoginTest extends SpringTest {
     public void queLuegoDeCrearUnUsuarioSePuedaVerificarSiSeGuardo() throws UsuarioNoRegistradoExepcion {
         Usuario usuarioBuscado = dadoQueExisteUnUsuario();
         cuandoLLamoAlRepositorioYbusco(usuarioBuscado);
-
         verificoQueNoSeaNull(usuarioBuscado);
 
     }

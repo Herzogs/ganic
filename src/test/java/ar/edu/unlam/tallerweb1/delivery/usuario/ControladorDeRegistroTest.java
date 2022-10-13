@@ -30,11 +30,16 @@ public class ControladorDeRegistroTest {
     @Test
     public void cuandoSeleccionoElBotonDeRegistarMeEnviaALaVistaRegistrar() {
         String vistaDestino = "registrar";
-        ModelAndView mod = this.controladorDeRegistro.registrarUsuario();
+        ModelAndView mod = cuandoLlamoAlControlador();
         assertThat(mod.getViewName()).isEqualTo(vistaDestino);
     }
 
-  @Test
+    private ModelAndView cuandoLlamoAlControlador() {
+        ModelAndView mod = this.controladorDeRegistro.registrarUsuario();
+        return mod;
+    }
+
+    @Test
     public void alIngresarLosDatosSeGuardenEnLaBaseDeDatos()  {
         String vista_destino ="login";
         this.datosLogin = new DatosLogin();

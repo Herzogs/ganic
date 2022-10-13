@@ -12,7 +12,8 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 
-import javax.servlet.ServletContext;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 
 import java.util.List;
@@ -27,6 +28,8 @@ public class ControladorIngredientesTest extends SpringTest {
     private ControladorDeIngredientes controladorDeIngredientes;
 
     private datosDelSandwich sandwich;
+
+    private HttpServletRequest request;
 
     @Before
     public void init() {
@@ -96,32 +99,52 @@ public class ControladorIngredientesTest extends SpringTest {
         entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(mod,vista_solicitada);
     }
 
-    /*
+
     @Test
     public void cuandoSeleccioneUnaCantidadInsuficienteDeIngredientesYQuieraConfirmarMeRedirijaALaVistaDeLPrimerIngredienteSiEstoyLogeado(){
         String vistaEsperada = "redirect:/generarPedido?paso=1";
-        this.request.addParameter("id", String.valueOf(1L));
+        this.request.setAttribute("id",1L);
         ModelAndView model = cuandoElControladorVerifiqueQueNoSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(1,this.request);
         entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model,vistaEsperada);
     }
 
-    public ModelAndView cuandoElControladorVerifiqueQueNoSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich (Integer paso, MockHttpServletRequest req){
+    public ModelAndView cuandoElControladorVerifiqueQueSiSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich (Integer paso, HttpServletRequest req) {
+        return this.controladorDeIngredientes.confirmarIngredientesSeleccionados(paso, req);
+    }
+
+
+    public ModelAndView cuandoElControladorVerifiqueQueNoSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich (Integer paso, HttpServletRequest req){
         return this.controladorDeIngredientes.confirmarIngredientesSeleccionados(paso, req);
     }
 
     @Test
     public void cuandoSeleccioneUnaCantidadSuficienteDeIngredientesYQuieraConfirmarMeRedirijaALaVistaDeConfirmacion(){
         String vistaEsperada = "confirmar";
-        Lista<Ingrediente> lista = dadoQueTengoUnaListaDeIngredientesSeleccionados();
+        List<Ingrediente> lista = dadoQueTengoUnaListaDeIngredientesSeleccionados();
         cuandoIngreseLosIngredientesSeleccionadosALaListaDeIngredientesParaFormarElSandwich(lista);
         ModelAndView model = cuandoElControladorVerifiqueQueSiSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(3,this.request);
-        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model.getViewName(),vistaEsperada);
+        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model,vistaEsperada);
     }
 
-    public ModelAndView cuandoElControladorVerifiqueQueSiSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich (Integer paso, HttpServerlet req){
-        return this.controladorDeIngredientes.confirmarIngredientesSeleccionados(paso, req);
+    @Test
+    public void cuandoSeleccioneUnaCantidadInsuficienteDeIngredientesPeroNoEsteLogeadoMeRedirijaAlLogin(){
+        String vistaEsperada = "redirect:/login";
+        List<Ingrediente> lista = dadoQueTengoUnaListaDeIngredientesSeleccionados();
+        ModelAndView model = cuandoElControladorVerifiqueQueNoSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(1,this.request);
+        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model,vistaEsperada);
+    }
 
-    private void cuandoIngreseLosIngredientesSeleccionadosALaListaDeIngredientesParaFormarElSandwich(Lista<Ingrediente> lista){
+
+     @Test
+     public void cuandoSeleccioneUnaCantidadSuficienteDeIngredientesYEsteLogeadoMeRedirijaAlaPantallaDeExito(){
+        String vistaEsperada = "exito";
+        List<Ingrediente> lista = dadoQueTengoUnaListaDeIngredientesSeleccionados();
+        cuandoIngreseLosIngredientesSeleccionadosALaListaDeIngredientesParaFormarElSandwich(lista);
+        ModelAndView model = cuandoElControladorVerifiqueQueSiSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(3,this.request);
+        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model,vistaEsperada);
+    }
+
+    private void cuandoIngreseLosIngredientesSeleccionadosALaListaDeIngredientesParaFormarElSandwich(List<Ingrediente> lista){
         when(this.sandwich.getIngredientesSandwich()).thenReturn(lista);
     }
 
@@ -135,23 +158,6 @@ public class ControladorIngredientesTest extends SpringTest {
         lista.add(ing1);
         return lista;
     }
-
-    @Test
-    public void cuandoSeleccioneUnaCantidadInsuficienteDeIngredientesPeroNoEsteLogeadoMeRedirijaAlLogin(){
-        String vistaEsperada = "redirect:/login";
-        Lista<Ingrediente> lista = dadoQueTengoUnaListaDeIngredientesSeleccionados();
-        ModelAndView model = cuandoElControladorVerifiqueQueNoSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(1,this.request);
-        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model.getViewName(),vistaEsperada);
-    }
-
-     @Test
-     public void cuandoSeleccioneUnaCantidadSuficienteDeIngredientesYEsteLogeadoMeRedirijaAlaPantallaDeExito(){
-        String vistaEsperada = "exito";
-        Lista<Ingrediente> lista = dadoQueTengoUnaListaDeIngredientesSeleccionados();
-        cuandoIngreseLosIngredientesSeleccionadosALaListaDeIngredientesParaFormarElSandwich(lista);
-        ModelAndView model = tcuandoElControladorVerifiqueQueSiSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(3,this.request);
-        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model.getViewName(),vistaEsperada);
-    }*/
 
 
     private void entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(ModelAndView mav, String vistaEsperada) {
@@ -222,27 +228,4 @@ public class ControladorIngredientesTest extends SpringTest {
         return new Ingrediente(idIngrediente, nombre, precio, paso, desc,esApto);
     }
 
-/*
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //TODO: Cuando envien un número de paso invalido mande mensaje de error y redirija a el paso 1
-
-    @Test
-    public void cuandoEnvienUnNumeroDePasoInvalidoRedirijaAElPaso1(){
-        // Preparación
-        String vista_solicitada = "redirect:/generarPedido?paso=1";
-        Integer nroPaso = 100;
-
-        ModelAndView mod = this.cuandoEnvianUnNroPasoInvalido(nroPaso);
-        // Verificación
-        entoncesEncuentroLaVistaPanes(mod,vista_solicitada);
-        verificarQueSeEnvioUnMensajeDeError(mod);
-    }
-
-    private ModelAndView cuandoEnvianUnNroPasoInvalido(Integer nro){
-        return this.controladorDeIngredientes.cargarPagina(nro);
-    }
-
-    private void verificarQueSeEnvioUnMensajeDeError(ModelAndView m){
-        assertThat(m.getModel().get("error")).isEqualTo("Paso Incorrecto");
-    }*/
 }
