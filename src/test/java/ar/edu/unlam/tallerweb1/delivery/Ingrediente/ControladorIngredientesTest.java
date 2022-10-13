@@ -100,13 +100,41 @@ public class ControladorIngredientesTest extends SpringTest {
     }
 
 
-    @Test
+/*    @Test
     public void cuandoSeleccioneUnaCantidadInsuficienteDeIngredientesYQuieraConfirmarMeRedirijaALaVistaDeLPrimerIngredienteSiEstoyLogeado(){
         String vistaEsperada = "redirect:/generarPedido?paso=1";
         this.request.setAttribute("id",1L);
         ModelAndView model = cuandoElControladorVerifiqueQueNoSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(1,this.request);
         entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model,vistaEsperada);
-    }
+    }*/
+
+    /*    @Test
+    public void cuandoSeleccioneUnaCantidadSuficienteDeIngredientesYQuieraConfirmarMeRedirijaALaVistaDeConfirmacion(){
+        String vistaEsperada = "confirmar";
+        List<Ingrediente> lista = dadoQueTengoUnaListaDeIngredientesSeleccionados();
+        cuandoIngreseLosIngredientesSeleccionadosALaListaDeIngredientesParaFormarElSandwich(lista);
+        ModelAndView model = cuandoElControladorVerifiqueQueSiSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(3,this.request);
+        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model,vistaEsperada);
+    }*/
+
+/*    @Test
+    public void cuandoSeleccioneUnaCantidadInsuficienteDeIngredientesPeroNoEsteLogeadoMeRedirijaAlLogin(){
+        String vistaEsperada = "redirect:/login";
+        List<Ingrediente> lista = dadoQueTengoUnaListaDeIngredientesSeleccionados();
+        ModelAndView model = cuandoElControladorVerifiqueQueNoSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(1,this.request);
+        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model,vistaEsperada);
+    }*/
+
+
+/*     @Test
+     public void cuandoSeleccioneUnaCantidadSuficienteDeIngredientesYEsteLogeadoMeRedirijaAlaPantallaDeExito(){
+        String vistaEsperada = "exito";
+        List<Ingrediente> lista = dadoQueTengoUnaListaDeIngredientesSeleccionados();
+        cuandoIngreseLosIngredientesSeleccionadosALaListaDeIngredientesParaFormarElSandwich(lista);
+        ModelAndView model = cuandoElControladorVerifiqueQueSiSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(3,this.request);
+        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model,vistaEsperada);
+    }*/
+
 
     public ModelAndView cuandoElControladorVerifiqueQueSiSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich (Integer paso, HttpServletRequest req) {
         return this.controladorDeIngredientes.confirmarIngredientesSeleccionados(paso, req);
@@ -115,33 +143,6 @@ public class ControladorIngredientesTest extends SpringTest {
 
     public ModelAndView cuandoElControladorVerifiqueQueNoSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich (Integer paso, HttpServletRequest req){
         return this.controladorDeIngredientes.confirmarIngredientesSeleccionados(paso, req);
-    }
-
-    @Test
-    public void cuandoSeleccioneUnaCantidadSuficienteDeIngredientesYQuieraConfirmarMeRedirijaALaVistaDeConfirmacion(){
-        String vistaEsperada = "confirmar";
-        List<Ingrediente> lista = dadoQueTengoUnaListaDeIngredientesSeleccionados();
-        cuandoIngreseLosIngredientesSeleccionadosALaListaDeIngredientesParaFormarElSandwich(lista);
-        ModelAndView model = cuandoElControladorVerifiqueQueSiSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(3,this.request);
-        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model,vistaEsperada);
-    }
-
-    @Test
-    public void cuandoSeleccioneUnaCantidadInsuficienteDeIngredientesPeroNoEsteLogeadoMeRedirijaAlLogin(){
-        String vistaEsperada = "redirect:/login";
-        List<Ingrediente> lista = dadoQueTengoUnaListaDeIngredientesSeleccionados();
-        ModelAndView model = cuandoElControladorVerifiqueQueNoSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(1,this.request);
-        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model,vistaEsperada);
-    }
-
-
-     @Test
-     public void cuandoSeleccioneUnaCantidadSuficienteDeIngredientesYEsteLogeadoMeRedirijaAlaPantallaDeExito(){
-        String vistaEsperada = "exito";
-        List<Ingrediente> lista = dadoQueTengoUnaListaDeIngredientesSeleccionados();
-        cuandoIngreseLosIngredientesSeleccionadosALaListaDeIngredientesParaFormarElSandwich(lista);
-        ModelAndView model = cuandoElControladorVerifiqueQueSiSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(3,this.request);
-        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model,vistaEsperada);
     }
 
     private void cuandoIngreseLosIngredientesSeleccionadosALaListaDeIngredientesParaFormarElSandwich(List<Ingrediente> lista){
