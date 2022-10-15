@@ -23,6 +23,7 @@ public class datosDelSandwich {
     }
 
     public float getMonto() {
+        this.monto = 0;
         for (Ingrediente ing : ingredientesSandwich) {
             monto += ing.getPrecio();
         }
@@ -33,14 +34,28 @@ public class datosDelSandwich {
         this.ingredientesSandwich.add(ingrediente);
     }
 
+    public void cargarIngredietnesAlSandwich(List<Ingrediente> lista){
+        this.ingredientesSandwich.addAll(lista);
+    }
+
     public void setMonto(float monto) {
         this.monto = monto;
 
+    }
+
+    public Ingrediente obtenerIngredientePor(Integer posicion){
+        return this.ingredientesSandwich.get(posicion);
     }
 
     public void borrarDatosDelSandwich(){
         this.ingredientesSandwich.clear();
         this.monto = 0;
     }
+
+    public Boolean eliminarIngrediente(Ingrediente ing){
+        this.monto -= ing.getPrecio();
+       return this.ingredientesSandwich.remove(ing);
+    }
+
 }
 

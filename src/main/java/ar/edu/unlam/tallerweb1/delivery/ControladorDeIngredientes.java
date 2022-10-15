@@ -117,4 +117,29 @@ public class ControladorDeIngredientes {
         return sandwich;
     }
 
+    // INFO: Por regla de diseño, un sandwich minimamente debe poseer un pan y un ingrediente principal
+    @RequestMapping(path = "eliminarIngrediente", method = RequestMethod.GET)
+    public ModelAndView eliminarIngredienteSeleccionado(@RequestParam(value = "ing") Long id){
+        ModelMap model = new ModelMap();
+        Ingrediente ing = null;
+        try {
+            ing = this.servicioDeIngrediente.obtenerIngredientePorId(id);
+            if(compararIngredienteEnLaPosicion(0, ing) || compararIngredienteEnLaPosicion(1, ing)){
+                model.put("error", "No Se Puede Eliminar El Ingrediente Seleccionado");
+            }else {
+                this.sandwich.eliminarIngrediente(ing);
+                model.put("ok", "Se a elminado el elemento seleccionado");
+            }
+
+        }catch(IngredienteInvalidoException ex){
+            model.put("error", "No Existe El Ingrediente Solicitado");
+        }
+        model.put("IngredientesQueElUsuarioSelecciono", sandwich.getIngredientesSandwich());
+        model.put("montoFinal", sandwich.getMonto());
+        return new ModelAndView("confirmar", model);
+    }
+
+    private boolean compararIngredienteEnLaPosicion(int posicion, Ingrediente ing) {
+        return this.sandwich.obtenerIngredientePor(posicion).equals(ing);
+    }
 }
