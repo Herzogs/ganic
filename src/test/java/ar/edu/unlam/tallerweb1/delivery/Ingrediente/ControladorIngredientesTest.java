@@ -100,8 +100,9 @@ public class ControladorIngredientesTest extends SpringTest {
     }
 
     @Test
-    public void cuandoEsteEnLaVistaDeConfirmarIngredientesSeleccionadosMePuedaDejarEliminarAlgunIngredienteAgregado(){
+    public void cuandoEsteEnLaVistaDeConfirmarIngredientesSeleccionadosMePuedaDejarEliminarAlgunIngredienteAgregado() throws IngredienteInvalidoException {
         Ingrediente ing3 = dadoQueExisteUnIngrediente(13L,"Mix verde",38F,2,"Salteado de verduras","SinRestriccion");
+        cuandoLePidoAlServicioQueMeDevuelvaUnIngredientePorID(ing3);
         ModelAndView model = cuandoLLamasAlControladorParaQueElimineElIngrediente(ing3);
         entoncesVerificoQueElModeloMeDevuelva(model, "ok", "Se a elminado el elemento seleccionado");
     }
@@ -109,29 +110,46 @@ public class ControladorIngredientesTest extends SpringTest {
     @Test
     public void cuandoEsteEnLaVistaDeConfirmarIngredientesSeleccionadosPeroIntentoEliminarUnIngredienteQueNoExista() throws IngredienteInvalidoException {
         Ingrediente ingInexistente = dadoQueExisteUnIngrediente(100L,"Pure",200F,3,"Pure de papas","SinRestriccion");
-        when(this.servicio.obtenerIngredientePorId(ingInexistente.getIdIngrediente())).thenThrow(new IngredienteInvalidoException("No Existe El Ingrediente"));
+        cuandoLePidoAlServicioQueMeBusqueUnIngredienteInexistenteMeLAnzeUnaExcepcion(ingInexistente);
         ModelAndView model = cuandoLLamasAlControladorParaQueElimineElIngrediente(ingInexistente);
         entoncesVerificoQueElModeloMeDevuelva(model, "error", "No Existe El Ingrediente Solicitado");
     }
 
     @Test
-    public void cuandoEsteEnLaVistaDeConfirmarIngredientesSeleccionadosPeroIntentoEliminarElPanYMeDevuelvaError() throws IngredienteInvalidoException {
-        Ingrediente ingPan = dadoQueExisteUnIngrediente(5L, "Pan clasico", 150F, 1, "Pan lactal blanco","SinRestriccion");
-        cuandoLlamoAlServicioPAraQueMeBusqueElIngredienteMeDevuelva(ingPan);
-        ModelAndView model = cuandoLLamasAlControladorParaQueElimineElIngrediente(ingPan);
-        entoncesVerificoQueElModeloMeDevuelva(model, "error", "No Se Puede Eliminar El Ingrediente Seleccionado");
-    }
-
-    private void cuandoLlamoAlServicioPAraQueMeBusqueElIngredienteMeDevuelva(Ingrediente ingPan) throws IngredienteInvalidoException {
-        when(this.servicio.obtenerIngredientePorId(ingPan.getIdIngrediente())).thenReturn(ingPan);
+    public void cuandoEnLaVistaDeConfirmarIngredienteQuieranModificarAlgunIngredienteMeLleveALaVistaDeModificarIngrediente() throws IngredienteInvalidoException {
+        Ingrediente ing3 = dadoQueExisteUnIngrediente(13L,"Mix verde",38F,2,"Salteado de verduras","SinRestriccion");
+        cuandoLePidoAlServicioQueMeDevuelvaUnIngredientePorID(ing3);
+        ModelAndView model = cuandoLlamoAlControladorParaQueMeGenereLaPaginaParaModificarElIngredienteAPartirDeUnIngrediente(ing3);
+        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model,"modificarIngrediente");
     }
 
     @Test
-    public void cuandoEsteEnLaVistaDeConfirmarIngredientesSeleccionadosPeroIntentoEliminarElPrimerIngredienteYMeDevuelvaError() throws IngredienteInvalidoException {
-        Ingrediente ingPrincipal = dadoQueExisteUnIngrediente (9L,"Medallo de carne",450F,2,"Carne de ternera a la parrilla","SinRestriccion");
-        cuandoLlamoAlServicioPAraQueMeBusqueElIngredienteMeDevuelva(ingPrincipal);
-        ModelAndView model = cuandoLLamasAlControladorParaQueElimineElIngrediente(ingPrincipal);
-        entoncesVerificoQueElModeloMeDevuelva(model, "error", "No Se Puede Eliminar El Ingrediente Seleccionado");
+    public void cuandoSeleccioneUnIngredienteNuevoEsteSeInsertaEnLaListaDeIngrediente() throws IngredienteInvalidoException{
+        Ingrediente n13 = dadoQueExisteUnIngrediente (17L,"La casa",250F,3,"Guacamo y mayonesa","SinRestriccion");
+        cuandoLePidoAlServicioQueMeDevuelvaUnIngredientePorID(n13);
+        ModelAndView model = cuandoLLamasAlControladorParaQueMeModifiqueElIngrediente(n13);
+        assertThat(model.getModelMap().get("IngredientesQueElUsuarioSelecciono")).isEqualTo(dadoQueTengoUnaNuevaListaDeIngredientesSeleccionados());
+    }
+
+    private ModelAndView cuandoLlamoAlControladorParaQueMeGenereLaPaginaParaModificarElIngredienteAPartirDeUnIngrediente(Ingrediente ing3) {
+        List<Ingrediente> listaIngredientes = dadoQueTengoUnaListaDeIngredientesSeleccionados();
+        this.controladorDeIngredientes.getSandwich().cargarIngredietnesAlSandwich(listaIngredientes);
+        ModelAndView model = this.controladorDeIngredientes.generarPaginaDeIngredienteParaCambiar(ing3.getIdIngrediente());
+        return model;
+    }
+
+    private ModelAndView cuandoLLamasAlControladorParaQueMeModifiqueElIngrediente(Ingrediente ing) {
+        Ingrediente ing1 = dadoQueExisteUnIngrediente(5L, "Pan clasico", 150F, 1, "Pan lactal blanco","SinRestriccion");
+        Ingrediente ing2 = dadoQueExisteUnIngrediente (9L,"Medallo de carne",450F,2,"Carne de ternera a la parrilla","SinRestriccion");
+        Ingrediente ing3 = dadoQueExisteUnIngrediente(13L,"Mix verde",38F,2,"Salteado de verduras","SinRestriccion");
+        List<Ingrediente> lista = new ArrayList<>();
+        lista.add(ing1);
+        lista.add(ing2);
+        lista.add(ing3);
+        lista.add(null);
+        this.controladorDeIngredientes.getSandwich().cargarIngredietnesAlSandwich(lista);
+        ModelAndView model = this.controladorDeIngredientes.cambiarIngrediente(ing.getIdIngrediente());
+        return model;
     }
 
     private ModelAndView cuandoLLamasAlControladorParaQueElimineElIngrediente(Ingrediente ing) {
@@ -144,6 +162,11 @@ public class ControladorIngredientesTest extends SpringTest {
     private void entoncesVerificoQueElModeloMeDevuelva(ModelAndView model, String ok, String expected) {
         assertThat(model.getModelMap().get(ok)).isEqualTo(expected);
     }
+
+    private void cuandoLePidoAlServicioQueMeBusqueUnIngredienteInexistenteMeLAnzeUnaExcepcion(Ingrediente ingInexistente) throws IngredienteInvalidoException {
+        when(this.servicio.obtenerIngredientePorId(ingInexistente.getIdIngrediente())).thenThrow(new IngredienteInvalidoException("No Existe El Ingrediente"));
+    }
+
 
 
 /*    @Test
@@ -191,9 +214,6 @@ public class ControladorIngredientesTest extends SpringTest {
         return this.controladorDeIngredientes.confirmarIngredientesSeleccionados(paso, req);
     }
 
-    private void cuandoIngreseLosIngredientesSeleccionadosALaListaDeIngredientesParaFormarElSandwich(List<Ingrediente> lista){
-        when(this.sandwich.getIngredientesSandwich()).thenReturn(lista);
-    }
 
     private List<Ingrediente> dadoQueTengoUnaListaDeIngredientesSeleccionados(){
         Ingrediente ing1 = dadoQueExisteUnIngrediente(5L, "Pan clasico", 150F, 1, "Pan lactal blanco","SinRestriccion");
@@ -212,10 +232,12 @@ public class ControladorIngredientesTest extends SpringTest {
         Ingrediente ing1 = dadoQueExisteUnIngrediente(5L, "Pan clasico", 150F, 1, "Pan lactal blanco","SinRestriccion");
         Ingrediente ing2 = dadoQueExisteUnIngrediente (9L,"Medallo de carne",450F,2,"Carne de ternera a la parrilla","SinRestriccion");
         Ingrediente ing3 = dadoQueExisteUnIngrediente(13L,"Mix verde",38F,2,"Salteado de verduras","SinRestriccion");
+        Ingrediente ing4 = dadoQueExisteUnIngrediente (17L,"La casa",250F,3,"Guacamo y mayonesa","SinRestriccion");
         List<Ingrediente> lista = new ArrayList<>();
         lista.add(ing1);
-        lista.add(ing1);
-        lista.add(ing1);
+        lista.add(ing2);
+        lista.add(ing3);
+        lista.add(ing4);
         return lista;
     }
 

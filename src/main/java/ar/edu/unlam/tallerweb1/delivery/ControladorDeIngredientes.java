@@ -117,19 +117,18 @@ public class ControladorDeIngredientes {
         return sandwich;
     }
 
-    // INFO: Por regla de diseño, un sandwich minimamente debe poseer un pan y un ingrediente principal
     @RequestMapping(path = "eliminarIngrediente", method = RequestMethod.GET)
     public ModelAndView eliminarIngredienteSeleccionado(@RequestParam(value = "ing") Long id){
         ModelMap model = new ModelMap();
         Ingrediente ing = null;
         try {
             ing = this.servicioDeIngrediente.obtenerIngredientePorId(id);
-            if(compararIngredienteEnLaPosicion(0, ing) || compararIngredienteEnLaPosicion(1, ing)){
+            /*if(compararIngredienteEnLaPosicion(0, ing) || compararIngredienteEnLaPosicion(1, ing)){
                 model.put("error", "No Se Puede Eliminar El Ingrediente Seleccionado");
-            }else {
-                this.sandwich.eliminarIngrediente(ing);
-                model.put("ok", "Se a elminado el elemento seleccionado");
-            }
+            }else {*/
+            this.sandwich.eliminarIngrediente(ing);
+            model.put("ok", "Se a elminado el elemento seleccionado");
+            //}
 
         }catch(IngredienteInvalidoException ex){
             model.put("error", "No Existe El Ingrediente Solicitado");
@@ -139,7 +138,41 @@ public class ControladorDeIngredientes {
         return new ModelAndView("confirmar", model);
     }
 
-    private boolean compararIngredienteEnLaPosicion(int posicion, Ingrediente ing) {
-        return this.sandwich.obtenerIngredientePor(posicion).equals(ing);
+    @RequestMapping(path = "modificarIngrediente", method = RequestMethod.GET)
+    public ModelAndView generarPaginaDeIngredienteParaCambiar(@RequestParam(value = "ing", defaultValue = "1", required = false) Long id) {
+        ModelMap mod = new ModelMap();
+        List<Ingrediente> lista = null;
+        try{
+            Ingrediente ingrediente = this.servicioDeIngrediente.obtenerIngredientePorId(id);
+            Integer idx = this.sandwich.buscarIngredientePorID(id);
+            if(!idx.equals(-1)) {
+                this.sandwich.getIngredientesSandwich().set(idx, null);
+                this.sandwich.setMonto(0F);
+            }
+            lista = this.servicioDeIngrediente.obtenerIngredientesPorPaso(ingrediente.getPaso());
+            mod.put("ListaDeIngredientes", lista);
+        }catch(IngredienteInvalidoException  | PasoInvalidoException e) {
+            /*mod.put("error", "Paso Incorrecto");
+            this.sandwich.borrarDatosDelSandwich();*/
+            return new ModelAndView("redirect:/error404", mod);
+        }
+        return new ModelAndView("modificarIngrediente",mod);
+    }
+
+    @RequestMapping(path = "mod", method = RequestMethod.GET)
+    public ModelAndView cambiarIngrediente(@RequestParam(value = "id") Long idIng) {
+        Ingrediente ing = null;
+        ModelMap model = new ModelMap();
+        try {
+            ing = this.servicioDeIngrediente.obtenerIngredientePorId(idIng);
+
+            this.sandwich.cambiarIngrediente(ing);
+        }catch(IngredienteInvalidoException excepcion){
+            this.sandwich.borrarDatosDelSandwich();
+            return new ModelAndView("redirect:/error404",new ModelMap("error",excepcion.getMessage()));
+        }
+        model.put("IngredientesQueElUsuarioSelecciono", sandwich.getIngredientesSandwich());
+        model.put("montoFinal", sandwich.getMonto());
+        return new ModelAndView("confirmar", model);
     }
 }

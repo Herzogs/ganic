@@ -43,10 +43,6 @@ public class datosDelSandwich {
 
     }
 
-    public Ingrediente obtenerIngredientePor(Integer posicion){
-        return this.ingredientesSandwich.get(posicion);
-    }
-
     public void borrarDatosDelSandwich(){
         this.ingredientesSandwich.clear();
         this.monto = 0;
@@ -55,6 +51,24 @@ public class datosDelSandwich {
     public Boolean eliminarIngrediente(Ingrediente ing){
         this.monto -= ing.getPrecio();
        return this.ingredientesSandwich.remove(ing);
+    }
+
+
+    public Integer buscarIngredientePorID(Long id){
+        Boolean enc = false;
+        Integer idx = 0;
+        for (; idx < this.ingredientesSandwich.size() && !enc; idx++) {
+            if(this.ingredientesSandwich.get(idx).getIdIngrediente().equals(id))
+                enc = true;
+        }
+        return (enc?idx-1:-1);
+    }
+
+    public void cambiarIngrediente(Ingrediente ing){
+        Integer idx = 0;
+        while(this.ingredientesSandwich.get(idx) != null)
+            idx++;
+        this.ingredientesSandwich.set(idx,ing);
     }
 
 }
