@@ -187,9 +187,13 @@ public class ControladorIngredientesTest extends SpringTest {
     @Test
     public void cuandoSeleccioneUnaCantidadInsuficienteDeIngredientesYQuieraConfirmarMeRedirijaALaVistaDeLPrimerIngredienteSiEstoyLogeado() {
         String vistaEsperada = "redirect:/generarPedido?paso=1";
-        when(this.request.getSession().getAttribute("id")).thenReturn(1L);
+        cuandoLePidoAlHttpServletRequestQueMeTraigaElId();
         ModelAndView model = cuandoElControladorVerifiqueQueNoSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(1, this.request);
         entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model, vistaEsperada);
+    }
+
+    private void cuandoLePidoAlHttpServletRequestQueMeTraigaElId() {
+        when(this.request.getSession().getAttribute("id")).thenReturn(1L);
     }
 
     @Test
@@ -197,7 +201,7 @@ public class ControladorIngredientesTest extends SpringTest {
         String vistaEsperada = "exito";
         List<Ingrediente> lista = dadoQueTengoUnaListaDeIngredientesSeleccionados();
         cuandoIngreseLosIngredientesSeleccionadosALaListaDeIngredientesParaFormarElSandwich(lista);
-        when(this.request.getSession().getAttribute("id")).thenReturn(1L);
+        cuandoLePidoAlHttpServletRequestQueMeTraigaElId();
         ModelAndView model = cuandoElControladorVerifiqueQueSiSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(3, this.request);
         entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model, vistaEsperada);
     }
@@ -206,10 +210,14 @@ public class ControladorIngredientesTest extends SpringTest {
     public void cuandoSeleccioneUnaCantidadInsuficienteDeIngredientesPeroNoEsteLogeadoMeRedirijaAlLogin() {
         String vistaEsperada = "redirect:/login";
         List<Ingrediente> lista = dadoQueTengoUnaListaDeIngredientesSeleccionados();
-        when(this.request.getSession().getAttribute("id")).thenReturn(null);
+        cuandoLePidoAlHttpServletRequestQueMeTraigaUnIdNulo();
         cuandoIngreseLosIngredientesSeleccionadosALaListaDeIngredientesParaFormarElSandwich(lista);
         ModelAndView model = cuandoElControladorVerifiqueQueNoSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(1, this.request);
         entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model, vistaEsperada);
+    }
+
+    private void cuandoLePidoAlHttpServletRequestQueMeTraigaUnIdNulo() {
+        when(this.request.getSession().getAttribute("id")).thenReturn(null);
     }
 
 
@@ -218,7 +226,7 @@ public class ControladorIngredientesTest extends SpringTest {
         String vistaEsperada = "exito";
         List<Ingrediente> lista = dadoQueTengoUnaListaDeIngredientesSeleccionados();
         cuandoIngreseLosIngredientesSeleccionadosALaListaDeIngredientesParaFormarElSandwich(lista);
-        when(this.request.getSession().getAttribute("id")).thenReturn(1L);
+        cuandoLePidoAlHttpServletRequestQueMeTraigaElId();
         ModelAndView model = cuandoElControladorVerifiqueQueSiSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(3, this.request);
         entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model, vistaEsperada);
     }
