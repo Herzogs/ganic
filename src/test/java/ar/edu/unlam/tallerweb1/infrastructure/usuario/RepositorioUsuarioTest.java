@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.infrastructure.usuario;
 
 import ar.edu.unlam.tallerweb1.SpringTest;
+import ar.edu.unlam.tallerweb1.domain.Excepciones.PassswordIncorrectoExeption;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioNoRegistradoExepcion;
 import ar.edu.unlam.tallerweb1.domain.usuarios.RepositorioUsuario;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
@@ -28,7 +29,7 @@ public class RepositorioUsuarioTest extends SpringTest {
     @Test
     @Transactional
     @Rollback
-    public void queSePuedaActualizarUnUsuarioQueExista() throws UsuarioNoRegistradoExepcion {
+    public void queSePuedaActualizarUnUsuarioQueExista() throws UsuarioNoRegistradoExepcion, PassswordIncorrectoExeption {
         dadoQueExisteUnUsuario();
         entoncesActualizo();
         Usuario usuarioAModificar=obtenerUsuario("pablo@gmail.com", "123");
@@ -40,7 +41,7 @@ public class RepositorioUsuarioTest extends SpringTest {
     @Test(expected =UsuarioNoRegistradoExepcion.class )
     @Transactional
     @Rollback
-    public void queSiPidoActualizarUnUsuarioQueNoExistaLanseUnaExepcion() throws UsuarioNoRegistradoExepcion {
+    public void queSiPidoActualizarUnUsuarioQueNoExistaLanseUnaExepcion() throws UsuarioNoRegistradoExepcion, PassswordIncorrectoExeption {
         dadoUnUsuarioNoRegistradoEnLABAseDeDatos();
         Usuario usuarioAModificar= obtenerUsuario("noestoyregistrado@gmail.com", "123");
         String nombre = "Pablo";
@@ -56,7 +57,7 @@ public class RepositorioUsuarioTest extends SpringTest {
         assertThat(usuarioAModificar.getNombre()).isEqualTo(nombre);
     }
 
-    private void entoncesActualizo() throws UsuarioNoRegistradoExepcion {
+    private void entoncesActualizo() throws UsuarioNoRegistradoExepcion, PassswordIncorrectoExeption {
         Usuario usuario = obtenerUsuario("pablo@gmail.com", "123");
         usuario.setNombre("Pablo");
         usuario.setApellido("Aimar");
@@ -66,7 +67,7 @@ public class RepositorioUsuarioTest extends SpringTest {
         
     }
 
-    private Usuario obtenerUsuario(String email, String password) throws UsuarioNoRegistradoExepcion {
+    private Usuario obtenerUsuario(String email, String password) throws UsuarioNoRegistradoExepcion, PassswordIncorrectoExeption {
         Usuario usuario = repositorioUsuario.buscarUsuario(email,password);
         return usuario;
     }

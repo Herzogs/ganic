@@ -1,16 +1,12 @@
 package ar.edu.unlam.tallerweb1.delivery.usuario;
 
-import ar.edu.unlam.tallerweb1.delivery.ControladorRegistro;
+import ar.edu.unlam.tallerweb1.delivery.ControladorUsuario;
 import ar.edu.unlam.tallerweb1.delivery.DatosLogin;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioNoRegistradoExepcion;
 import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
-import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletRequest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,16 +14,16 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
-public class ControladorDeRegistroTest {
+public class ControladorUsuarioTest {
 
     private ServicioLogin servicioLogin;
-    private ControladorRegistro controladorDeRegistro;
+    private ControladorUsuario controladorDeRegistro;
     private DatosLogin datosLogin;
 
     @Before
     public void inti() {
         this.servicioLogin = mock(ServicioLogin.class);
-        this.controladorDeRegistro = new ControladorRegistro(this.servicioLogin);
+        this.controladorDeRegistro = new ControladorUsuario(this.servicioLogin);
     }
 
     @Test
