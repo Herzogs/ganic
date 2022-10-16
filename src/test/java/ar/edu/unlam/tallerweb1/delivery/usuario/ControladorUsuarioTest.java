@@ -1,20 +1,12 @@
 package ar.edu.unlam.tallerweb1.delivery.usuario;
 
-import ar.edu.unlam.tallerweb1.SpringTest;
-import ar.edu.unlam.tallerweb1.delivery.ControladorRegistro;
+import ar.edu.unlam.tallerweb1.delivery.ControladorUsuario;
 import ar.edu.unlam.tallerweb1.delivery.DatosLogin;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioNoRegistradoExepcion;
 import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
-import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,19 +14,16 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
-public class ControladorDeRegistroTest extends SpringTest {
+public class ControladorUsuarioTest {
 
     private ServicioLogin servicioLogin;
-    private ControladorRegistro controladorDeRegistro;
+    private ControladorUsuario controladorDeRegistro;
     private DatosLogin datosLogin;
-
 
     @Before
     public void inti() {
         this.servicioLogin = mock(ServicioLogin.class);
-        this.controladorDeRegistro = new ControladorRegistro(this.servicioLogin);
-
-
+        this.controladorDeRegistro = new ControladorUsuario(this.servicioLogin);
     }
 
     @Test
@@ -80,18 +69,6 @@ public class ControladorDeRegistroTest extends SpringTest {
         assertThat(model.getViewName()).isEqualTo(vista_destino);
         assertThat(model.getModel().get("msg")).isEqualTo("El mail debe ser de formato valido");
     }
-
-  /*  // TODO no podemos evitar el null pointer del request
-    @Test
-    public void cuandoSeleccionoElBotonDeVerificarPerfilMeLlevaALaVistaVerificar() {
-        String vistaDestino = "verificar";
-
-        this.request.setAttribute("id",1L);
-
-        ModelAndView mod = this.controladorDeRegistro.verificarDatos(this.request);
-
-        assertThat(mod.getViewName()).isEqualTo(vistaDestino);
-    }*/
 
     private DatosLogin obtenerUnDatosLogin() {
         this.datosLogin = new DatosLogin();

@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.domain.usuarios;
 
+import ar.edu.unlam.tallerweb1.domain.Excepciones.PassswordIncorrectoExeption;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioNoRegistradoExepcion;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
@@ -7,7 +8,7 @@ import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 // Interface que define los metodos del Servicio de Usuarios.
 public interface ServicioLogin {
 
-	Usuario consultarUsuario(String email, String password) throws UsuarioNoRegistradoExepcion;
+	Usuario consultarUsuario(String email, String password) throws UsuarioNoRegistradoExepcion, PassswordIncorrectoExeption;
 	void crearUsuario(Usuario usuario);
 
 	void actualizarUsuario(Usuario usuario);

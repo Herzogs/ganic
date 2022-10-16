@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.infrastructure;
 
+import ar.edu.unlam.tallerweb1.domain.Excepciones.PassswordIncorrectoExeption;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioNoRegistradoExepcion;
 import ar.edu.unlam.tallerweb1.domain.usuarios.RepositorioUsuario;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
@@ -22,14 +23,17 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 	}
 
 	@Override
-	public Usuario buscarUsuario(String email, String password) throws UsuarioNoRegistradoExepcion {
+	public Usuario buscarUsuario(String email, String password) throws UsuarioNoRegistradoExepcion, PassswordIncorrectoExeption {
 
 		if (estaRegistrado(email)) {
 			final Session session = sessionFactory.getCurrentSession();
-			return (Usuario) session.createCriteria(Usuario.class)
+			Usuario buscado= (Usuario) session.createCriteria(Usuario.class)
 					.add(Restrictions.eq("email", email))
 					.add(Restrictions.eq("password", password))
 					.uniqueResult();
+			if(buscado!=null){
+				return buscado;
+			}throw new PassswordIncorrectoExeption("Password incorrecto");
 		}
 		throw new UsuarioNoRegistradoExepcion("No se encuentra registrado el Usuario");
 

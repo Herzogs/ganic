@@ -16,7 +16,7 @@ public class ServicioEmailTest {
 
     @Test
     public void queSePuedaEnviarUnMailAUnDestinatarioValido(){
-        String email = "crisefeld@gmail.com";
+        String email = "test@gmail.com";
         String password = "1234";
         Boolean envioExitoso = true;
         Usuario user = dadoQueTengoUnUsuario(email,password);

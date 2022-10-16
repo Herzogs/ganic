@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.domain.usuario;
 
 import ar.edu.unlam.tallerweb1.SpringTest;
+import ar.edu.unlam.tallerweb1.domain.Excepciones.PassswordIncorrectoExeption;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioNoRegistradoExepcion;
 import ar.edu.unlam.tallerweb1.domain.usuarios.RepositorioUsuario;
@@ -28,7 +29,7 @@ public class ServicioLoginTest extends SpringTest {
     }
 
     @Test
-    public void queLuegoDeCrearUnUsuarioSePuedaVerificarSiSeGuardo() throws UsuarioNoRegistradoExepcion {
+    public void queLuegoDeCrearUnUsuarioSePuedaVerificarSiSeGuardo() throws UsuarioNoRegistradoExepcion, PassswordIncorrectoExeption {
         Usuario usuarioBuscado = dadoQueExisteUnUsuario();
         cuandoLLamoAlRepositorioYbusco(usuarioBuscado);
         verificoQueNoSeaNull(usuarioBuscado);
@@ -60,7 +61,7 @@ public class ServicioLoginTest extends SpringTest {
         return user;
     }
 
-    private void cuandoLLamoAlRepositorioYbusco(Usuario usuarioBuscado) throws UsuarioNoRegistradoExepcion {
+    private void cuandoLLamoAlRepositorioYbusco(Usuario usuarioBuscado) throws UsuarioNoRegistradoExepcion, PassswordIncorrectoExeption {
         when(repositorioUsuario.buscarUsuario(usuarioBuscado.getEmail(), usuarioBuscado.getPassword())).
                 thenReturn(usuarioBuscado);
     }
