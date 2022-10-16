@@ -147,6 +147,44 @@ public class ControladorIngredientesTest extends SpringTest {
         assertThat(model.getModelMap().get("IngredientesQueElUsuarioSelecciono")).isEqualTo(dadoQueTengoUnaNuevaListaDeIngredientesSeleccionados());
     }
 
+    @Test
+    public void cuandoSeleccioneUnaCantidadInsuficienteDeIngredientesYQuieraConfirmarMeRedirijaALaVistaDeLPrimerIngredienteSiEstoyLogeado() {
+        String vistaEsperada = "redirect:/generarPedido?paso=1";
+        cuandoLePidoAlHttpServletRequestQueMeTraigaElId();
+        ModelAndView model = cuandoElControladorVerifiqueQueNoSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(1, this.request);
+        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model, vistaEsperada);
+    }
+
+    @Test
+    public void cuandoSeleccioneUnaCantidadSuficienteDeIngredientesYQuieraConfirmarMeRedirijaALaVistaDeConfirmacion() {
+        String vistaEsperada = "exito";
+        List<Ingrediente> lista = dadoQueTengoUnaListaDeIngredientesSeleccionados();
+        cuandoIngreseLosIngredientesSeleccionadosALaListaDeIngredientesParaFormarElSandwich(lista);
+        cuandoLePidoAlHttpServletRequestQueMeTraigaElId();
+        ModelAndView model = cuandoElControladorVerifiqueQueSiSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(3, this.request);
+        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model, vistaEsperada);
+    }
+
+    @Test
+    public void cuandoSeleccioneUnaCantidadInsuficienteDeIngredientesPeroNoEsteLogeadoMeRedirijaAlLogin() {
+        String vistaEsperada = "redirect:/login";
+        List<Ingrediente> lista = dadoQueTengoUnaListaDeIngredientesSeleccionados();
+        cuandoLePidoAlHttpServletRequestQueMeTraigaUnIdNulo();
+        cuandoIngreseLosIngredientesSeleccionadosALaListaDeIngredientesParaFormarElSandwich(lista);
+        ModelAndView model = cuandoElControladorVerifiqueQueNoSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(1, this.request);
+        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model, vistaEsperada);
+    }
+
+    @Test
+    public void cuandoSeleccioneUnaCantidadSuficienteDeIngredientesYEsteLogeadoMeRedirijaAlaPantallaDeExito() {
+        String vistaEsperada = "exito";
+        List<Ingrediente> lista = dadoQueTengoUnaListaDeIngredientesSeleccionados();
+        cuandoIngreseLosIngredientesSeleccionadosALaListaDeIngredientesParaFormarElSandwich(lista);
+        cuandoLePidoAlHttpServletRequestQueMeTraigaElId();
+        ModelAndView model = cuandoElControladorVerifiqueQueSiSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(3, this.request);
+        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model, vistaEsperada);
+    }
+
     private ModelAndView cuandoLlamoAlControladorParaQueMeGenereLaPaginaParaModificarElIngredienteAPartirDeUnIngrediente(Ingrediente ing3) {
         List<Ingrediente> listaIngredientes = dadoQueTengoUnaListaDeIngredientesSeleccionados();
         this.controladorDeIngredientes.getSandwich().cargarIngredietnesAlSandwich(listaIngredientes);
@@ -183,52 +221,12 @@ public class ControladorIngredientesTest extends SpringTest {
         when(this.servicio.obtenerIngredientePorId(ingInexistente.getIdIngrediente())).thenThrow(new IngredienteInvalidoException("No Existe El Ingrediente"));
     }
 
-
-    @Test
-    public void cuandoSeleccioneUnaCantidadInsuficienteDeIngredientesYQuieraConfirmarMeRedirijaALaVistaDeLPrimerIngredienteSiEstoyLogeado() {
-        String vistaEsperada = "redirect:/generarPedido?paso=1";
-        cuandoLePidoAlHttpServletRequestQueMeTraigaElId();
-        ModelAndView model = cuandoElControladorVerifiqueQueNoSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(1, this.request);
-        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model, vistaEsperada);
-    }
-
     private void cuandoLePidoAlHttpServletRequestQueMeTraigaElId() {
         when(this.request.getSession().getAttribute("id")).thenReturn(1L);
     }
 
-    @Test
-    public void cuandoSeleccioneUnaCantidadSuficienteDeIngredientesYQuieraConfirmarMeRedirijaALaVistaDeConfirmacion() {
-        String vistaEsperada = "exito";
-        List<Ingrediente> lista = dadoQueTengoUnaListaDeIngredientesSeleccionados();
-        cuandoIngreseLosIngredientesSeleccionadosALaListaDeIngredientesParaFormarElSandwich(lista);
-        cuandoLePidoAlHttpServletRequestQueMeTraigaElId();
-        ModelAndView model = cuandoElControladorVerifiqueQueSiSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(3, this.request);
-        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model, vistaEsperada);
-    }
-
-    @Test
-    public void cuandoSeleccioneUnaCantidadInsuficienteDeIngredientesPeroNoEsteLogeadoMeRedirijaAlLogin() {
-        String vistaEsperada = "redirect:/login";
-        List<Ingrediente> lista = dadoQueTengoUnaListaDeIngredientesSeleccionados();
-        cuandoLePidoAlHttpServletRequestQueMeTraigaUnIdNulo();
-        cuandoIngreseLosIngredientesSeleccionadosALaListaDeIngredientesParaFormarElSandwich(lista);
-        ModelAndView model = cuandoElControladorVerifiqueQueNoSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(1, this.request);
-        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model, vistaEsperada);
-    }
-
     private void cuandoLePidoAlHttpServletRequestQueMeTraigaUnIdNulo() {
         when(this.request.getSession().getAttribute("id")).thenReturn(null);
-    }
-
-
-    @Test
-    public void cuandoSeleccioneUnaCantidadSuficienteDeIngredientesYEsteLogeadoMeRedirijaAlaPantallaDeExito() {
-        String vistaEsperada = "exito";
-        List<Ingrediente> lista = dadoQueTengoUnaListaDeIngredientesSeleccionados();
-        cuandoIngreseLosIngredientesSeleccionadosALaListaDeIngredientesParaFormarElSandwich(lista);
-        cuandoLePidoAlHttpServletRequestQueMeTraigaElId();
-        ModelAndView model = cuandoElControladorVerifiqueQueSiSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(3, this.request);
-        entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model, vistaEsperada);
     }
 
     private void cuandoIngreseLosIngredientesSeleccionadosALaListaDeIngredientesParaFormarElSandwich
