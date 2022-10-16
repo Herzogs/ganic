@@ -108,6 +108,22 @@ public class ControladorIngredientesTest extends SpringTest {
     }
 
     @Test
+    public void cuandoEsteEnLaVistaDeConfirmarIngredientesSeleccionadosPeroIntentoEliminarUnIngredienteDelPaso1MeDEvuelveError() throws IngredienteInvalidoException {
+        Ingrediente ing1 = dadoQueExisteUnIngrediente(5L, "Pan clasico", 150F, 1, "Pan lactal blanco","SinRestriccion");
+        cuandoLePidoAlServicioQueMeDevuelvaUnIngredientePorID(ing1);
+        ModelAndView model = cuandoLLamasAlControladorParaQueElimineElIngrediente(ing1);
+        entoncesVerificoQueElModeloMeDevuelva(model, "error", "No Se Puede Eliminar El Ingrediente Seleccionado");
+    }
+
+    @Test
+    public void cuandoEsteEnLaVistaDeConfirmarIngredientesSeleccionadosPeroIntentoEliminarUnIngredienteDelPaso2MeDEvuelveError() throws IngredienteInvalidoException {
+        Ingrediente ing2 = dadoQueExisteUnIngrediente (9L,"Medallo de carne",450F,2,"Carne de ternera a la parrilla","SinRestriccion");
+        cuandoLePidoAlServicioQueMeDevuelvaUnIngredientePorID(ing2);
+        ModelAndView model = cuandoLLamasAlControladorParaQueElimineElIngrediente(ing2);
+        entoncesVerificoQueElModeloMeDevuelva(model, "error", "No Se Puede Eliminar El Ingrediente Seleccionado");
+    }
+
+    @Test
     public void cuandoEsteEnLaVistaDeConfirmarIngredientesSeleccionadosPeroIntentoEliminarUnIngredienteQueNoExista() throws IngredienteInvalidoException {
         Ingrediente ingInexistente = dadoQueExisteUnIngrediente(100L,"Pure",200F,3,"Pure de papas","SinRestriccion");
         cuandoLePidoAlServicioQueMeBusqueUnIngredienteInexistenteMeLAnzeUnaExcepcion(ingInexistente);

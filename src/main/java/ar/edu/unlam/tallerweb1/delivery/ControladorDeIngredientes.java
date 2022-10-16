@@ -123,12 +123,12 @@ public class ControladorDeIngredientes {
         Ingrediente ing = null;
         try {
             ing = this.servicioDeIngrediente.obtenerIngredientePorId(id);
-            /*if(compararIngredienteEnLaPosicion(0, ing) || compararIngredienteEnLaPosicion(1, ing)){
+            if(compararIngredienteEnLaPosicion(0, ing) || compararIngredienteEnLaPosicion(1, ing)){
                 model.put("error", "No Se Puede Eliminar El Ingrediente Seleccionado");
-            }else {*/
+            }else {
             this.sandwich.eliminarIngrediente(ing);
             model.put("ok", "Se a elminado el elemento seleccionado");
-            //}
+            }
 
         }catch(IngredienteInvalidoException ex){
             model.put("error", "No Existe El Ingrediente Solicitado");
@@ -136,6 +136,10 @@ public class ControladorDeIngredientes {
         model.put("IngredientesQueElUsuarioSelecciono", sandwich.getIngredientesSandwich());
         model.put("montoFinal", sandwich.getMonto());
         return new ModelAndView("confirmar", model);
+    }
+
+    private boolean compararIngredienteEnLaPosicion(int i, Ingrediente ing) {
+        return this.sandwich.getIngredientesSandwich().get(i).equals(ing);
     }
 
     @RequestMapping(path = "modificarIngrediente", method = RequestMethod.GET)
