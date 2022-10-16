@@ -24,6 +24,7 @@ public class ControladorUsuario {
     public ControladorUsuario(ServicioLogin servicioLogin) {
         this.servicioLogin = servicioLogin;
     }
+
     @RequestMapping("/login")
     public ModelAndView irALogin() {
 
@@ -33,35 +34,26 @@ public class ControladorUsuario {
 
         return new ModelAndView("login", modelo);
     }
+
     @RequestMapping(path = "/validar-login", method = RequestMethod.POST)
-    public ModelAndView validarLogin(@ModelAttribute("datosLogin") DatosLogin datosLogin, HttpServletRequest request)  {
+    public ModelAndView validarLogin(@ModelAttribute("datosLogin") DatosLogin datosLogin, HttpServletRequest request) {
         ModelMap model = new ModelMap();
 
-//
-      try {
-          Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
-          request.getSession().setAttribute("id", usuarioBuscado.getId());
-          request.getSession().setAttribute("email", usuarioBuscado.getEmail());
-          return new ModelAndView("redirect:/home");
 
-      }catch (UsuarioNoRegistradoExepcion e){
-          model.put("error", e.getMessage());
-          return new ModelAndView("login", model);
-      } catch (PassswordIncorrectoExeption e) {
-          model.put("error", e.getMessage());
-          return new ModelAndView("login", model);
-      }
+        try {
+            Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
+            request.getSession().setAttribute("id", usuarioBuscado.getId());
+            request.getSession().setAttribute("email", usuarioBuscado.getEmail());
+            return new ModelAndView("redirect:/home");
 
-//
-//        if (usuarioBuscado != null) {
-//            request.getSession().setAttribute("id", usuarioBuscado.getId());
-//            request.getSession().setAttribute("email", usuarioBuscado.getEmail());
-//            return new ModelAndView("redirect:/home");
-//        } else {
-//            // si el usuario no existe agrega un mensaje de error en el modelo.
-//            model.put("error", "Usuario o clave incorrecta");
-//        }
-//        return new ModelAndView("login", model);
+        } catch (UsuarioNoRegistradoExepcion e) {
+            model.put("error", e.getMessage());
+            return new ModelAndView("login", model);
+        } catch (PassswordIncorrectoExeption e) {
+            model.put("error", e.getMessage());
+            return new ModelAndView("login", model);
+        }
+
     }
 
     @RequestMapping(path = "/registrar", method = RequestMethod.GET)
@@ -121,14 +113,11 @@ public class ControladorUsuario {
     }
 
 
-
-
-
-
     private boolean esValido(String email) {
 
         return email.matches("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$");
     }
+
     @RequestMapping(path = "/", method = RequestMethod.GET)
     public ModelAndView inicio() {
         return new ModelAndView("redirect:/home");
