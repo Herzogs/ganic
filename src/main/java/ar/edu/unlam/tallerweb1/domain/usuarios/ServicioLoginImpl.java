@@ -1,6 +1,6 @@
 package ar.edu.unlam.tallerweb1.domain.usuarios;
 
-import ar.edu.unlam.tallerweb1.domain.Excepciones.PassswordIncorrectoExeption;
+import ar.edu.unlam.tallerweb1.domain.Excepciones.LoginInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioNoRegistradoExepcion;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +25,11 @@ public class ServicioLoginImpl implements ServicioLogin {
 	}
 
 	@Override
-	public Usuario consultarUsuario (String email, String password) throws UsuarioNoRegistradoExepcion, PassswordIncorrectoExeption {
-		return servicioLoginDao.buscarUsuario(email, password);
+	public Usuario consultarUsuario (String email, String password) throws LoginInvalidoException {
+		Usuario usuarioBuscado = servicioLoginDao.buscarUsuario(email, password);
+		if(usuarioBuscado == null)
+			throw new LoginInvalidoException("El usuario y contraseña son invalidos");
+		return usuarioBuscado;
 	}
 
 	@Override
@@ -50,6 +53,8 @@ public class ServicioLoginImpl implements ServicioLogin {
 	@Override
 	public Usuario consultarUsuario(String email) throws UsuarioNoRegistradoExepcion {
 		Usuario buscado= this.servicioLoginDao.buscar(email);
+		if(buscado == null)
+			throw new UsuarioNoRegistradoExepcion("El usuario es invalido");
 		return buscado;
 	}
 

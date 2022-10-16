@@ -1,7 +1,7 @@
 package ar.edu.unlam.tallerweb1.domain.usuario;
 
 import ar.edu.unlam.tallerweb1.SpringTest;
-import ar.edu.unlam.tallerweb1.domain.Excepciones.PassswordIncorrectoExeption;
+import ar.edu.unlam.tallerweb1.domain.Excepciones.LoginInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioNoRegistradoExepcion;
 import ar.edu.unlam.tallerweb1.domain.usuarios.RepositorioUsuario;
@@ -10,8 +10,6 @@ import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLoginImpl;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.exceptions.base.MockitoException;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -29,7 +27,7 @@ public class ServicioLoginTest extends SpringTest {
     }
 
     @Test
-    public void queLuegoDeCrearUnUsuarioSePuedaVerificarSiSeGuardo() throws UsuarioNoRegistradoExepcion, PassswordIncorrectoExeption {
+    public void queLuegoDeCrearUnUsuarioSePuedaVerificarSiSeGuardo() throws UsuarioNoRegistradoExepcion, LoginInvalidoException {
         Usuario usuarioBuscado = dadoQueExisteUnUsuario();
         cuandoLLamoAlRepositorioYbusco(usuarioBuscado);
         verificoQueNoSeaNull(usuarioBuscado);
@@ -61,7 +59,7 @@ public class ServicioLoginTest extends SpringTest {
         return user;
     }
 
-    private void cuandoLLamoAlRepositorioYbusco(Usuario usuarioBuscado) throws UsuarioNoRegistradoExepcion, PassswordIncorrectoExeption {
+    private void cuandoLLamoAlRepositorioYbusco(Usuario usuarioBuscado) throws UsuarioNoRegistradoExepcion, LoginInvalidoException {
         when(repositorioUsuario.buscarUsuario(usuarioBuscado.getEmail(), usuarioBuscado.getPassword())).
                 thenReturn(usuarioBuscado);
     }

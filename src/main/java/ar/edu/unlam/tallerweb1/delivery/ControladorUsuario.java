@@ -1,6 +1,6 @@
 package ar.edu.unlam.tallerweb1.delivery;
 
-import ar.edu.unlam.tallerweb1.domain.Excepciones.PassswordIncorrectoExeption;
+import ar.edu.unlam.tallerweb1.domain.Excepciones.LoginInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioNoRegistradoExepcion;
 import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
@@ -38,18 +38,13 @@ public class ControladorUsuario {
     @RequestMapping(path = "/validar-login", method = RequestMethod.POST)
     public ModelAndView validarLogin(@ModelAttribute("datosLogin") DatosLogin datosLogin, HttpServletRequest request) {
         ModelMap model = new ModelMap();
-
-
         try {
             Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
             request.getSession().setAttribute("id", usuarioBuscado.getId());
             request.getSession().setAttribute("email", usuarioBuscado.getEmail());
             return new ModelAndView("redirect:/home");
 
-        } catch (UsuarioNoRegistradoExepcion e) {
-            model.put("error", e.getMessage());
-            return new ModelAndView("login", model);
-        } catch (PassswordIncorrectoExeption e) {
+        } catch (LoginInvalidoException e) {
             model.put("error", e.getMessage());
             return new ModelAndView("login", model);
         }
