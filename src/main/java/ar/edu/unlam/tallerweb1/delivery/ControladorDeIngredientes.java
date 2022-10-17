@@ -95,7 +95,7 @@ public class ControladorDeIngredientes {
             }
             model.put("montoFinal", sandwich.getMonto());
             model.put("IngredientesQueElUsuarioSelecciono", sandwich.getIngredientesSandwich());
-            return new ModelAndView("exito", model);
+            return new ModelAndView("confirmar", model);
         }
         return new ModelAndView("redirect:/login");
     }
