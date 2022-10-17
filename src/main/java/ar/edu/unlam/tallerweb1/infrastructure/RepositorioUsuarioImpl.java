@@ -17,6 +17,7 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 
     @Autowired
     public RepositorioUsuarioImpl(SessionFactory sessionFactory) {
+
         this.sessionFactory = sessionFactory;
     }
 
@@ -31,7 +32,8 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 
     @Override
     public void guardar(Usuario usuario) {
-        sessionFactory.getCurrentSession().save(usuario);
+        final Session session = sessionFactory.getCurrentSession();
+        session.save(usuario);
     }
 
     @Override
