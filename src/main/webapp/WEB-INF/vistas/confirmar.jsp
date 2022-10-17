@@ -36,9 +36,13 @@
                             <p class="card-text text-center text-succes">Tu Sandwich</p>
                             <c:forEach var="ing" items="${IngredientesQueElUsuarioSelecciono}">
                                 <p class="card-text fw-bold">${ing.nombre}
-                                    <a href="eliminarIngrediente?ing=${ing.idIngrediente}" class="px-3 my-3">
-                                        <i class="bi bi-trash-fill"></i>
-                                    </a>
+                                    <c:choose>
+                                        <c:when test="${ing.paso > 2}">
+                                            <a href="eliminarIngrediente?ing=${ing.idIngrediente}" class="px-3 my-3">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </a>
+                                        </c:when>
+                                    </c:choose>
                                     <a href="modificarIngrediente?ing=${ing.idIngrediente}" class="px-3 my-3">
                                         <i class="bi bi-pencil-fill"></i>
                                     </a>

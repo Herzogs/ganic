@@ -59,7 +59,7 @@ public class ControladorIngredientesTest extends SpringTest {
         // Preparación
 
         // Ejecución
-        ModelAndView mod = cuandoLePidaAlControladorQueMeRedirijaALaVistaDeIngredienteDelPaso(1);
+        ModelAndView mod = cuandoLePidaAlControladorQueMeRedirijaALaVistaDeIngredienteDelPaso(1,"SinRestriccion");
         // Verificación
 
         entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(mod, "generarPedido");
@@ -326,8 +326,8 @@ public class ControladorIngredientesTest extends SpringTest {
         return ingredienteList;
     }
 
-    private ModelAndView cuandoLePidaAlControladorQueMeRedirijaALaVistaDeIngredienteDelPaso(Integer paso) {
-        return this.controladorDeIngredientes.cargarPagina(paso);
+    private ModelAndView cuandoLePidaAlControladorQueMeRedirijaALaVistaDeIngredienteDelPaso(Integer paso, String pref) {
+        return this.controladorDeIngredientes.cargarPagina(paso, pref);
     }
 
     private void cuandoLePidoAlServicioQueMeDevuelvaUnIngredientePorID(Ingrediente ing) throws

@@ -17,7 +17,7 @@ public class Sandwich {
     private String nombre;
     private String descripcion;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(name = "compuesto_por",
                 joinColumns = @JoinColumn(name = "idSandwich"),
                 inverseJoinColumns = @JoinColumn(name = "idIngrediente"))
