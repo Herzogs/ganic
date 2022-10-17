@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.ModelMap;
 
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -51,19 +52,30 @@ public class ControladorDeIngredientes {
     }
 
     @RequestMapping(path = "/generarPedido", method = RequestMethod.GET)
-    public ModelAndView cargarPagina(@RequestParam(value = "paso", defaultValue = "1", required = false) Integer paso) {
+    public ModelAndView cargarPagina(@RequestParam(value = "paso", defaultValue = "1", required = false) Integer paso,
+                                     @RequestParam(value = "pref", defaultValue = "SinRestriccion", required = false) String pref) {
         ModelMap mod = new ModelMap();
         List<Ingrediente> lista = null;
         try{
-            lista = this.servicioDeIngrediente.obtenerIngredientesPorPaso(paso);
+            lista = this.servicioDeIngrediente.obtenerIngredientesFiltradoPorPasoYPreferencia(paso,pref);
+
             mod.put("ListaDePanes", lista);
             mod.put("paso", paso);
+            mod.put("formPref", new FormularioPreferencia());
         }catch(PasoInvalidoException e) {
             mod.put("error","Paso Incorrecto");
             this.sandwich.borrarDatosDelSandwich();
             return new ModelAndView("redirect:/error404",mod);
         }
         return new ModelAndView("generarPedido",mod);
+    }
+
+    @RequestMapping(path = "/actualizarPreferencia", method = RequestMethod.POST)
+    public ModelAndView actualizarPreferencia(@ModelAttribute("formPref") FormularioPreferencia du) {
+        ModelMap mod = new ModelMap();
+        mod.put("pref",du.getPreferencia());
+        mod.put("paso",du.getPaso());
+        return new ModelAndView("redirect:/generarPedido",mod);
     }
 
     @RequestMapping(path = "/agregarIngrediente", method = RequestMethod.GET)
@@ -84,7 +96,8 @@ public class ControladorDeIngredientes {
     }
 
     @RequestMapping(path = "/confirmar", method = RequestMethod.GET)
-    public ModelAndView confirmarIngredientesSeleccionados(@RequestParam(value = "paso", required = false) Integer paso,HttpServletRequest request) {
+    public ModelAndView confirmarIngredientesSeleccionados(@RequestParam(value = "paso", required = false) Integer paso,
+                                                           HttpServletRequest request) {
         Long idLogeado = (Long) request.getSession().getAttribute("id");
         if ( idLogeado != null) {
             ModelMap model = new ModelMap();
@@ -107,11 +120,20 @@ public class ControladorDeIngredientes {
         return new ModelAndView("alerta_exitosa");
     }
 
+    //////////////////////////////////// ESTO VA EN EL CONTROLADOR DE HOME /////////////////////////////////////////////
     @RequestMapping(path = "/home", method = RequestMethod.GET)
     public ModelAndView irAHome() {
         this.sandwich.borrarDatosDelSandwich();
         return new ModelAndView("home");
     }
+
+    @RequestMapping(path = "/Salir", method = RequestMethod.GET)
+    public ModelAndView salirSession(HttpServletRequest request){
+        request.getSession().setAttribute("id",null);
+        return new ModelAndView("redirect:/home");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public datosDelSandwich getSandwich() {
         return sandwich;
@@ -146,15 +168,19 @@ public class ControladorDeIngredientes {
     public ModelAndView generarPaginaDeIngredienteParaCambiar(@RequestParam(value = "ing", defaultValue = "1", required = false) Long id) {
         ModelMap mod = new ModelMap();
         List<Ingrediente> lista = null;
+        Ingrediente ingrediente = null;
         try{
-            Ingrediente ingrediente = this.servicioDeIngrediente.obtenerIngredientePorId(id);
+            ingrediente = this.servicioDeIngrediente.obtenerIngredientePorId(id);
             Integer idx = this.sandwich.buscarIngredientePorID(id);
             if(!idx.equals(-1)) {
                 this.sandwich.getIngredientesSandwich().set(idx, null);
                 this.sandwich.setMonto(0F);
             }
-            lista = this.servicioDeIngrediente.obtenerIngredientesPorPaso(ingrediente.getPaso());
+            lista = this.servicioDeIngrediente.obtenerIngredientesFiltradoPorPasoYPreferencia(ingrediente.getPaso(), ingrediente.getEsApto());
+            System.err.println("LISTA DE INGREDIENTES" + lista.toString());
             mod.put("ListaDeIngredientes", lista);
+            mod.put("paso",ingrediente.getPaso());
+            mod.put("formPref",new FormularioPreferencia());
         }catch(IngredienteInvalidoException  | PasoInvalidoException e) {
             /*mod.put("error", "Paso Incorrecto");
             this.sandwich.borrarDatosDelSandwich();*/
@@ -178,5 +204,13 @@ public class ControladorDeIngredientes {
         model.put("IngredientesQueElUsuarioSelecciono", sandwich.getIngredientesSandwich());
         model.put("montoFinal", sandwich.getMonto());
         return new ModelAndView("confirmar", model);
+    }
+
+    @RequestMapping(path = "/actualizarPreferenciaMod", method = RequestMethod.POST)
+    public ModelAndView actualizarPreferenciaEnVistaModificar(@ModelAttribute("formPref") FormularioPreferencia du) {
+        ModelMap mod = new ModelMap();
+        mod.put("pref",du.getPreferencia());
+        mod.put("paso",du.getPaso());
+        return new ModelAndView("redirect:/modifcarIngrediente",mod);
     }
 }

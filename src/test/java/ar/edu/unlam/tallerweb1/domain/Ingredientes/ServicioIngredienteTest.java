@@ -114,7 +114,7 @@ public class ServicioIngredienteTest extends SpringTest {
     }
 
     @Test
-    public void queAlSolicitarUnaListaDeIngredientesPorPasoyPreferenciaMeDevuelvaUnaListaNoNula(){
+    public void queAlSolicitarUnaListaDeIngredientesPorPasoyPreferenciaMeDevuelvaUnaListaNoNula() throws PasoInvalidoException {
         List<Ingrediente> valorEsperado = obtengoTodosLosIngredientesSinRestriccion();
         cuandoSeInvoqueAlRepositorioParaObtenerUnaListaDeIngredientesPorUnPasoYPreferenciaMeDevuelvaUnaListaNoVacia(1,"SinRestriccion",obtengoTodosLosIngredientesSinRestriccion());
         List<Ingrediente> valorObtenido = entoncesLlamoAlServicioPidiendoleUnaListaDeIUngredientesFiltradaPorPasoYPreferencia(1,"SinRestriccion");
@@ -130,7 +130,7 @@ public class ServicioIngredienteTest extends SpringTest {
         assertThat(valorObtenido).isEqualTo(valorEsperado);
     }
 
-    private List<Ingrediente> entoncesLlamoAlServicioPidiendoleUnaListaDeIUngredientesFiltradaPorPasoYPreferencia(Integer paso, String preferencia) {
+    private List<Ingrediente> entoncesLlamoAlServicioPidiendoleUnaListaDeIUngredientesFiltradaPorPasoYPreferencia(Integer paso, String preferencia) throws PasoInvalidoException {
         return this.servicio.obtenerIngredientesFiltradoPorPasoYPreferencia(paso,preferencia);
     }
 

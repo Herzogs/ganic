@@ -1,6 +1,7 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
 
@@ -37,6 +38,21 @@
             <div class="row g-4">
                 <h3>Genere su pedido</h3>
                 <h4>Seleccone ingrediente</h4>
+
+                    <form:form action="actualizarPreferencia" method="POST" modelAttribute="formPref">
+                        <h3>Filtro por preferencia: </h3>
+                        <form:input path="paso" value="${paso}" type="hidden"/>
+                        <form:select  path="preferencia" id="preferencia" class="form-select">
+                            <form:option value="SinRestriccion">SinRestriccion</form:option>
+                            <form:option value="Vegano">Vegano</form:option>
+                            <form:option value="sin_TACC">sin_TACC</form:option>
+                            <c:set var="formPref.paso" value="${paso}"/>
+                        </form:select>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-success mt-1 mb-4" Type="Submit">Filtrar</button>
+                        </div>
+                    </form:form>
+
                 <c:forEach var="pan" items="${ListaDePanes}" >
                     <div class="col-6">
                         <div class="card">

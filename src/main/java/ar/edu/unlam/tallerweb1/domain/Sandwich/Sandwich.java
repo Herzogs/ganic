@@ -17,7 +17,10 @@ public class Sandwich {
     private String nombre;
     private String descripcion;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    private Boolean enPromocion;
+    private String esApto;
+
+    @ManyToMany
     @JoinTable(name = "compuesto_por",
                 joinColumns = @JoinColumn(name = "idSandwich"),
                 inverseJoinColumns = @JoinColumn(name = "idIngrediente"))
@@ -30,6 +33,31 @@ public class Sandwich {
         this.idSandwich = idSandwich;
         this.nombre = nombre;
         this.descripcion = descripcion;
+    }
+
+    public Sandwich(Long idSandwich, String nombre, String descripcion, Boolean enPromocion, String esApto, Set<Ingrediente> ingrediente) {
+        this.idSandwich = idSandwich;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.enPromocion = enPromocion;
+        this.esApto = esApto;
+        this.ingrediente = ingrediente;
+    }
+
+    public Boolean getEnPromocion() {
+        return enPromocion;
+    }
+
+    public void setEnPromocion(Boolean enPromocion) {
+        this.enPromocion = enPromocion;
+    }
+
+    public String getEsApto() {
+        return esApto;
+    }
+
+    public void setEsApto(String esApto) {
+        this.esApto = esApto;
     }
 
     public Long getIdSandwich() {

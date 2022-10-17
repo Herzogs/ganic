@@ -1,6 +1,7 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
 
@@ -36,16 +37,31 @@
         <div class="container py-5">
             <div class="row g-4">
                 <h3>Seleccone ingrediente</h3>
-                <c:forEach var="ing" items="${ListaDeIngredientes}" >
+
+                    <form:form action="actualizarPreferenciaMod" method="POST" modelAttribute="formPref">
+                        <h4>Filtro por preferencia: </h4>
+                        <form:input path="paso" value="${paso}" type="hidden"/>
+                        <form:select  path="preferencia" id="preferencia" class="form-select">
+                            <form:option value="SinRestriccion">SinRestriccion</form:option>
+                            <form:option value="Vegano">Vegano</form:option>
+                            <form:option value="sin_TACC">sin_TACC</form:option>
+                            <c:set var="formPref.paso" value="${paso}"/>
+                        </form:select>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-success mt-1 mb-4" Type="Submit">Filtrar</button>
+                        </div>
+                    </form:form>
+
+                <c:forEach var="pan" items="${ListaDeIngredientes}" >
                     <div class="col-6">
                         <div class="card">
                             <div class="card-header bg-dark text-white">
-                                    ${ing.nombre}
+                                    ${pan.nombre}
                             </div>
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item">${ing.detalle}</li>
-                                <li class="list-group-item"><span class="text-primary">Precio:</span> ${ing.precio}</li>
-                                <li class="list-group-item"><a href="mod?id=${ing.idIngrediente}" class="btn btn-success px-3 my-3">Agregar</a></li>
+                                <li class="list-group-item">${pan.detalle}</li>
+                                <li class="list-group-item"><span class="text-primary">Precio:</span> ${pan.precio}</li>
+                                <li class="list-group-item"><a href="mod?id=${pan.idIngrediente}" class="btn btn-success px-3 my-3">Agregar</a></li>
                             </ul>
                         </div>
                     </div>
@@ -59,6 +75,8 @@
                     <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
             </div>
+            <a href="home" class="btn btn-primary px-5 my-5">Volver al Home</a>
+            <a href="confirmar?paso=${paso}" class="btn btn-success px-5 my-5">Finalizar</a>
         </div>
     </section>
 </main>

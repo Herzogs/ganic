@@ -46,7 +46,10 @@ public class ServicioDeIngredienteImpl implements ServicioDeIngrediente {
 	}
 
 	@Override
-	public List<Ingrediente> obtenerIngredientesFiltradoPorPasoYPreferencia(Integer paso, String preferencia) {
-		return this.repo.obtenerIngredientesPorPasoYPorPreferencia(paso, preferencia);
+	public List<Ingrediente> obtenerIngredientesFiltradoPorPasoYPreferencia(Integer paso, String preferencia) throws PasoInvalidoException {
+		List<Ingrediente> lista = this.repo.obtenerIngredientesPorPasoYPorPreferencia(paso, preferencia);
+		if(lista.isEmpty())
+			throw new PasoInvalidoException("No Existe Paso o Preferencia");
+		return lista;
 	}
 }

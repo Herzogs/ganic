@@ -19,7 +19,17 @@
 				<a href="home"><img src="img/ganiclogo.png" class="img-fluid logo_style" alt="Logo"></a>
 				<a href="contacto">Contacto</a>
 				<a href="nosotros">Nosotros</a>
-				<a class="bg-warning rounded-pill text-white" href="verificar">Perfil</a>
+				<c:choose>
+					<c:when test="${sessionScope.id == null}">
+						<a class="bg-warning rounded-pill text-white" href="login">Login</a>
+						<a class="bg-warning rounded-pill text-white" href="registrar">Registrar</a>
+					</c:when>
+					<c:otherwise>
+						<a class="bg-warning rounded-pill text-white" href="verificar">Perfil</a>
+						<a class="bg-warning rounded-pill text-white" href="Salir">Salir</a>
+					</c:otherwise>
+
+				</c:choose>
 			</div>
 		</div>
 	</nav>

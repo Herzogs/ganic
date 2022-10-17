@@ -42,15 +42,37 @@ public class RepositorioSandwichTest extends SpringTest {
 
     @Test @Rollback @Transactional
     public void queAlSolicitarLaListaDeSandwichesMeDevuelvaUnaListaNoVacia(){
-        List<Sandwich> valorEsperado = dadoQueExistenVariosSandwiches();
-        guardoEnLaBaseDeDatosLaListaDeSandwiches(valorEsperado);
         List<Sandwich> valorObtenido = obtengoTodasLosSandwichesDeLaBaseDeDatos();
-        entoncesComparoAmbasListasDeSandwiches(valorObtenido,valorEsperado);
+        entoncesVerificoQueLaListaObtenidaTenga(valorObtenido, 6);
+    }
+
+    private void entoncesVerificoQueLaListaObtenidaTenga(List<Sandwich> valorObtenido, Integer expected) {
+        assertThat(valorObtenido).hasSize(expected);
+    }
+
+    @Test @Rollback @Transactional
+    public void queAlSolicitarLaListaDeSandwichesEnPromocionMeDevuelvaUnaListaNoVacia(){
+        List<Sandwich> valorObtenido = obtengoTodasLosSandwichesEnPromocionDeLaBaseDeDatos();
+        entoncesVerificoQueLaListaObtenidaTenga(valorObtenido, 5);
+    }
+
+    @Test @Rollback @Transactional
+    public void queAlSolicitarLaListaDeSandwichesConPreferenciaMeDevuelvaUnaListaNoVacia(){
+        List<Sandwich> valorObtenido = obtengoTodasLosSandwichesDeUnTipoDeLaBaseDeDatos("Vegano");
+        entoncesVerificoQueLaListaObtenidaTenga(valorObtenido, 2);
+    }
+
+    private List<Sandwich> obtengoTodasLosSandwichesDeUnTipoDeLaBaseDeDatos(String pref) {
+        return this.repositorioSandwich.obtenerTodosLosSandwitchPorPreferencia(pref);
+    }
+
+    private List<Sandwich> obtengoTodasLosSandwichesEnPromocionDeLaBaseDeDatos() {
+        return this.repositorioSandwich.obtenerTodosLosSandwitchEnPromocion();
     }
 
     private void entoncesComparoAmbasListasDeSandwiches(List<Sandwich> valorObtenido, List<Sandwich> valorEsperado) {
         assertThat(valorObtenido).isNotEmpty();
-        assertThat(valorObtenido).hasSize(valorEsperado.size());
+        entoncesVerificoQueLaListaObtenidaTenga(valorObtenido, valorEsperado.size());
         assertThat(valorObtenido).isEqualTo(valorEsperado);
     }
 
@@ -58,17 +80,14 @@ public class RepositorioSandwichTest extends SpringTest {
         return this.repositorioSandwich.obtenerTodosLosSandwiches();
     }
 
-    private void guardoEnLaBaseDeDatosLaListaDeSandwiches(List<Sandwich> valorEsperado) {
-        for (Sandwich s: valorEsperado) {
-            session().save(s);
-        }
-    }
-
     private List<Sandwich> dadoQueExistenVariosSandwiches() {
         Sandwich s1 = this.dadoQueExisteUnSandwich("sandwich1", "sandwich1");
         Sandwich s2 = this.dadoQueExisteUnSandwich("sandwich2", "sandwich2");
         Sandwich s3 = this.dadoQueExisteUnSandwich("sandwich3", "sandwich3");
         List<Sandwich> lista = new ArrayList<>();
+        lista.add(s1);
+        lista.add(s2);
+        lista.add(s3);
         lista.add(s1);
         lista.add(s2);
         lista.add(s3);

@@ -21,7 +21,7 @@ public class Ingrediente {
 
 	private String esApto;
 
-	@ManyToMany(mappedBy = "ingrediente")
+	/*@ManyToMany(mappedBy = "ingrediente")
 	private Set<Sandwich> sandwiches = new LinkedHashSet<>();
 
 	public Set<Sandwich> getSandwiches() {
@@ -31,7 +31,7 @@ public class Ingrediente {
 	public void setSandwiches(Set<Sandwich> sandwiches) {
 		this.sandwiches = sandwiches;
 	}
-
+*/
 	public Ingrediente() {
 	}
 
@@ -118,7 +118,7 @@ public class Ingrediente {
 				", paso=" + paso +
 				", detalle='" + detalle + '\'' +
 				", esApto='" + esApto + '\'' +
-				", sandwiches=" + sandwiches +
+				/*", sandwiches=" + sandwiches +*/
 				'}';
 	}
 }
