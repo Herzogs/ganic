@@ -1,11 +1,13 @@
 package ar.edu.unlam.tallerweb1.domain.Sandwich;
 
 import ar.edu.unlam.tallerweb1.SpringTest;
+import ar.edu.unlam.tallerweb1.domain.Excepciones.NoHaySandwichEnPromocionException;
+import ar.edu.unlam.tallerweb1.domain.Excepciones.SandwichNoExistenteException;
+import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -25,7 +27,7 @@ public class ServicioSandwichTest extends SpringTest {
 
     //TODO: cambiar nombre del metodo
     @Test
-    public void queAlSolicitarUnSandwichPorIdMeDevuelvaUnValor(){
+    public void queAlSolicitarUnSandwichPorIdMeDevuelvaUnValor() throws SandwichNoExistenteException {
 
         Sandwich valorEsperado = cuandoAlRepositorioLePidaQueMeDevuelvaUnSandwichPorId();
         Sandwich valorObtenido = solicitoAlServicioUnSandwitchPorId(1L);
@@ -33,20 +35,133 @@ public class ServicioSandwichTest extends SpringTest {
 
     }
 
+    @Test (expected = SandwichNoExistenteException.class)
+    public void queAlSolicitarUnSandwichPorIdInvalidoMeDevuelvaUnaExcepcion() throws SandwichNoExistenteException {
+
+        cuandoAlRepositorioLePidaQueMeDevuelvaUnSandwichPorIdInvalidoMeDevuelvaExcepcion(100L);
+        solicitoAlServicioUnSandwitchPorId(100L);
+    }
+
+    private void cuandoAlRepositorioLePidaQueMeDevuelvaUnSandwichPorIdInvalidoMeDevuelvaExcepcion(Long id) {
+        when(this.repo.obtenerSandwichPorId(id)).thenReturn(null);
+    }
+
     //TODO: cambiar nombre del metodo
     @Test
-    public void queAlSolicitarLaListaDeSandwichesMeDevuelvaUnaListaNoVacia(){
+    public void queAlSolicitarLaListaDeSandwichesMeDevuelvaUnaListaNoVacia() throws SandwichNoExistenteException {
 
         cuandoAlRepositorioLePidaQueMeDevuelvaTodosLosSandwiches();
         List<Sandwich> valorObtenido = solicitoAlServicioQueMeDevuelvaTodosLosSandwiches();
         entoncesVerificoQueLoRetornadoNoSeaUnaListaVacia(valorObtenido);
     }
 
+    @Test
+    public void queAlObtenerTodosLosSandwichesEnPromocionMeDevuelvaUnaListaNoVacia() throws NoHaySandwichEnPromocionException {
+        List<Sandwich> lista = dadoQueExistenSandwichesEnPromocion();
+        cuandoAlRepositorioLePidaQueMeDevuelvaLaListaEnPromocion(lista);
+        List<Sandwich> enPromocion = solicitoAlServicioQueMeDevuelvaTodosLosSandwichesEnPromocion();
+        entoncesVerificoQueLoRetornadoSeaLoMismo(lista,enPromocion);
+    }
+
+    @Test (expected = NoHaySandwichEnPromocionException.class)
+    public void queAlObtenerTodosLosSandwichesEnPromocionMeDevuelvaUnaExcepcion() throws NoHaySandwichEnPromocionException {
+        cuandoAlRepositorioLePidaQueMeDevuelvaLaListaEnPromocion(new ArrayList<>());
+        solicitoAlServicioQueMeDevuelvaTodosLosSandwichesEnPromocion();
+    }
+
+    @Test
+    public void queAlObtenerTodosLosSandwichesDeUnTipoMeDevuelvaUnaListaNoVacia()throws SandwichNoExistenteException{
+        List<Sandwich> esperado = dadoQueExistenVariosSandwichesDeUnTipo();
+        cuandoAlRepositorioLePidaQueMeDevuelvaLaListaDeUnTipo(esperado);
+        List<Sandwich> obtenido = solicitoAlServicioListaDeSandwichesDeUnTipo("Vegano");
+        entoncesVerificoQueLoRetornadoSeaLoMismo(esperado,obtenido);
+    }
+
+    private void cuandoAlRepositorioLePidaQueMeDevuelvaLaListaDeUnTipo(List<Sandwich> esperado) {
+        when(this.repo.obtenerTodosLosSandwitchPorPreferencia("Vegano")).thenReturn(esperado);
+    }
+
+    @Test (expected = SandwichNoExistenteException.class)
+    public void queAlObtenerTodosLosSandwichesDeUnTipoMeDevuelvaUnaExcepcion()throws SandwichNoExistenteException{
+        cuandoAlRepositorioLePidaQueMeDevuelvaLaListaEnPromocion(new ArrayList<>());
+        solicitoAlServicioListaDeSandwichesDeUnTipo("Vegano");
+    }
+
+    @Test
+    public void queAlSolcitarLosIngredientesDeUnSandwichMeDevuelvaUnaListaNoVacia() throws SandwichNoExistenteException{
+        Sandwich nuevo = dadoQueTengoUnSandwichConIngredientes();
+        cuandoAlRepositorioLePidaQueMeDevuelvaUnSandwich(nuevo);
+        List<Ingrediente> obtenido = cuandoLePidoAlServicioQueMeTraigaLosIngredientesDelSandwich(nuevo.getIdSandwich());
+        assertThat(obtenido).hasSize(2);
+    }
+
+    @Test (expected = SandwichNoExistenteException.class)
+    public void queAlSolcitarLosIngredientesDeUnSandwichQueNoExistaMeDevuelvaUnaExcepcion() throws SandwichNoExistenteException {
+        cuandoAlRepositorioLePidaQueMeDevuelvaUnSandwichNulo(100L);
+        cuandoLePidoAlServicioQueMeTraigaLosIngredientesDelSandwich(100L);
+    }
+
+    private void cuandoAlRepositorioLePidaQueMeDevuelvaUnSandwichNulo(Long id) {
+        when(this.repo.obtenerSandwichPorId(id)).thenReturn(null);
+    }
+
+    private List<Ingrediente> cuandoLePidoAlServicioQueMeTraigaLosIngredientesDelSandwich(Long idIngrediente) throws SandwichNoExistenteException {
+        return this.serv.obtenerLosIngredientesDeUnSandwich(idIngrediente);
+    }
+
+    private void cuandoAlRepositorioLePidaQueMeDevuelvaUnSandwich(Sandwich s) {
+        when(this.repo.obtenerSandwichPorId(s.getIdSandwich())).thenReturn(s);
+    }
+
+    private Sandwich dadoQueTengoUnSandwichConIngredientes() {
+        Ingrediente ing1 = new Ingrediente(1l,"test",1F,1,"test","Vegano");
+        Ingrediente ing2 = new Ingrediente(2l,"test",1F,1,"test","Vegano");
+        Set<Ingrediente> listaIngredientes = new LinkedHashSet<>();
+        listaIngredientes.add(ing1);
+        listaIngredientes.add(ing2);
+        Sandwich sandwich = new Sandwich(1l,"sand1","sand1",true,"Vegano",listaIngredientes);
+        return sandwich;
+    }
+
+    private List<Sandwich> solicitoAlServicioListaDeSandwichesDeUnTipo(String vegano) throws SandwichNoExistenteException {
+        return this.serv.obtenerTodosLosSandwichesDeUnTipo(vegano);
+    }
+
+    private List<Sandwich> dadoQueExistenVariosSandwichesDeUnTipo() {
+        List<Sandwich> lista = new ArrayList<>();
+        Sandwich s1 = new Sandwich(1L,"sandwich1","sandwich1");
+        s1.setEsApto("Vegano");
+        Sandwich s2 = new Sandwich(2L,"sandwich2","sandwich2");
+        s1.setEsApto("Vegano");
+        lista.add(s1);
+        lista.add(s2);
+        return lista;
+    }
+
+    private void entoncesVerificoQueLoRetornadoSeaLoMismo(List<Sandwich> lista, List<Sandwich> enPromocion) {
+        assertThat(lista).isEqualTo(enPromocion);
+    }
+
+    private List<Sandwich> solicitoAlServicioQueMeDevuelvaTodosLosSandwichesEnPromocion() throws NoHaySandwichEnPromocionException {
+        return this.serv.obtenerTodosLosSandwichesEnPromocion();
+    }
+
+    private void cuandoAlRepositorioLePidaQueMeDevuelvaLaListaEnPromocion(List<Sandwich> lista) {
+        when(this.repo.obtenerTodosLosSandwitchEnPromocion()).thenReturn(lista);
+    }
+
+    private List<Sandwich> dadoQueExistenSandwichesEnPromocion() {
+        List<Sandwich> lista = new ArrayList<>();
+        lista.add(new Sandwich(1L,"sandwich1","sandwich1"));
+        return lista;
+    }
+
+
     private void entoncesVerificoQueLoRetornadoNoSeaUnaListaVacia(List<Sandwich> valorObtenido) {
         assertThat(valorObtenido).isNotEmpty();
     }
 
-    private List<Sandwich> solicitoAlServicioQueMeDevuelvaTodosLosSandwiches() {
+    private List<Sandwich> solicitoAlServicioQueMeDevuelvaTodosLosSandwiches() throws SandwichNoExistenteException {
         return this.serv.obtenerTodosLosSandwiches();
     }
 
@@ -78,7 +193,7 @@ public class ServicioSandwichTest extends SpringTest {
         assertThat(valorObtenido).isEqualTo(valorEsperado);
     }
 
-    private Sandwich solicitoAlServicioUnSandwitchPorId(long idSandwich) {
+    private Sandwich solicitoAlServicioUnSandwitchPorId(long idSandwich) throws SandwichNoExistenteException {
         return this.serv.obtenerSandwichPorId(idSandwich);
     }
 

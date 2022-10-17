@@ -44,6 +44,21 @@ public class Sandwich {
         this.ingrediente = ingrediente;
     }
 
+    public Boolean getEnPromocion() {
+        return enPromocion;
+    }
+
+    public void setEnPromocion(Boolean enPromocion) {
+        this.enPromocion = enPromocion;
+    }
+
+    public String getEsApto() {
+        return esApto;
+    }
+
+    public void setEsApto(String esApto) {
+        this.esApto = esApto;
+    }
 
     public Long getIdSandwich() {
         return idSandwich;
