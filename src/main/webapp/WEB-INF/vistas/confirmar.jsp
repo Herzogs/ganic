@@ -5,7 +5,8 @@
 <head>
     <meta charset="utf-8">
     <!-- CSS only -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
     <link href="css/styles.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
 </head>
@@ -33,14 +34,27 @@
                         <img src="img/pedido.png" class="card-img-top img-fluid" alt="...">
                         <div class="card-body">
                             <p class="card-text text-center text-succes">Tu Sandwich</p>
-                            <c:forEach var="ing" items="${IngredientesQueElUsuarioSelecciono}" >
-                            <p class="card-text fw-bold">${ing.nombre}</p>
+                            <c:forEach var="ing" items="${IngredientesQueElUsuarioSelecciono}">
+                                <p class="card-text fw-bold">${ing.nombre}
+                                    <a href="eliminarIngrediente?ing=${ing.idIngrediente}" class="px-3 my-3">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </a>
+                                    <a href="modificarIngrediente?ing=${ing.idIngrediente}" class="px-3 my-3">
+                                        <i class="bi bi-pencil-fill"></i>
+                                    </a>
+                                </p>
                                 <p class="card-text">${ing.detalle}</p>
                                 <p class="card-text">Precio por unidad $${ing.precio}</p>
                             </c:forEach>
-                            <p class="card-text fw-bold text-end">Monto a pagar <span class="text-primary">$${montoFinal}</span> </p>
+                            <p class="card-text fw-bold text-end">Monto a pagar <span
+                                    class="text-primary">$${montoFinal}</span></p>
                         </div>
                     </div>
+                    <%--Bloque que es visible si el elemento error no esta vacio	--%>
+                    <c:if test="${not empty error}">
+                        <h4><span>${error}</span></h4>
+                        <br>
+                    </c:if>
                 </div>
                 <div class="col-6">
                     <h4 class="pb-3">Confirmar pago</h4>
@@ -69,6 +83,8 @@
     </div>
 </footer>
 <!-- JavaScript Bundle with Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+        crossorigin="anonymous"></script>
 </body>
 </html>

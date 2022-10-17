@@ -1,7 +1,7 @@
 package ar.edu.unlam.tallerweb1.infrastructure.usuario;
 
 import ar.edu.unlam.tallerweb1.SpringTest;
-import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioNoRegistradoExepcion;
+
 import ar.edu.unlam.tallerweb1.domain.usuarios.RepositorioUsuario;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.junit.Test;
@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+
 
 public class RepositorioUsuarioTest extends SpringTest {
     @Autowired
@@ -20,7 +20,7 @@ public class RepositorioUsuarioTest extends SpringTest {
     @Test
     @Transactional
     @Rollback
-    public void queLuegoDeCrearUnUsusrioLoPuedaEncontar() throws UsuarioNoRegistradoExepcion {
+    public void queLuegoDeCrearUnUsusrioLoPuedaEncontar() {
         dadoQueExisteUnUsuario();
         Boolean existeUsusrio = entoncesEncuento("pablo@gmail.com");
         entoncesVerificoQueNoSeaNull(existeUsusrio);
@@ -28,7 +28,7 @@ public class RepositorioUsuarioTest extends SpringTest {
     @Test
     @Transactional
     @Rollback
-    public void queSePuedaActualizarUnUsuarioQueExista() throws UsuarioNoRegistradoExepcion {
+    public void queSePuedaActualizarUnUsuarioQueExista() {
         dadoQueExisteUnUsuario();
         entoncesActualizo();
         Usuario usuarioAModificar=obtenerUsuario("pablo@gmail.com", "123");
@@ -37,10 +37,10 @@ public class RepositorioUsuarioTest extends SpringTest {
         entoncesVerificoQueSeHaYaMOdificado(usuarioAModificar,nombre);
     }
 
-    @Test(expected =UsuarioNoRegistradoExepcion.class )
+    @Test
     @Transactional
     @Rollback
-    public void queSiPidoActualizarUnUsuarioQueNoExistaLanseUnaExepcion() throws UsuarioNoRegistradoExepcion {
+    public void queSiPidoActualizarUnUsuarioQueNoExistaLanseUnaExepcion()  {
         dadoUnUsuarioNoRegistradoEnLABAseDeDatos();
         Usuario usuarioAModificar= obtenerUsuario("noestoyregistrado@gmail.com", "123");
         String nombre = "Pablo";
@@ -56,7 +56,7 @@ public class RepositorioUsuarioTest extends SpringTest {
         assertThat(usuarioAModificar.getNombre()).isEqualTo(nombre);
     }
 
-    private void entoncesActualizo() throws UsuarioNoRegistradoExepcion {
+    private void entoncesActualizo() {
         Usuario usuario = obtenerUsuario("pablo@gmail.com", "123");
         usuario.setNombre("Pablo");
         usuario.setApellido("Aimar");
@@ -66,7 +66,7 @@ public class RepositorioUsuarioTest extends SpringTest {
         
     }
 
-    private Usuario obtenerUsuario(String email, String password) throws UsuarioNoRegistradoExepcion {
+    private Usuario obtenerUsuario(String email, String password) {
         Usuario usuario = repositorioUsuario.buscarUsuario(email,password);
         return usuario;
     }
@@ -76,7 +76,7 @@ public class RepositorioUsuarioTest extends SpringTest {
         assertEquals(true, usuarioBuscado);
     }
 
-    private Boolean entoncesEncuento(String email) throws UsuarioNoRegistradoExepcion {
+    private Boolean entoncesEncuento(String email) {
         return repositorioUsuario.estaRegistrado(email);
     }
     private void dadoQueExisteUnUsuario() {
