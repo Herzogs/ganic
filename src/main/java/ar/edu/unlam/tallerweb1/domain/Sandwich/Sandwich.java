@@ -17,6 +17,9 @@ public class Sandwich {
     private String nombre;
     private String descripcion;
 
+    private Boolean enPromocion;
+    private String esApto;
+
     @ManyToMany
     @JoinTable(name = "compuesto_por",
                 joinColumns = @JoinColumn(name = "idSandwich"),
@@ -31,6 +34,16 @@ public class Sandwich {
         this.nombre = nombre;
         this.descripcion = descripcion;
     }
+
+    public Sandwich(Long idSandwich, String nombre, String descripcion, Boolean enPromocion, String esApto, Set<Ingrediente> ingrediente) {
+        this.idSandwich = idSandwich;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.enPromocion = enPromocion;
+        this.esApto = esApto;
+        this.ingrediente = ingrediente;
+    }
+
 
     public Long getIdSandwich() {
         return idSandwich;

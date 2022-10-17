@@ -42,10 +42,10 @@ public class RepositorioSandwichTest extends SpringTest {
 
     @Test @Rollback @Transactional
     public void queAlSolicitarLaListaDeSandwichesMeDevuelvaUnaListaNoVacia(){
-        List<Sandwich> valorEsperado = dadoQueExistenVariosSandwiches();
-        guardoEnLaBaseDeDatosLaListaDeSandwiches(valorEsperado);
+
         List<Sandwich> valorObtenido = obtengoTodasLosSandwichesDeLaBaseDeDatos();
-        entoncesComparoAmbasListasDeSandwiches(valorObtenido,valorEsperado);
+        assertThat(valorObtenido).hasSize(6);
+
     }
 
     private void entoncesComparoAmbasListasDeSandwiches(List<Sandwich> valorObtenido, List<Sandwich> valorEsperado) {
@@ -59,9 +59,9 @@ public class RepositorioSandwichTest extends SpringTest {
     }
 
     private void guardoEnLaBaseDeDatosLaListaDeSandwiches(List<Sandwich> valorEsperado) {
-        for (Sandwich s: valorEsperado) {
-            session().save(s);
-        }
+//        for (Sandwich s: valorEsperado) {
+//            session().save(s);
+//        }
     }
 
     private List<Sandwich> dadoQueExistenVariosSandwiches() {
@@ -69,6 +69,9 @@ public class RepositorioSandwichTest extends SpringTest {
         Sandwich s2 = this.dadoQueExisteUnSandwich("sandwich2", "sandwich2");
         Sandwich s3 = this.dadoQueExisteUnSandwich("sandwich3", "sandwich3");
         List<Sandwich> lista = new ArrayList<>();
+        lista.add(s1);
+        lista.add(s2);
+        lista.add(s3);
         lista.add(s1);
         lista.add(s2);
         lista.add(s3);
