@@ -48,17 +48,17 @@ public class ControladorHomeTest {
     }
 
     // TODO revisar request set
-/*
+
     @Test
     public void queAlSeleccionarElLinkSalirDelPerfilMeEnvieAlHome() {
         String vistaEsperada = dadoQueEsperoLaVistaLlamada("redirect:/home");
 
-        when( this.request.getSession().setAttribute("id",null)).thenReturn(null);
+        this.request.getSession().setAttribute("id",null);
         ModelAndView model = this.controladorDeHome.salirSession(request);
 
         assertThat(model.getViewName()).isEqualTo(vistaEsperada);
     }
-*/
+
 
 
     private String dadoQueEsperoLaVistaLlamada(String esperada) {
