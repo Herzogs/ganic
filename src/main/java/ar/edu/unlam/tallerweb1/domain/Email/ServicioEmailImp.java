@@ -49,4 +49,23 @@ public class ServicioEmailImp implements ServicioEmail {
         }
         return true;
     }
+    @Override
+    public Boolean sendEmail(Email email, String subject){
+        init();
+
+        try {
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(username);
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(email.getUser().getEmail()));
+            message.setSubject(subject);
+            message.setContent(email.generateEmailBody(),"text/html");
+            Transport t = session.getTransport("smtp");
+            t.connect(username, password);
+            t.sendMessage(message, message.getAllRecipients());
+            t.close();
+        } catch (MessagingException e){
+            return false;
+        }
+        return true;
+    }
 }

@@ -40,7 +40,7 @@ public class RepositorioIngredientesImplTest extends SpringTest {
 
     @Test @Transactional @Rollback
     public void queCuandoSeIntenteBuscarUnIngredienteQueNoExistaDevuelvaUnNULL(){
-        Ingrediente nuevo = dadoQueExisteUnIngrediente(1L,"Pan",12F,1,"pan","SinRestriccion");
+        Ingrediente nuevo = dadoQueExisteUnIngrediente(50L,"Pan",12F,1,"pan","SinRestriccion");
         entoncesGuardoElIngredienteExistenteEnLaBaseDeDatos(nuevo);
         Ingrediente ingredienteInexistente = dadoQueExisteUnIngrediente(2L,"Error",12F,2,"error","SinRestriccion");
         Ingrediente retorno_busqueda = entoncesBuscoElIngredienteEnLaBaseDeDAtos(ingredienteInexistente);

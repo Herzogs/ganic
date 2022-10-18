@@ -7,6 +7,7 @@ import ar.edu.unlam.tallerweb1.domain.Excepciones.IngredienteInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.PasoInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.ServicioDeIngrediente;
+import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,6 +24,7 @@ import static org.mockito.Mockito.when;
 public class ControladorIngredientesTest extends SpringTest {
 
     private ServicioDeIngrediente servicio;
+    private ServicioLogin servicioLogin;
     private ControladorDeIngredientes controladorDeIngredientes;
 
     private datosDelSandwich sandwich;
@@ -33,7 +35,8 @@ public class ControladorIngredientesTest extends SpringTest {
     @Before
     public void init() {
         this.servicio = mock(ServicioDeIngrediente.class);
-        this.controladorDeIngredientes = new ControladorDeIngredientes(this.servicio);
+        this.servicioLogin = mock(ServicioLogin.class);
+        this.controladorDeIngredientes = new ControladorDeIngredientes(this.servicio,this.servicioLogin);
         this.sandwich = new datosDelSandwich();
         this.request = mock(HttpServletRequest.class);
         this.session = mock(HttpSession.class);

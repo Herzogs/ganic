@@ -2,10 +2,14 @@ package ar.edu.unlam.tallerweb1.delivery;
 
 import java.util.List;
 
+import ar.edu.unlam.tallerweb1.domain.Email.Email;
 import ar.edu.unlam.tallerweb1.domain.Email.ServicioEmail;
 import ar.edu.unlam.tallerweb1.domain.Email.ServicioEmailImp;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.IngredienteInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.PasoInvalidoException;
+import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioInvalidoException;
+import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
+import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -26,16 +30,21 @@ import javax.servlet.http.HttpServletRequest;
 public class ControladorDeIngredientes {
 
     private ServicioDeIngrediente servicioDeIngrediente;
+    private ServicioLogin servicioLogin;
     private ServicioEmail se;
     private datosDelSandwich sandwich;
+
+    private Email email;
     private static final Integer MAX_PASOS_PERMITIDOS = 3;
 
     @Autowired
-    public ControladorDeIngredientes(ServicioDeIngrediente servicioDeIngrediente) {
+    public ControladorDeIngredientes(ServicioDeIngrediente servicioDeIngrediente, ServicioLogin servicioLogin) {
         super();
         this.servicioDeIngrediente = servicioDeIngrediente;
         this.sandwich = new datosDelSandwich();
         this.se = new ServicioEmailImp();
+        this.servicioLogin = servicioLogin;
+        this.email = new Email();
     }
 
     @RequestMapping(path = "/ingredientes", method = RequestMethod.GET)
@@ -97,7 +106,7 @@ public class ControladorDeIngredientes {
 
     @RequestMapping(path = "/confirmar", method = RequestMethod.GET)
     public ModelAndView confirmarIngredientesSeleccionados(@RequestParam(value = "paso", required = false) Integer paso,
-                                                           HttpServletRequest request) {
+                                                           HttpServletRequest request){
         Long idLogeado = (Long) request.getSession().getAttribute("id");
         if ( idLogeado != null) {
             ModelMap model = new ModelMap();
@@ -106,6 +115,8 @@ public class ControladorDeIngredientes {
                 model.put("error", "Para poder seguir, debe seleccionar minimante 2 ingredientes");
                 return new ModelAndView(String.format("redirect:/generarPedido?paso=%d", paso), model);
             }
+            this.email.setLista(this.sandwich.getIngredientesSandwich());
+            this.email.setMetodoPago("En Efetivo");
             model.put("montoFinal", sandwich.getMonto());
             model.put("IngredientesQueElUsuarioSelecciono", sandwich.getIngredientesSandwich());
             return new ModelAndView("confirmar", model);
@@ -115,8 +126,15 @@ public class ControladorDeIngredientes {
 
     @RequestMapping(path = "/exito", method = RequestMethod.GET)
     public ModelAndView exito(HttpServletRequest request){
-        String email = (String) request.getSession().getAttribute("email");
-        se.sendEmail(email, "Pedido Exitoso", "Se le estara enviando su pedido en unos momentos");
+        Long idLogeado = (Long) request.getSession().getAttribute("id");
+        Usuario user = null;
+        try {
+            user = this.servicioLogin.consultarPorID(idLogeado);
+            email.setUser(user);
+            this.se.sendEmail(this.email,"Pedido");
+        }catch(UsuarioInvalidoException ex){
+            System.err.println(ex.getMessage());
+        }
         return new ModelAndView("alerta_exitosa");
     }
 
