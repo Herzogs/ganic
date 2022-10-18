@@ -107,25 +107,9 @@ public class ControladorUsuario {
         }
     }
 
-
     private boolean esValido(String email) {
 
         return email.matches("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$");
-    }
-
-    @RequestMapping(path = "/", method = RequestMethod.GET)
-    public ModelAndView inicio() {
-        return new ModelAndView("redirect:/home");
-    }
-
-    @RequestMapping(path = "/nosotros")
-    public ModelAndView nosotros() {
-        return new ModelAndView("nosotros");
-    }
-
-    @RequestMapping(path = "/contacto")
-    public ModelAndView contacto() {
-        return new ModelAndView("contacto");
     }
 
 }

@@ -126,13 +126,6 @@ public class ControladorDeIngredientes {
         this.sandwich.borrarDatosDelSandwich();
         return new ModelAndView("home");
     }
-
-    @RequestMapping(path = "/Salir", method = RequestMethod.GET)
-    public ModelAndView salirSession(HttpServletRequest request){
-        request.getSession().setAttribute("id",null);
-        return new ModelAndView("redirect:/home");
-    }
-
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public datosDelSandwich getSandwich() {
