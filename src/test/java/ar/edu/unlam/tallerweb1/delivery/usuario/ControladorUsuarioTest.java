@@ -62,7 +62,7 @@ public class ControladorUsuarioTest {
         assertThat(model.getViewName()).isEqualTo(vista_destino);
     }
     @Test
-    public void queNSePuedaGuardarUnUsusrioConMamilYaRegistrado() throws UsuarioNoRegistradoExepcion {
+    public void queNSePuedaGuardarUnUsusrioConMamilYaRegistrado()  {
         String vista_destino ="registrar";
         DatosLogin nuevoDatosLogin = obtenerUnDatosLogin();
         ModelAndView model;

@@ -61,4 +61,5 @@ public class ServicioSandwichImp implements ServicioSandwich {
             throw new SandwichNoExistenteException("No existe el sandwich");
         return obtenido.getIngrediente().stream().collect(Collectors.toCollection(ArrayList::new)); //convierte de Set a List
     }
+
 }

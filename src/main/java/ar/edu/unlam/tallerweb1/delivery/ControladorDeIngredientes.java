@@ -139,10 +139,11 @@ public class ControladorDeIngredientes {
     }
 
     //////////////////////////////////// ESTO VA EN EL CONTROLADOR DE HOME /////////////////////////////////////////////
-    @RequestMapping(path = "/home", method = RequestMethod.GET)
+    @RequestMapping(path = "restablecer", method = RequestMethod.GET)
     public ModelAndView irAHome() {
         this.sandwich.borrarDatosDelSandwich();
-        return new ModelAndView("home");
+        System.err.println("lista de ingredientes"+ sandwich.getIngredientesSandwich());
+        return new ModelAndView("redirect:/home");
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
