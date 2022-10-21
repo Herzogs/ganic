@@ -66,8 +66,8 @@ public class ServicioLoginImpl implements ServicioLogin {
 	@Override
 	public Boolean estaRegistrado(String email) throws UsuarioNoRegistradoExepcion {
 		Usuario buscado = this.repositorioUsuario.buscar(email);
-		if(buscado == null)
-			throw new UsuarioNoRegistradoExepcion("Usuario no registrado");
-		return true;
+		if(buscado != null)
+			throw new UsuarioNoRegistradoExepcion("Usuario registrado");
+		return false;
 	}
 }
