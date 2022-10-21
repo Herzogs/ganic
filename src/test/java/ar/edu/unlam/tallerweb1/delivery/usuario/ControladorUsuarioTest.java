@@ -52,7 +52,7 @@ public class ControladorUsuarioTest {
     }
 
     @Test
-    public void alIngresarLosDatosSeGuardenEnLaBaseDeDatos()  {
+    public void alIngresarLosDatosSeGuardenEnLaBaseDeDatos() throws UsuarioNoRegistradoExepcion {
         String vista_destino ="redirect:/login";
         this.datosLogin = new DatosLogin();
         this.datosLogin.setEmail("test@test.com");
@@ -62,7 +62,7 @@ public class ControladorUsuarioTest {
         assertThat(model.getViewName()).isEqualTo(vista_destino);
     }
     @Test
-    public void queNSePuedaGuardarUnUsusrioConMamilYaRegistrado()  {
+    public void queNSePuedaGuardarUnUsusrioConMamilYaRegistrado() throws UsuarioNoRegistradoExepcion {
         String vista_destino ="registrar";
         DatosLogin nuevoDatosLogin = obtenerUnDatosLogin();
         ModelAndView model;
@@ -73,7 +73,7 @@ public class ControladorUsuarioTest {
     }
 
     @Test
-    public void queNoMeDejeGuardarUnUsurioConFormatoDeMAilInavlido()  {
+    public void queNoMeDejeGuardarUnUsurioConFormatoDeMAilInavlido() throws UsuarioNoRegistradoExepcion {
         String vista_destino ="registrar";
         this.datosLogin = new DatosLogin();
         this.datosLogin.setEmail("test@test");
@@ -176,7 +176,7 @@ public class ControladorUsuarioTest {
         DatosLogin nuevoDatosLogin= datosLogin;
         return nuevoDatosLogin;
     }
-    private void cuandoUnUsuarioYaExiste(String mail){
+    private void cuandoUnUsuarioYaExiste(String mail) throws UsuarioNoRegistradoExepcion {
          when(this.servicioLogin.estaRegistrado(mail)).thenReturn(true);
     }
 

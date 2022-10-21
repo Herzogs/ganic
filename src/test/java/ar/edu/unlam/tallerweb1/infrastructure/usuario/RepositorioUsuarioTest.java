@@ -22,7 +22,7 @@ public class RepositorioUsuarioTest extends SpringTest {
     @Rollback
     public void queLuegoDeCrearUnUsusrioLoPuedaEncontar() {
         dadoQueExisteUnUsuario();
-        Boolean existeUsusrio = entoncesEncuento("pablo@gmail.com");
+        Usuario existeUsusrio = entoncesEncuento("pablo@gmail.com");
         entoncesVerificoQueNoSeaNull(existeUsusrio);
     }
     @Test
@@ -72,12 +72,12 @@ public class RepositorioUsuarioTest extends SpringTest {
     }
 
 
-    private void entoncesVerificoQueNoSeaNull(Boolean usuarioBuscado) {
-        assertEquals(true, usuarioBuscado);
+    private void entoncesVerificoQueNoSeaNull(Usuario usuarioBuscado) {
+        assertThat(usuarioBuscado).isNotNull();
     }
 
-    private Boolean entoncesEncuento(String email) {
-        return repositorioUsuario.estaRegistrado(email);
+    private Usuario entoncesEncuento(String email) {
+        return repositorioUsuario.buscar(email);
     }
     private void dadoQueExisteUnUsuario() {
         Usuario usuario = new Usuario("pablo@gmail.com", "123");

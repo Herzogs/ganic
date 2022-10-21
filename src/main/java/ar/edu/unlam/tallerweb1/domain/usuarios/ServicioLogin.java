@@ -15,5 +15,5 @@ public interface ServicioLogin {
 	Usuario consultarPorID(Long id) throws UsuarioInvalidoException;
 
 	Usuario consultarUsuario(String email) throws UsuarioNoRegistradoExepcion;
-	Boolean estaRegistrado(String email) ;
+	Boolean estaRegistrado(String email) throws UsuarioNoRegistradoExepcion;
 }

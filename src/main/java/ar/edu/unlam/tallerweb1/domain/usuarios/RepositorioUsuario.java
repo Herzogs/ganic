@@ -10,5 +10,5 @@ public interface RepositorioUsuario {
 	Usuario buscarPorId(Long id);
 	void modificar(Usuario usuario);
 
-    Boolean estaRegistrado(String email) ;
+    /*Boolean estaRegistrado(String email) ;*/
 }
