@@ -5,6 +5,7 @@ import ar.edu.unlam.tallerweb1.domain.Excepciones.SandwichNoExistenteException;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -12,7 +13,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
+/*@Transactional(propagation= Propagation.REQUIRED, readOnly=true, noRollbackFor=Exception.class)*/
+@Transactional(Transactional.TxType.REQUIRED)
 public class ServicioSandwichImp implements ServicioSandwich {
 
     private RepositorioSandwich repositorioSandwich;
