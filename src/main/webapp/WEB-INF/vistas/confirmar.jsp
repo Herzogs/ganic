@@ -68,7 +68,7 @@
                                 <p class="card-text">${ing.detalle}</p>
                                 <p class="card-text">Precio por unidad $${ing.precio}</p>
                             </c:forEach>
-                            <p id="montoParcial" class="card-text fw-bold text-end">Monto a pagar <span
+                            <p class="card-text fw-bold text-end">Monto a pagar <span id="montoParcial"
                                     class="text-primary">$${montoFinal}</span></p>
                         </div>
                     </div>
@@ -83,16 +83,16 @@
                     <div id="map" class="map"></div>
                     <f:form action="setearMethodoPago" modelAttribute="formPago" method="post">
                         Cargo: <p id="cargo"></p> <br>
-                        Monto Actualizado: <f:input path="monto" id="montoTotal" title="0"/><br>
+                        Monto Actualizado: <p id="montoTotal"></p>
                         Forma De Pgo:
-                        <form:select  path="pago" id="pago" class="form-select">
-                            <form:option value="enEfectivo">En Efectivo</form:option>
-                            <form:option value="debito">Tarjeta Debito</form:option>
-                            <form:option value="credito">Tarjeta Credito</form:option>
-                        </form:select>
-                        <h4 class="pb-3">Confirmar pago</h4>
+                        <f:select  path="pago" id="pago" class="form-select">
+                            <f:option value="enEfectivo">En Efectivo</f:option>
+                            <f:option value="debito">Tarjeta Debito</f:option>
+                            <f:option value="credito">Tarjeta Credito</f:option>
+                        </f:select>
                         <button type="submit">Confirmar</button>
                     </f:form>
+                    <h4 class="pb-3">Confirmar pago</h4>
                     <a href="exito" class="btn btn-success px-5 mb-5">Confirmar</a>
                     <div><a href="restablecer" class="btn btn-primary px-5 my-5">Volver al Home</a></div>
                 </div>
