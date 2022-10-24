@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="f" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,6 +10,23 @@
           integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
     <link href="css/styles.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
+          integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14="
+          crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js"
+            integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg="
+            crossorigin=""></script>
+    <script src="https://npmcdn.com/leaflet-geometryutil"></script>
+    <script src="${pageContext.request.contextPath}/js/jquery-1.11.3.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/confirmacion.js" type="text/javascript"></script>
+    <title>Confirmación de pedido</title>
+    <style type="text/css">
+        .map{
+            height: 400px;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
 <header>
@@ -50,7 +68,7 @@
                                 <p class="card-text">${ing.detalle}</p>
                                 <p class="card-text">Precio por unidad $${ing.precio}</p>
                             </c:forEach>
-                            <p class="card-text fw-bold text-end">Monto a pagar <span
+                            <p id="montoParcial" class="card-text fw-bold text-end">Monto a pagar <span
                                     class="text-primary">$${montoFinal}</span></p>
                         </div>
                     </div>
@@ -61,7 +79,20 @@
                     </c:if>
                 </div>
                 <div class="col-6">
-                    <h4 class="pb-3">Confirmar pago</h4>
+                    <h2>Mapa</h2>
+                    <div id="map" class="map"></div>
+                    <f:form action="setearMethodoPago" modelAttribute="formPago" method="post">
+                        Cargo: <p id="cargo"></p> <br>
+                        Monto Actualizado: <f:input path="monto" id="montoTotal" title="0"/><br>
+                        Forma De Pgo:
+                        <form:select  path="pago" id="pago" class="form-select">
+                            <form:option value="enEfectivo">En Efectivo</form:option>
+                            <form:option value="debito">Tarjeta Debito</form:option>
+                            <form:option value="credito">Tarjeta Credito</form:option>
+                        </form:select>
+                        <h4 class="pb-3">Confirmar pago</h4>
+                        <button type="submit">Confirmar</button>
+                    </f:form>
                     <a href="exito" class="btn btn-success px-5 mb-5">Confirmar</a>
                     <div><a href="restablecer" class="btn btn-primary px-5 my-5">Volver al Home</a></div>
                 </div>
