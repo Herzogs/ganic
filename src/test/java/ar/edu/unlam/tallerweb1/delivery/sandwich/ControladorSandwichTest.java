@@ -3,11 +3,15 @@ package ar.edu.unlam.tallerweb1.delivery.sandwich;
 
 import ar.edu.unlam.tallerweb1.SpringTest;
 import ar.edu.unlam.tallerweb1.delivery.ControladorSandwich;
+import ar.edu.unlam.tallerweb1.domain.Email.ServicioEmail;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.NoHaySandwichEnPromocionException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.SandwichNoExistenteException;
+import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.ServicioSandwich;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
+import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
+import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
@@ -27,17 +31,23 @@ import static org.mockito.Mockito.when;
 public class ControladorSandwichTest extends SpringTest {
 
     private ServicioSandwich servicioSandwich;
+
+    private ServicioLogin servicioLogin;
     private ControladorSandwich controladorSandwich;
     private HttpSession session;
     private HttpServletRequest request;
 
+    private ServicioEmail servicioEmail;
+
     @Before
     public void init() {
         this.servicioSandwich = mock(ServicioSandwich.class);
-        this.controladorSandwich = new ControladorSandwich(this.servicioSandwich);
+        this.servicioLogin = mock(ServicioLogin.class);
         this.session = mock(HttpSession.class);
         this.request = mock(HttpServletRequest.class);
-        when(request.getSession()).thenReturn(this.session);
+        this.controladorSandwich = new ControladorSandwich(this.servicioSandwich,this.servicioLogin);
+        this.servicioEmail = mock(ServicioEmail.class);
+        when(this.request.getSession()).thenReturn(this.session);
     }
 
     @Test
@@ -45,8 +55,6 @@ public class ControladorSandwichTest extends SpringTest {
         List<Sandwich> sandwichList = dadoQueExistenVariosSandwiches();
         cuandoLLamoAlServicioOptengoUnaLIstaDeSandwich(sandwichList);
         ModelAndView modelAndView = cuandoLLamoAlControladorObtengoUnaListaDeSandwichEnPromocion(request);
-
-
         comparoLista(sandwichList, (List<Sandwich>) modelAndView.getModel().get("listaEnPromocion"));
     }
 
@@ -75,6 +83,53 @@ public class ControladorSandwichTest extends SpringTest {
         cuandoLlamoAlServicioYNoHayaListaPorPreferencia(preferencia);
         ModelAndView modelAndView = cuandoLLamoAlControladoryFiltroPorPreferencia(preferencia);
         ahoraEsperoElMensaje((String) modelAndView.getModel().get("msj"), msjError);
+    }
+
+    @Test
+    public void queSePuedaComprarUnSandwich()throws SandwichNoExistenteException {
+        Sandwich sandwich = dadoQueTengoUnSandwichConIngredientes();
+        cuandoLLamoAlServicioParaBuscarUnSandwichPor(sandwich.getIdSandwich(),sandwich);
+        when((Long)this.request.getSession().getAttribute("id")).thenReturn(1L);
+        ModelAndView mav = cuandoLLamoAlControladorParaQueMeEnvieALaConfirmacion(sandwich.getIdSandwich(),request);
+        assertThat(mav.getModel().get("IngredientesDelSandwich")).isNotNull();
+        assertThat(mav.getModel().get("nombre")).isEqualTo(sandwich.getNombre());
+    }
+
+    @Test
+    public void queDeMeEnvieUnEmailConLosDatosDelSandwichComprado() throws UsuarioInvalidoException {
+        Sandwich sandwichComprado = dadoQueTengoUnSandwichConIngredientes();
+        Usuario usuarioRegistrado = dadoQueTengoUnUsuarioRegistrado();
+        when((Long)this.request.getSession().getAttribute("id")).thenReturn(usuarioRegistrado.getId());
+        cuandoLLamoAlServicioDeUsuarioParaBuscarUnUsuarioPor(usuarioRegistrado.getId(),usuarioRegistrado);
+        ModelAndView mav = cuandoLLamoAlControladorDeExitoDeCompraDeSandwich(sandwichComprado.getIdSandwich(),this.request);
+        assertThat(mav.getModel().get("msg")).isEqualTo("Se ha enviado el email de confirmación");
+    }
+
+    private void cuandoLLamoAlServicioDeUsuarioParaBuscarUnUsuarioPor(Long id, Usuario usuarioRegistrado) throws UsuarioInvalidoException {
+        when(this.servicioLogin.consultarPorID(id)).thenReturn(usuarioRegistrado);
+    }
+
+    private Usuario dadoQueTengoUnUsuarioRegistrado() {
+        Usuario cliente = new Usuario();
+        cliente.setId(1L);
+        cliente.setNombre("Pepe");
+        cliente.setApellido("Argento");
+        cliente.setDireccion("dire");
+        cliente.setEmail("pepe@racinguista.com");
+        return cliente;
+    }
+
+
+    private ModelAndView cuandoLLamoAlControladorDeExitoDeCompraDeSandwich(Long idSandwich, HttpServletRequest request) {
+        return this.controladorSandwich.envioDeConfirmacion(idSandwich,request);
+    }
+
+    private ModelAndView cuandoLLamoAlControladorParaQueMeEnvieALaConfirmacion(Long idSandwich, HttpServletRequest request) {
+        return this.controladorSandwich.confirmarSandwich(idSandwich, request);
+    }
+
+    private void cuandoLLamoAlServicioParaBuscarUnSandwichPor(Long idSandwich,Sandwich sandwichEsperado) throws SandwichNoExistenteException {
+        when(this.servicioSandwich.obtenerSandwichPorId(idSandwich)).thenReturn(sandwichEsperado);
     }
 
     private void cuandoLlamoAlServicioYNoHayaListaPorPreferencia(String preferencia) throws SandwichNoExistenteException {

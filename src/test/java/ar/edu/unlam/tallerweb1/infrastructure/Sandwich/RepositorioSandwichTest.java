@@ -43,7 +43,7 @@ public class RepositorioSandwichTest extends SpringTest {
     @Test @Rollback @Transactional
     public void queAlSolicitarLaListaDeSandwichesMeDevuelvaUnaListaNoVacia(){
         List<Sandwich> valorObtenido = obtengoTodasLosSandwichesDeLaBaseDeDatos();
-        entoncesVerificoQueLaListaObtenidaTenga(valorObtenido, 6);
+        entoncesVerificoQueLaListaObtenidaTenga(valorObtenido, 18);
     }
 
     private void entoncesVerificoQueLaListaObtenidaTenga(List<Sandwich> valorObtenido, Integer expected) {
@@ -53,13 +53,13 @@ public class RepositorioSandwichTest extends SpringTest {
     @Test @Rollback @Transactional
     public void queAlSolicitarLaListaDeSandwichesEnPromocionMeDevuelvaUnaListaNoVacia(){
         List<Sandwich> valorObtenido = obtengoTodasLosSandwichesEnPromocionDeLaBaseDeDatos();
-        entoncesVerificoQueLaListaObtenidaTenga(valorObtenido, 5);
+        entoncesVerificoQueLaListaObtenidaTenga(valorObtenido, 15);
     }
 
     @Test @Rollback @Transactional
     public void queAlSolicitarLaListaDeSandwichesConPreferenciaMeDevuelvaUnaListaNoVacia(){
         List<Sandwich> valorObtenido = obtengoTodasLosSandwichesDeUnTipoDeLaBaseDeDatos("Vegano");
-        entoncesVerificoQueLaListaObtenidaTenga(valorObtenido, 2);
+        entoncesVerificoQueLaListaObtenidaTenga(valorObtenido, 6);
     }
 
     private List<Sandwich> obtengoTodasLosSandwichesDeUnTipoDeLaBaseDeDatos(String pref) {
