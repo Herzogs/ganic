@@ -38,28 +38,20 @@ public class RepositorioSandwichImp implements RepositorioSandwich {
         final Session session = this.sessionFactory.getCurrentSession();
         List<Sandwich> lista=  (List<Sandwich>) session.createCriteria(Sandwich.class)
                 .setFetchMode("idSandwich", FetchMode.JOIN)
+                .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
                 .list();
-        Set<Sandwich> borroRepetidos= new HashSet<>();
-        borroRepetidos.addAll(lista);
-        List<Sandwich> listacopiada2= new ArrayList<>();
-        listacopiada2.addAll(borroRepetidos);
-        return listacopiada2;
+        return lista;
     }
 
     @Override
     public List<Sandwich> obtenerTodosLosSandwitchEnPromocion() {
         final Session session = this.sessionFactory.getCurrentSession();
-
-
         List<Sandwich> lista= (List<Sandwich>) session.createCriteria(Sandwich.class)
                 .setFetchMode("idSandwich",FetchMode.JOIN)
                 .add(Restrictions.eq("enPromocion",true))
+                .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
                 .list();
-        Set<Sandwich> borroRepetidos= new HashSet<>();
-        borroRepetidos.addAll(lista);
-        List<Sandwich> listacopiada2= new ArrayList<>();
-        listacopiada2.addAll(borroRepetidos);
-        return listacopiada2;
+        return lista;
     }
 
     @Override
@@ -68,11 +60,8 @@ public class RepositorioSandwichImp implements RepositorioSandwich {
         List<Sandwich> lista=  (List<Sandwich>) session.createCriteria(Sandwich.class)
                 .setFetchMode("idSandwich", FetchMode.JOIN)
                 .add(Restrictions.eq("esApto",pref))
+                .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
                 .list();
-        Set<Sandwich> borroRepetidos= new HashSet<>();
-        borroRepetidos.addAll(lista);
-        List<Sandwich> listacopiada2= new ArrayList<>();
-        listacopiada2.addAll(borroRepetidos);
-        return listacopiada2;
+        return lista;
     }
 }
