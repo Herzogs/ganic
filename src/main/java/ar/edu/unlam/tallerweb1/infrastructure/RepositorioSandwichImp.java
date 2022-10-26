@@ -36,26 +36,32 @@ public class RepositorioSandwichImp implements RepositorioSandwich {
     @Override
     public List<Sandwich> obtenerTodosLosSandwiches() {
         final Session session = this.sessionFactory.getCurrentSession();
-        return (List<Sandwich>) session.createCriteria(Sandwich.class)
+        List<Sandwich> lista=  (List<Sandwich>) session.createCriteria(Sandwich.class)
                 .setFetchMode("idSandwich", FetchMode.JOIN)
+                .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
                 .list();
+        return lista;
     }
 
     @Override
     public List<Sandwich> obtenerTodosLosSandwitchEnPromocion() {
         final Session session = this.sessionFactory.getCurrentSession();
-        return (List<Sandwich>) session.createCriteria(Sandwich.class)
-                .setFetchMode("idSandwich", FetchMode.JOIN)
+        List<Sandwich> lista= (List<Sandwich>) session.createCriteria(Sandwich.class)
+                .setFetchMode("idSandwich",FetchMode.JOIN)
                 .add(Restrictions.eq("enPromocion",true))
+                .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
                 .list();
+        return lista;
     }
 
     @Override
     public List<Sandwich> obtenerTodosLosSandwitchPorPreferencia(String pref) {
         final Session session = this.sessionFactory.getCurrentSession();
-        return (List<Sandwich>) session.createCriteria(Sandwich.class)
+        List<Sandwich> lista=  (List<Sandwich>) session.createCriteria(Sandwich.class)
                 .setFetchMode("idSandwich", FetchMode.JOIN)
                 .add(Restrictions.eq("esApto",pref))
+                .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
                 .list();
+        return lista;
     }
 }
