@@ -48,10 +48,7 @@ public class ControladorSandwich {
         List<Sandwich> sandwichList = null;
         try {
             sandwichList = servicioSandwich.obtenerTodosLosSandwichesEnPromocion();
-            Integer cantidad = sandwichList.size();
             model.put("listaEnPromocion", sandwichList);
-            model.put("cantidades", cantidad);
-
 
         } catch (NoHaySandwichEnPromocionException e) {
             model.put("msj", "no hay sandwich disponibles");

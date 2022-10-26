@@ -29,7 +29,7 @@ public class ControladorHome {
     @RequestMapping(path = "/Salir", method = RequestMethod.GET)
     public ModelAndView salirSession(HttpServletRequest request){
         request.getSession().setAttribute("id",null);
-        return new ModelAndView("redirect:/home");
+        return new ModelAndView("redirect:/login");
     }
 
 
