@@ -69,6 +69,25 @@
 				</div>
 			</div>
 
+
+			<div class="row my-5">
+				<h1> ${cantidades}</h1>
+					<c:forEach var="sandwich" items="${listaEnPromocion}" >
+						<div class="col-6">
+							<div class="card">
+								<div class="card-header bg-dark text-white">
+										${sandwich.nombre}
+								</div>
+								<ul class="list-group list-group-flush">
+									<li class="list-group-item">${sandwich.descripcion}</li>
+									<li class="list-group-item"><span class="text-primary">Es apto:</span> ${sandwich.esApto}</li>
+									<li class="list-group-item"><a href="confirmarSandwich?idSandwich=${sandwich.idSandwich}" class="btn btn-success px-3 my-3">Agregar</a></li>
+								</ul>
+							</div>
+						</div>
+					</c:forEach>
+			</div>
+
 			<div class="row my-5 py-5">
 				<div class="col-6">
 

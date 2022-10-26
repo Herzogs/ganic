@@ -62,7 +62,7 @@ public class ControladorUsuarioTest {
         assertThat(model.getViewName()).isEqualTo(vista_destino);
     }
     @Test
-    public void queNSePuedaGuardarUnUsusrioConMamilYaRegistrado() throws UsuarioNoRegistradoExepcion {
+    public void queNoSePuedaGuardarUnUsuarioConEmailYaRegistrado() throws UsuarioNoRegistradoExepcion {
         String vista_destino ="registrar";
         DatosLogin nuevoDatosLogin = obtenerUnDatosLogin();
         ModelAndView model;
@@ -177,7 +177,7 @@ public class ControladorUsuarioTest {
         return nuevoDatosLogin;
     }
     private void cuandoUnUsuarioYaExiste(String mail) throws UsuarioNoRegistradoExepcion {
-         when(this.servicioLogin.estaRegistrado(mail)).thenReturn(true);
+         when(this.servicioLogin.estaRegistrado(mail)).thenThrow(new UsuarioNoRegistradoExepcion("usuario registrado"));
     }
 
 }

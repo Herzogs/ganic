@@ -55,7 +55,7 @@ public class Email {
         msg += "</ul><br/>";
         msg += String.format("<p>Dirección de Envio: %s</p><br/>",this.user.getDireccion());
         msg += String.format("<p>Metodo De Pago: %s</p><br/>",this.metodoPago);
-        msg += String.format("<p>Precio Total: %f</p><br/>",this.getMonto());
+        msg += String.format("<p>Precio Total: %.2f</p><br/>",this.getMonto());
         return msg;
     }
 }
