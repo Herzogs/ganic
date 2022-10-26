@@ -48,7 +48,10 @@ public class ControladorSandwich {
         List<Sandwich> sandwichList = null;
         try {
             sandwichList = servicioSandwich.obtenerTodosLosSandwichesEnPromocion();
+            Integer cantidad = sandwichList.size();
             model.put("listaEnPromocion", sandwichList);
+            model.put("cantidades", cantidad);
+
 
         } catch (NoHaySandwichEnPromocionException e) {
             model.put("msj", "no hay sandwich disponibles");
@@ -76,7 +79,7 @@ public class ControladorSandwich {
         Sandwich sandwichObtenido = null;
         Long idLogeado = (Long) request.getSession().getAttribute("id");
         if(idLogeado == null)
-            return new ModelAndView("redirect:/home");
+            return new ModelAndView("redirect:/login");
         try{
             sandwichObtenido = this.servicioSandwich.obtenerSandwichPorId(idSandwich);
             System.err.println(this.convertirSetToList(sandwichObtenido.getIngrediente()));

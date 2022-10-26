@@ -20,7 +20,7 @@ public class Sandwich {
     private Boolean enPromocion;
     private String esApto;
 
-    @ManyToMany (fetch = FetchType.EAGER)
+    @ManyToMany (fetch = FetchType.LAZY)
     @JoinTable(name = "compuesto_por",
                 joinColumns = @JoinColumn(name = "idSandwich"),
                 inverseJoinColumns = @JoinColumn(name = "idIngrediente"))
