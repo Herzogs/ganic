@@ -104,8 +104,21 @@ public class Sandwich {
         return getIdSandwich().equals(sandwich.getIdSandwich()) && getNombre().equals(sandwich.getNombre()) && getDescripcion().equals(sandwich.getDescripcion()) && Objects.equals(getIngrediente(), sandwich.getIngrediente());
     }
 
-    @Override
+    /*@Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Sandwich sandwich = (Sandwich) o;
+        return idSandwich.equals(sandwich.idSandwich);
+    }*/
+
+    /*@Override
     public int hashCode() {
         return Objects.hash(getIdSandwich(), getNombre(), getDescripcion(), getIngrediente());
+    }*/
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getIdSandwich(), getIngrediente());
     }
 }

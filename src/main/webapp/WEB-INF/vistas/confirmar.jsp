@@ -56,14 +56,10 @@
                                 <p class="card-text fw-bold">${ing.nombre}
                                     <c:choose>
                                         <c:when test="${ing.paso > 2}">
-                                            <a href="eliminarIngrediente?ing=${ing.idIngrediente}" class="px-3 my-3">
-                                                <i class="bi bi-trash-fill"></i>
-                                            </a>
+                                            <a href="eliminarIngrediente?ing=${ing.idIngrediente}" class="px-3 my-3"><i class="bi bi-trash-fill text-danger"></i></a>
                                         </c:when>
                                     </c:choose>
-                                    <a href="modificarIngrediente?ing=${ing.idIngrediente}" class="px-3 my-3">
-                                        <i class="bi bi-pencil-fill"></i>
-                                    </a>
+                                    <a href="modificarIngrediente?ing=${ing.idIngrediente}" class="px-3 my-3"><i class="bi bi-pencil-fill text-success"></i></a>
                                 </p>
                                 <p class="card-text">${ing.detalle}</p>
                                 <p class="card-text">Precio por unidad $${ing.precio}</p>

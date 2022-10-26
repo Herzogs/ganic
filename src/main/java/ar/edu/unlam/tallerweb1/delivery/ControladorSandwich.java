@@ -76,7 +76,7 @@ public class ControladorSandwich {
         Sandwich sandwichObtenido = null;
         Long idLogeado = (Long) request.getSession().getAttribute("id");
         if(idLogeado == null)
-            return new ModelAndView("redirect:/home");
+            return new ModelAndView("redirect:/login");
         try{
             sandwichObtenido = this.servicioSandwich.obtenerSandwichPorId(idSandwich);
             System.err.println(this.convertirSetToList(sandwichObtenido.getIngrediente()));

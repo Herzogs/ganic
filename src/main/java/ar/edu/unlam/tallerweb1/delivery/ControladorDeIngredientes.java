@@ -119,7 +119,6 @@ public class ControladorDeIngredientes {
             this.email.setMetodoPago("En Efetivo");
             model.put("montoFinal", sandwich.getMonto());
             model.put("IngredientesQueElUsuarioSelecciono", sandwich.getIngredientesSandwich());
-            model.put("formPago",new FormularioPago());
             return new ModelAndView("confirmar", model);
         }
         return new ModelAndView("redirect:/login");
@@ -139,21 +138,12 @@ public class ControladorDeIngredientes {
         return new ModelAndView("alerta_exitosa");
     }
 
-
-    @RequestMapping(path = "setearMethodoPago", method = RequestMethod.POST)
-    public ModelAndView obtenerDatosDePago(@ModelAttribute(value = "formPago") FormularioPago fp){
-        System.err.println(fp.getPago()+ " - " + fp.getMonto());
-        return null;
-    }
-
-    //////////////////////////////////// ESTO VA EN EL CONTROLADOR DE HOME /////////////////////////////////////////////
     @RequestMapping(path = "restablecer", method = RequestMethod.GET)
     public ModelAndView irAHome() {
         this.sandwich.borrarDatosDelSandwich();
         System.err.println("lista de ingredientes"+ sandwich.getIngredientesSandwich());
         return new ModelAndView("redirect:/home");
     }
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public datosDelSandwich getSandwich() {
         return sandwich;

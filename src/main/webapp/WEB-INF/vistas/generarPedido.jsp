@@ -36,21 +36,19 @@
     <section>
         <div class="container py-5">
             <div class="row g-4">
-                <h3>Genere su pedido</h3>
-                <h4>Seleccone ingrediente</h4>
+                <h3 class="mb-2">Genere su pedido</h3>
+                <h4 class="mb-5 mt-2">Seleccione ingrediente</h4>
 
-                    <form:form action="actualizarPreferencia" method="POST" modelAttribute="formPref">
-                        <h3>Filtro por preferencia: </h3>
+                <h5 class="my-1">Filtrar por preferencia:</h5>
+                    <form:form action="actualizarPreferencia" method="POST" modelAttribute="formPref" class="d-flex m-0">
                         <form:input path="paso" value="${paso}" type="hidden"/>
-                        <form:select  path="preferencia" id="preferencia" class="form-select">
+                        <form:select  path="preferencia" id="preferencia" class="form-select w-auto">
                             <form:option value="SinRestriccion">SinRestriccion</form:option>
                             <form:option value="Vegano">Vegano</form:option>
                             <form:option value="sin_TACC">sin_TACC</form:option>
                             <c:set var="formPref.paso" value="${paso}"/>
                         </form:select>
-                        <div class="d-grid gap-2">
-                            <button class="btn btn-success mt-1 mb-4" Type="Submit">Filtrar</button>
-                        </div>
+                            <button class="btn btn-primary ms-2" Type="Submit">Filtrar</button>
                     </form:form>
 
                 <c:forEach var="pan" items="${ListaDePanes}" >
