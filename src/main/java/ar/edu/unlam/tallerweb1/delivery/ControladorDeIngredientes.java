@@ -138,14 +138,12 @@ public class ControladorDeIngredientes {
         return new ModelAndView("alerta_exitosa");
     }
 
-    //////////////////////////////////// ESTO VA EN EL CONTROLADOR DE HOME /////////////////////////////////////////////
     @RequestMapping(path = "restablecer", method = RequestMethod.GET)
     public ModelAndView irAHome() {
         this.sandwich.borrarDatosDelSandwich();
         System.err.println("lista de ingredientes"+ sandwich.getIngredientesSandwich());
         return new ModelAndView("redirect:/home");
     }
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public datosDelSandwich getSandwich() {
         return sandwich;

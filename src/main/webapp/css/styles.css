@@ -10,12 +10,17 @@ body {
     color: #829302 !important;
 }
 .btn-success {
-    background-color: #829302;
-    border: 1px solid #829302;
+    background-color: #829302 !important;
+    border: 1px solid #829302 !important;
 }
 
 .btn-success:hover {
     background-color: #516f15 !important;
+}
+
+.bg-success {
+    background-color: #829302 !important;
+    border: 1px solid #829302 !important;
 }
 
 .nav_style {

@@ -51,7 +51,7 @@ public class ControladorHomeTest {
 
     @Test
     public void queAlSeleccionarElLinkSalirDelPerfilMeEnvieAlHome() {
-        String vistaEsperada = dadoQueEsperoLaVistaLlamada("redirect:/home");
+        String vistaEsperada = dadoQueEsperoLaVistaLlamada("redirect:/login");
 
         this.request.getSession().setAttribute("id",null);
         ModelAndView model = this.controladorDeHome.salirSession(request);

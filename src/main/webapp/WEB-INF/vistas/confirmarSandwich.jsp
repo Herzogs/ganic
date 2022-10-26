@@ -33,7 +33,7 @@
                     <div class="card" style="max-width: 400px;">
                         <img src="img/pedido.png" class="card-img-top img-fluid" alt="...">
                         <div class="card-body">
-                            <p class="card-text text-center text-succes">Tu Sandwich - ${nombre}</p>
+                            <p class="card-text text-center text-succes">${nombre}</p>
                             <c:forEach var="ing" items="${IngredientesDelSandwich}">
                                 <p class="card-text fw-bold">${ing.nombre}</p>
                                 <p class="card-text">${ing.detalle}</p>

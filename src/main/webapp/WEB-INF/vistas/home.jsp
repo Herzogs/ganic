@@ -14,21 +14,34 @@
 	<nav class="nav_style d-flex align-items-center">
 		<div class="container">
 			<div class="text-center">
+				<a href="home"><img src="img/ganiclogo.png" class="img-fluid logo_style" alt="Logo"></a>
 				<a href="home">Home</a>
 				<a href="ingredientes">Menu</a>
-				<a href="home"><img src="img/ganiclogo.png" class="img-fluid logo_style" alt="Logo"></a>
 				<a href="contacto">Contacto</a>
 				<a href="nosotros">Nosotros</a>
 				<c:choose>
 					<c:when test="${sessionScope.id == null}">
-						<a class="bg-warning rounded-pill text-white" href="login">Login</a>
-						<a class="bg-warning rounded-pill text-white" href="registrar">Registrar</a>
+						<span class="dropdown ps-5">
+							<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+								Mi perfil
+							</button>
+							<ul class="dropdown-menu">
+								<li><a class="dropdown-item text-dark py-2" href="login">Login</a></li>
+								<li><a class="dropdown-item text-dark py-2" href="registrar">Registrar</a></li>
+							</ul>
+						</span>
 					</c:when>
 					<c:otherwise>
-						<a class="bg-warning rounded-pill text-white" href="verificar">Perfil</a>
-						<a class="bg-warning rounded-pill text-white" href="Salir">Salir</a>
+						<span class="dropdown ps-5">
+							<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+								Mi perfil
+							</button>
+							<ul class="dropdown-menu">
+								<li><a class="dropdown-item text-dark py-2" href="verificar">Actulizar datos</a></li>
+								<li><a class="dropdown-item text-dark py-2" href="Salir">Salir</a></li>
+							</ul>
+						</span>
 					</c:otherwise>
-
 				</c:choose>
 			</div>
 		</div>
@@ -68,68 +81,76 @@
 					<a href="ingredientes" class="btn btn-success rounded-pill px-5">VER INGREDIENTES</a>
 				</div>
 			</div>
+		</div>
 
-
-			<div class="row my-5">
-				<h1> ${cantidades}</h1>
+		<section class="bg-dark">
+			<div class="container">
+				<div class="row my-5 py-5">
+					<h2 class="text-center text-white"> Aprovechá nuestras promociones</h2>
 					<c:forEach var="sandwich" items="${listaEnPromocion}" >
-						<div class="col-6">
+						<div class="col-4 g-5">
 							<div class="card">
-								<div class="card-header bg-dark text-white">
+								<div class="card-header bg-success text-white">
 										${sandwich.nombre}
 								</div>
 								<ul class="list-group list-group-flush">
 									<li class="list-group-item">${sandwich.descripcion}</li>
 									<li class="list-group-item"><span class="text-primary">Es apto:</span> ${sandwich.esApto}</li>
-									<li class="list-group-item"><a href="confirmarSandwich?idSandwich=${sandwich.idSandwich}" class="btn btn-success px-3 my-3">Agregar</a></li>
+									<li class="list-group-item"><a href="confirmarSandwich?idSandwich=${sandwich.idSandwich}" class="btn btn-success px-3 my-3">Comprar</a></li>
 								</ul>
 							</div>
 						</div>
 					</c:forEach>
+				</div>
 			</div>
+		</section>
 
-			<div class="row my-5 py-5">
-				<div class="col-6">
+			<div class="container">
 
-					<div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
-						<div class="carousel-inner">
-							<div class="carousel-item active" data-bs-interval="3000">
-								<img src="img/s01.png" class="d-block w-100" alt="...">
+				<div class="row my-5 py-5">
+					<div class="col-6">
+
+						<div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+							<div class="carousel-inner">
+								<div class="carousel-item active" data-bs-interval="3000">
+									<img src="img/s01.png" class="d-block w-100" alt="...">
+								</div>
+								<div class="carousel-item" data-bs-interval="3000">
+									<img src="img/s02.png" class="d-block w-100" alt="...">
+								</div>
+								<div class="carousel-item" data-bs-interval="3000">
+									<img src="img/s03.png" class="d-block w-100" alt="...">
+								</div>
+								<div class="carousel-item" data-bs-interval="3000">
+									<img src="img/s04.png" class="d-block w-100" alt="...">
+								</div>
 							</div>
-							<div class="carousel-item" data-bs-interval="3000">
-								<img src="img/s02.png" class="d-block w-100" alt="...">
-							</div>
-							<div class="carousel-item" data-bs-interval="3000">
-								<img src="img/s03.png" class="d-block w-100" alt="...">
-							</div>
-							<div class="carousel-item" data-bs-interval="3000">
-								<img src="img/s04.png" class="d-block w-100" alt="...">
-							</div>
+							<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+								<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+								<span class="visually-hidden">Previous</span>
+							</button>
+							<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+								<span class="carousel-control-next-icon" aria-hidden="true"></span>
+								<span class="visually-hidden">Next</span>
+							</button>
 						</div>
-						<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
-							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-							<span class="visually-hidden">Previous</span>
-						</button>
-						<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
-							<span class="carousel-control-next-icon" aria-hidden="true"></span>
-							<span class="visually-hidden">Next</span>
-						</button>
-					</div>
 
+					</div>
+					<div class="col-6">
+						<h3 class="text-center mt-4">NUESTRO MENÚ</h3>
+						<hr/>
+						<p class="text-center mt-4 p-5">
+							Nuestro menú ofrece variedad de sandiwchs caseros de estilo gourmet, llenos de sabor preparados con
+							ingredientes frescos y naturales, satisfaciendo hasta los más exigentes paladares. Ofrecemos un servicio de
+							sandiwchs gourmet manteniendo la calidad tanto en nuestros locales como en eventos masivos.
+						</p>
+					</div>
 				</div>
-				<div class="col-6">
-					<h3 class="text-center mt-4">NUESTRO MENÚ</h3>
-					<hr/>
-					<p class="text-center mt-4 p-5">
-						Nuestro menú ofrece variedad de sandiwchs caseros de estilo gourmet, llenos de sabor preparados con
-						ingredientes frescos y naturales, satisfaciendo hasta los más exigentes paladares. Ofrecemos un servicio de
-						sandiwchs gourmet manteniendo la calidad tanto en nuestros locales como en eventos masivos.
-					</p>
-				</div>
+
 			</div>
 
 
-		</div>
+
 	</section>
 </main>
 
