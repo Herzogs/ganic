@@ -47,7 +47,6 @@ public class ControladorHomeTest {
         assertThat(model.getViewName()).isEqualTo(vistaEsperada);
     }
 
-    // TODO revisar request set
 
     @Test
     public void queAlSeleccionarElLinkSalirDelPerfilMeEnvieAlHome() {
@@ -58,7 +57,6 @@ public class ControladorHomeTest {
 
         assertThat(model.getViewName()).isEqualTo(vistaEsperada);
     }
-
 
 
     private String dadoQueEsperoLaVistaLlamada(String esperada) {
