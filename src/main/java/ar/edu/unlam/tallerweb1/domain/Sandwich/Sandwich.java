@@ -20,7 +20,7 @@ public class Sandwich {
     private Boolean enPromocion;
     private String esApto;
 
-    @ManyToMany (fetch = FetchType.LAZY)
+    @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable(name = "compuesto_por",
                 joinColumns = @JoinColumn(name = "idSandwich"),
                 inverseJoinColumns = @JoinColumn(name = "idIngrediente"))
@@ -96,12 +96,20 @@ public class Sandwich {
         this.ingrediente.add(ingrediente);
     }
 
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (!(o instanceof Sandwich)) return false;
+//        Sandwich sandwich = (Sandwich) o;
+//        return getIdSandwich().equals(sandwich.getIdSandwich()) && getNombre().equals(sandwich.getNombre()) && getDescripcion().equals(sandwich.getDescripcion()) && Objects.equals(getIngrediente(), sandwich.getIngrediente());
+//    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Sandwich)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Sandwich sandwich = (Sandwich) o;
-        return getIdSandwich().equals(sandwich.getIdSandwich()) && getNombre().equals(sandwich.getNombre()) && getDescripcion().equals(sandwich.getDescripcion()) && Objects.equals(getIngrediente(), sandwich.getIngrediente());
+        return idSandwich.equals(sandwich.idSandwich);
     }
 
     @Override

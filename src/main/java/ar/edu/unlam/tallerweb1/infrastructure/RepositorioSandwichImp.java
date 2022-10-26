@@ -12,7 +12,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.*;
 
 @Repository
 public class RepositorioSandwichImp implements RepositorioSandwich {
@@ -44,18 +44,30 @@ public class RepositorioSandwichImp implements RepositorioSandwich {
     @Override
     public List<Sandwich> obtenerTodosLosSandwitchEnPromocion() {
         final Session session = this.sessionFactory.getCurrentSession();
-        return (List<Sandwich>) session.createCriteria(Sandwich.class)
-                .setFetchMode("idSandwich", FetchMode.JOIN)
+
+
+        List<Sandwich> lista= (List<Sandwich>) session.createCriteria(Sandwich.class)
+                .setFetchMode("idSandwich",FetchMode.JOIN)
                 .add(Restrictions.eq("enPromocion",true))
                 .list();
+        Set<Sandwich> borroRepetidos= new HashSet<>();
+        borroRepetidos.addAll(lista);
+        List<Sandwich> listacopiada2= new ArrayList<>();
+        listacopiada2.addAll(borroRepetidos);
+        return listacopiada2;
     }
 
     @Override
     public List<Sandwich> obtenerTodosLosSandwitchPorPreferencia(String pref) {
         final Session session = this.sessionFactory.getCurrentSession();
-        return (List<Sandwich>) session.createCriteria(Sandwich.class)
+        List<Sandwich> lista=  (List<Sandwich>) session.createCriteria(Sandwich.class)
                 .setFetchMode("idSandwich", FetchMode.JOIN)
                 .add(Restrictions.eq("esApto",pref))
                 .list();
+        Set<Sandwich> borroRepetidos= new HashSet<>();
+        borroRepetidos.addAll(lista);
+        List<Sandwich> listacopiada2= new ArrayList<>();
+        listacopiada2.addAll(borroRepetidos);
+        return listacopiada2;
     }
 }
