@@ -43,7 +43,7 @@ public class RepositorioSandwichTest extends SpringTest {
     @Test @Rollback @Transactional
     public void queAlSolicitarLaListaDeSandwichesMeDevuelvaUnaListaNoVacia(){
         List<Sandwich> valorObtenido = obtengoTodasLosSandwichesDeLaBaseDeDatos();
-        entoncesVerificoQueLaListaObtenidaTenga(valorObtenido, 18);
+        entoncesVerificoQueLaListaObtenidaTenga(valorObtenido, 6);
     }
 
     private void entoncesVerificoQueLaListaObtenidaTenga(List<Sandwich> valorObtenido, Integer expected) {

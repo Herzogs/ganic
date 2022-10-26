@@ -36,9 +36,14 @@ public class RepositorioSandwichImp implements RepositorioSandwich {
     @Override
     public List<Sandwich> obtenerTodosLosSandwiches() {
         final Session session = this.sessionFactory.getCurrentSession();
-        return (List<Sandwich>) session.createCriteria(Sandwich.class)
+        List<Sandwich> lista=  (List<Sandwich>) session.createCriteria(Sandwich.class)
                 .setFetchMode("idSandwich", FetchMode.JOIN)
                 .list();
+        Set<Sandwich> borroRepetidos= new HashSet<>();
+        borroRepetidos.addAll(lista);
+        List<Sandwich> listacopiada2= new ArrayList<>();
+        listacopiada2.addAll(borroRepetidos);
+        return listacopiada2;
     }
 
     @Override
