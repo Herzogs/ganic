@@ -57,16 +57,5 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         sessionFactory.getCurrentSession().update(usuario);
     }
 
-    /*@Override
-    public Boolean estaRegistrado(String email) {
-        Usuario buscado = (Usuario) sessionFactory.getCurrentSession().createCriteria(Usuario.class)
-                .add(Restrictions.eq("email", email))
-                .uniqueResult();
-        if (buscado != null) {
-            return true;
-        }
-        return false;
-    }*/
-
 
 }

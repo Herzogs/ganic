@@ -21,17 +21,6 @@ public class Ingrediente {
 
 	private String esApto;
 
-	/*@ManyToMany(mappedBy = "ingrediente")
-	private Set<Sandwich> sandwiches = new LinkedHashSet<>();
-
-	public Set<Sandwich> getSandwiches() {
-		return sandwiches;
-	}
-
-	public void setSandwiches(Set<Sandwich> sandwiches) {
-		this.sandwiches = sandwiches;
-	}
-*/
 	public Ingrediente() {
 	}
 

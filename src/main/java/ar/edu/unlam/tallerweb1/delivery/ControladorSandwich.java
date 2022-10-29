@@ -94,13 +94,11 @@ public class ControladorSandwich {
     @RequestMapping(path = "/envioDeConfirmacion")
     public ModelAndView envioDeConfirmacion(@RequestParam(value = "idSandwich") Long idSandwich, HttpServletRequest request) {
         Usuario cliente = null;
-        Sandwich sandwichEscogido = null;
         ModelMap modelo = new ModelMap();
         Email nuevo = new Email();
         Long idCliente = (Long) request.getSession().getAttribute("id");
         try{
             cliente = this.servicioLogin.consultarPorID(idCliente);
-            /*sandwichEscogido = this.servicioSandwich.obtenerSandwichPorId(idSandwich);*/
             nuevo.setUser(cliente);
             nuevo.setMetodoPago("Pago En Efectivo");
             nuevo.setLista(this.servicioSandwich.obtenerLosIngredientesDeUnSandwich(idSandwich));

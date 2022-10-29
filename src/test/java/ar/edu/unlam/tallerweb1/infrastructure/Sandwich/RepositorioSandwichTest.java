@@ -56,8 +56,10 @@ public class RepositorioSandwichTest extends SpringTest {
         entoncesVerificoQueLaListaObtenidaTenga(valorObtenido, 5);
     }
 
+    // TODO:: Agregar referencia a base H2 y modificar todos los test
     @Test @Rollback @Transactional
-    public void queAlSolicitarLaListaDeSandwichesConPreferenciaMeDevuelvaUnaListaNoVacia(){
+    public void queAlSolicitarLaListaDeSandwichesConPreferenciaVeganoMeDevuelvaUnaListaNoVacia(){
+
         List<Sandwich> valorObtenido = obtengoTodasLosSandwichesDeUnTipoDeLaBaseDeDatos("Vegano");
         entoncesVerificoQueLaListaObtenidaTenga(valorObtenido, 2);
     }
