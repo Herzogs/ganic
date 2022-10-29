@@ -64,4 +64,10 @@ public class RepositorioSandwichImp implements RepositorioSandwich {
                 .list();
         return lista;
     }
+
+    @Override
+    public void guardarSandwich(Sandwich sandwich) {
+        final Session session = this.sessionFactory.getCurrentSession();
+        session.save(sandwich);
+    }
 }

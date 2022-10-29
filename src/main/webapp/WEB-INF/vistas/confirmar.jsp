@@ -77,11 +77,12 @@
                 <div class="col-6">
                     <h2>Mapa</h2>
                     <div id="map" class="map"></div>
-                    <f:form action="setearMethodoPago" modelAttribute="formPago" method="post">
+
                         Cargo: <p id="cargo"></p> <br>
                         Monto Actualizado: <p id="montoTotal"></p>
                         Forma De Pgo:
-                        <f:select  path="pago" id="pago" class="form-select">
+                    <f:form action="setearMethodoPago" modelAttribute="formPref" method="post">
+                        <f:select  path="preferencia" id="pago" class="form-select">
                             <f:option value="enEfectivo">En Efectivo</f:option>
                             <f:option value="debito">Tarjeta Debito</f:option>
                             <f:option value="credito">Tarjeta Credito</f:option>

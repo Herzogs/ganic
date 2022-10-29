@@ -12,4 +12,6 @@ public interface RepositorioSandwich {
 
     List<Sandwich> obtenerTodosLosSandwitchPorPreferencia(String pref);
 
+    void guardarSandwich(Sandwich sandwich);
+
 }

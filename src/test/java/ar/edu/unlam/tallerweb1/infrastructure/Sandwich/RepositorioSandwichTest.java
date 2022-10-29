@@ -41,9 +41,30 @@ public class RepositorioSandwichTest extends SpringTest {
     }
 
     @Test @Rollback @Transactional
-    public void queAlSolicitarLaListaDeSandwichesMeDevuelvaUnaListaNoVacia(){
+    public void queAlSolicitarLaListaDeSandwichesDeLaBaseDeDatosMeDevuelvaUnaListaNoVacia(){
+        List<Sandwich> listaSandwich = dadoQueTengoUnaListaDeSandwichesDistintos();
+        entoncesGuardoLaListaEnLaBaseDeDatos(listaSandwich);
         List<Sandwich> valorObtenido = obtengoTodasLosSandwichesDeLaBaseDeDatos();
-        entoncesVerificoQueLaListaObtenidaTenga(valorObtenido, 6);
+        entoncesComparoAmbosListasDeSandwiches(valorObtenido,listaSandwich);
+    }
+
+    private void entoncesComparoAmbosListasDeSandwiches(List<Sandwich> valorObtenido, List<Sandwich> listaSandwich) {
+        assertThat(valorObtenido).isNotEmpty();
+        assertThat(valorObtenido).hasSize(listaSandwich.size());
+        assertThat(valorObtenido).isEqualTo(listaSandwich);
+    }
+
+    private void entoncesGuardoLaListaEnLaBaseDeDatos(List<Sandwich> listaSandwich) {
+        listaSandwich.forEach((sandwich) -> this.repositorioSandwich.guardarSandwich(sandwich));
+    }
+
+    private List<Sandwich> dadoQueTengoUnaListaDeSandwichesDistintos() {
+        List<Sandwich> lista = new ArrayList<>();
+        lista.add(new Sandwich(1L,"Sandwich1","Sandwich1",true,"SinRestriccion",null));
+        lista.add(new Sandwich(2L,"Sandwich2","Sandwich2",false,"Vegano",null));
+        lista.add(new Sandwich(3L,"Sandwich3","Sandwich3",true,"SinRestriccion",null));
+        lista.add(new Sandwich(4L,"Sandwich4","Sandwich4",false,"Vegano",null));
+        return lista;
     }
 
     private void entoncesVerificoQueLaListaObtenidaTenga(List<Sandwich> valorObtenido, Integer expected) {
@@ -52,14 +73,25 @@ public class RepositorioSandwichTest extends SpringTest {
 
     @Test @Rollback @Transactional
     public void queAlSolicitarLaListaDeSandwichesEnPromocionMeDevuelvaUnaListaNoVacia(){
+        List<Sandwich> lista = dadoQueTengoUnaListaDeSandwichesEnPromocion();
+        entoncesGuardoLaListaEnLaBaseDeDatos(lista);
         List<Sandwich> valorObtenido = obtengoTodasLosSandwichesEnPromocionDeLaBaseDeDatos();
-        entoncesVerificoQueLaListaObtenidaTenga(valorObtenido, 5);
+        entoncesVerificoQueLaListaObtenidaTenga(valorObtenido, lista.size());
     }
 
-    // TODO:: Agregar referencia a base H2 y modificar todos los test
+    private List<Sandwich> dadoQueTengoUnaListaDeSandwichesEnPromocion() {
+        List<Sandwich> lista = new ArrayList<>();
+        lista.add(new Sandwich(1L,"Sandwich1","Sandwich1",true,"SinRestriccion",null));
+        lista.add(new Sandwich(2L,"Sandwich2","Sandwich2",true,"SinRestriccion",null));
+        lista.add(new Sandwich(3L,"Sandwich3","Sandwich3",true,"SinRestriccion",null));
+        lista.add(new Sandwich(4L,"Sandwich4","Sandwich4",true,"SinRestriccion",null));
+        return lista;
+    }
+
     @Test @Rollback @Transactional
     public void queAlSolicitarLaListaDeSandwichesConPreferenciaVeganoMeDevuelvaUnaListaNoVacia(){
-
+        List<Sandwich> listaSandwich = dadoQueTengoUnaListaDeSandwichesDistintos();
+        entoncesGuardoLaListaEnLaBaseDeDatos(listaSandwich);
         List<Sandwich> valorObtenido = obtengoTodasLosSandwichesDeUnTipoDeLaBaseDeDatos("Vegano");
         entoncesVerificoQueLaListaObtenidaTenga(valorObtenido, 2);
     }

@@ -119,6 +119,7 @@ public class ControladorDeIngredientes {
             this.email.setMetodoPago("En Efetivo");
             model.put("montoFinal", sandwich.getMonto());
             model.put("IngredientesQueElUsuarioSelecciono", sandwich.getIngredientesSandwich());
+            model.put("formPref",new FormularioPreferencia());
             return new ModelAndView("confirmar", model);
         }
         return new ModelAndView("redirect:/login");

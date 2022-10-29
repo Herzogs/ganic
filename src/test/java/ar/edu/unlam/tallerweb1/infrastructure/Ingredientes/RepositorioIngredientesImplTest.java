@@ -52,10 +52,26 @@ public class RepositorioIngredientesImplTest extends SpringTest {
     }
 
     @Test @Transactional
-    public void queAlBuscarPorUnPasoEspecificoValidoMeRetorneUnaListaNoVacia(){
+    public void prueboQueAlBuscarUnIngredientePorUnPasoEspecificoPeroValidoMeRetorneUnaListaNoVacia(){
+        List<Ingrediente> valorEsperado = dadoQueTengoEstosIngredientesDePaso1EnLaBaseDeDatos();
+        entoncesGuardoLaListaDeIngredientesEnLaBaseDeDatos(valorEsperado);
         List<Ingrediente> valor_obtenido = cuandoLePidaAlRepositorioQueTraigaLosIngredientesPorUnPasoEspecifico(1);
-        entoncesVerificoQueLaListaNoSeaNula(valor_obtenido);
+        entoncesVerificoQueLasListasSeanIguales(valorEsperado,valor_obtenido);
     }
+
+    private List<Ingrediente> dadoQueTengoEstosIngredientesDePaso1EnLaBaseDeDatos() {
+            List<Ingrediente> valorEsperado= new ArrayList<>();
+            Ingrediente n1 = dadoQueExisteUnIngrediente(5L, "Pan clasico", 150F, 1, "Pan lactal blanco","SinRestriccion");
+            Ingrediente n2 = dadoQueExisteUnIngrediente(6L, "Pan flauta", 120F, 1, "Pan de mesa blanco","SinRestriccion");
+            Ingrediente n3 = dadoQueExisteUnIngrediente(7L, "Pan de campo", 250F, 1, "Pan de campo blanco","SinRestriccion");
+            Ingrediente n4 = dadoQueExisteUnIngrediente(8L, "Pan integral", 280F, 1, "Pan lactal integral","SinRestriccion");
+            valorEsperado.add(n1);
+            valorEsperado.add(n2);
+            valorEsperado.add(n3);
+            valorEsperado.add(n4);
+            return valorEsperado;
+        }
+
 
     private static void entoncesVerificoQueLaListaNoSeaNula(List<Ingrediente> valor_obtenido) {
         assertThat(valor_obtenido).isNotNull();
@@ -67,11 +83,29 @@ public class RepositorioIngredientesImplTest extends SpringTest {
     }
 
     @Test @Transactional
-    public void queAlBuscarSiEsAptoMeRetorneAlgunValor(){
+    public void prueboQueAlBuscarUnaListaDeIngredientesConAptitudSinRestriccionMeRetorneAlgunValor(){
 
-        List<Ingrediente> valorEsperado = dadoQueTengoEstosIngredientesEnLaBaseDeDatos();
-        List<Ingrediente> valor_obtenido = entoncesLeDigoAlRepositorioQueMeTraigaTodosLosIngredientesQueNoTenganRestriccion();
-        entoncesVerificoQueLasListasSeanIguales(valorEsperado, valor_obtenido);
+        List<Ingrediente> valorEsperado = dadoQueTengoEstosIngredientesDeTipoSinRestriccionEnLaBaseDeDatos();
+        entoncesGuardoLaListaDeIngredientesEnLaBaseDeDatos(valorEsperado);
+        List<Ingrediente> valorObtenido = entoncesLeDigoAlRepositorioQueMeTraigaTodosLosIngredientesQueNoTenganRestriccion();
+        entoncesVerificoQueLasListasSeanIguales(valorEsperado, valorObtenido);
+    }
+
+    private void entoncesGuardoLaListaDeIngredientesEnLaBaseDeDatos(List<Ingrediente> valorEsperado) {
+        valorEsperado.forEach((ing) -> this.repo.guardarIngrediente(ing));
+    }
+
+    private List<Ingrediente> dadoQueTengoEstosIngredientesDeTipoSinRestriccionEnLaBaseDeDatos() {
+        List<Ingrediente> valorEsperado= new ArrayList<>();
+        Ingrediente n1 = dadoQueExisteUnIngrediente(5L, "Pan clasico", 150F, 1, "Pan lactal blanco","SinRestriccion");
+        Ingrediente n2 = dadoQueExisteUnIngrediente(6L, "Pan flauta", 120F, 1, "Pan de mesa blanco","SinRestriccion");
+        Ingrediente n3 = dadoQueExisteUnIngrediente(7L, "Pan de campo", 250F, 1, "Pan de campo blanco","SinRestriccion");
+        Ingrediente n4 = dadoQueExisteUnIngrediente(8L, "Pan integral", 280F, 1, "Pan lactal integral","SinRestriccion");
+        valorEsperado.add(n1);
+        valorEsperado.add(n2);
+        valorEsperado.add(n3);
+        valorEsperado.add(n4);
+        return valorEsperado;
     }
 
     private void entoncesVerificoQueLasListasSeanIguales(List<Ingrediente> valorEsperado, List<Ingrediente> valor_obtenido) {
@@ -118,11 +152,26 @@ public class RepositorioIngredientesImplTest extends SpringTest {
     }
 
     @Test @Transactional
-    public void queAlPedirUnaListaDeIngredientesDeLaBaseDeDatosSeFiltrePorPasoYPreferencia(){
+    public void queAlPedirUnaListaDeIngredientesPorUnPasoYPreferenciaEspecificoDeLaBaseDeDatosSeFiltreMeDevuelvaUnaListaNoVacia(){
+        List<Ingrediente> valorEsperado = dadoQueTengoUnaListaDeIngredientesPorPasoYPreferenciaEspecifico();
+        entoncesGuardoLaListaDeIngredientesEnLaBaseDeDatos(valorEsperado);
         List<Ingrediente> listaFiltrada = entoncesLeSolicitoALaBaseDeDatosQueMeTraigaTodosLosIngredientesFiltradosPor(1,"SinRestriccion");
-        System.err.println(listaFiltrada);
         entoncesVerificoQueLaListaNoSeaNula(listaFiltrada);
     }
+
+    private List<Ingrediente> dadoQueTengoUnaListaDeIngredientesPorPasoYPreferenciaEspecifico() {
+        List<Ingrediente> valorEsperado= new ArrayList<>();
+        Ingrediente n1 = dadoQueExisteUnIngrediente(5L, "Pan clasico", 150F, 1, "Pan lactal blanco","SinRestriccion");
+        Ingrediente n2 = dadoQueExisteUnIngrediente(6L, "Pan flauta", 120F, 1, "Pan de mesa blanco","SinRestriccion");
+        Ingrediente n3 = dadoQueExisteUnIngrediente(7L, "Pan de campo", 250F, 1, "Pan de campo blanco","SinRestriccion");
+        Ingrediente n4 = dadoQueExisteUnIngrediente(8L, "Pan integral", 280F, 1, "Pan lactal integral","SinRestriccion");
+        valorEsperado.add(n1);
+        valorEsperado.add(n2);
+        valorEsperado.add(n3);
+        valorEsperado.add(n4);
+        return valorEsperado;
+    }
+
 
     private List<Ingrediente> entoncesLeSolicitoALaBaseDeDatosQueMeTraigaTodosLosIngredientesFiltradosPor(Integer i, String preferencia) {
         return this.repo.obtenerIngredientesPorPasoYPorPreferencia(i,preferencia);
