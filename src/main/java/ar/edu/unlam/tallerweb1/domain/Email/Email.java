@@ -10,7 +10,19 @@ public class Email {
     private String metodoPago;
     private Usuario user;
 
-    public Email() {}
+    private Float recargo;
+
+    public Email() {
+        this.recargo = 0F;
+    }
+
+    public Float getRecargo() {
+        return recargo;
+    }
+
+    public void setRecargo(Float recargo) {
+        this.recargo = recargo;
+    }
 
     public List<Ingrediente> getLista() {
         return lista;
@@ -42,7 +54,7 @@ public class Email {
         for (Ingrediente ing: this.lista) {
             tot += ing.getPrecio();
         }
-        return tot;
+        return tot + this.recargo ;
     }
 
     public String generateEmailBody(){

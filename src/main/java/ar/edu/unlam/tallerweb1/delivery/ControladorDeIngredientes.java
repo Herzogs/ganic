@@ -13,6 +13,7 @@ import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -116,10 +117,9 @@ public class ControladorDeIngredientes {
                 return new ModelAndView(String.format("redirect:/generarPedido?paso=%d", paso), model);
             }
             this.email.setLista(this.sandwich.getIngredientesSandwich());
-            this.email.setMetodoPago("En Efetivo");
             model.put("montoFinal", sandwich.getMonto());
             model.put("IngredientesQueElUsuarioSelecciono", sandwich.getIngredientesSandwich());
-            model.put("formPref",new FormularioPreferencia());
+            request.getSession().setAttribute("email",this.email);
             return new ModelAndView("confirmar", model);
         }
         return new ModelAndView("redirect:/login");

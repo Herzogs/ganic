@@ -10,7 +10,21 @@
           integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
     <link href="css/styles.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
-    <title>Confirmación de pedido</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
+          integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14="
+          crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js"
+            integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg="
+            crossorigin=""></script>
+    <script src="${pageContext.request.contextPath}/js/jquery-1.11.3.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/confirmacion.js" type="text/javascript"></script>
+    <title>Destino</title>
+    <style type="text/css">
+        .map{
+            height: 500px;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -29,39 +43,15 @@
 </header>
 <main>
     <section>
-        <div class="container py-5">
-            <h3 class="pt-5 pb-3">Datos de su pedido</h3>
-            <div class="row">
-                <div class="col-6">
-                    <div class="card" style="max-width: 400px;">
-                        <img src="img/pedido.png" class="card-img-top img-fluid" alt="...">
-                        <div class="card-body">
-                            <p class="card-text text-center text-succes">Tu Sandwich</p>
-                            <c:forEach var="ing" items="${IngredientesQueElUsuarioSelecciono}">
-                                <p class="card-text fw-bold">${ing.nombre}
-                                    <c:choose>
-                                        <c:when test="${ing.paso > 2}">
-                                            <a href="eliminarIngrediente?ing=${ing.idIngrediente}" class="px-3 my-3"><i class="bi bi-trash-fill text-danger"></i></a>
-                                        </c:when>
-                                    </c:choose>
-                                    <a href="modificarIngrediente?ing=${ing.idIngrediente}" class="px-3 my-3"><i class="bi bi-pencil-fill text-success"></i></a>
-                                </p>
-                                <p class="card-text">${ing.detalle}</p>
-                                <p class="card-text">Precio por unidad $${ing.precio}</p>
-                            </c:forEach>
-                            <p class="card-text fw-bold text-end">Monto a pagar <span id="montoParcial"
-                                    class="text-primary">$${montoFinal}</span></p>
-                        </div>
-                    </div>
-                    <%--Bloque que es visible si el elemento error no esta vacio	--%>
-                    <c:if test="${not empty error}">
-                        <h4><span>${error}</span></h4>
-                        <br>
-                    </c:if>
-                </div>
-                <div class="col-6">
+        <div class="container">
+                <div class="col-12">
+                    <h1>Elija su destino</h1>
+                    <div id="map" class="map"></div>
+                    <p id="cargo"></p>
+                    <c:set var="${cargo}" scope="session" value="" />
                     <h4 class="pb-3">Confirmar pago</h4>
-                    <a href="destino" class="btn btn-success px-5 mb-5">Confirmar Destino</a>
+
+                    <a href="seleccionarDestino?distancia=cargo" class="btn btn-success px-5 mb-5">Confirmar Metodo Pago</a>
                     <div><a href="restablecer" class="btn btn-primary px-5 my-5">Volver al Home</a></div>
                 </div>
             </div>
