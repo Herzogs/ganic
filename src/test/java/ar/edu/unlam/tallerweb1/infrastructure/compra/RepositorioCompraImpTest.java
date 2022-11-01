@@ -39,14 +39,15 @@ public class RepositorioCompraImpTest extends SpringTest {
         Compra buscada = buscoLaCompra(compra);
         comprueboQueMeDevuelvaLaDosSandwich(buscada.getDetalle(), 2);
     }
+
     @Test
     @Transactional
-    public void queSePuedanObtenerLasComprasDeUnCLiente(){
+    public void queSePuedanObtenerLasComprasDeUnCLienteListadoPorIdUsuario() {
         Usuario usuario = dadoQueTengoUnUsuario(1L, "diego@ganic.com", "123");
         Set<Sandwich> sandwich = dadoQueTengoSandwichsSeleccionados();
         Compra compra = generoLaCompra(1L, usuario, (Set<Sandwich>) sandwich);
         Compra compra2 = generoLaCompra(2L, usuario, (Set<Sandwich>) sandwich);
-        List<Compra> listaCompra= obtengoLasComprasDeUnCliente(usuario);
+        List<Compra> listaCompra = obtengoLasComprasDeUnCliente(usuario);
         comparoLaCantidadDeComprasDeUnCliente(listaCompra, 2);
     }
 
@@ -79,9 +80,7 @@ public class RepositorioCompraImpTest extends SpringTest {
         Compra compra = new Compra();
         compra.setIdCompra(idCompra);
         compra.setCliente(usuario);
-        System.out.println(usuario.getId() + "El nombre del cliente");
         compra.setDetalle(sandwich);
-        repo.guardarCompra(compra);
         session().save(compra);
         return compra;
     }

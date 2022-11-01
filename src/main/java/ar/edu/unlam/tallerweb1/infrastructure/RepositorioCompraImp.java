@@ -47,6 +47,15 @@ public class RepositorioCompraImp implements RepositorioCompra {
         return lista;
     }
 
+    @Override
+    public List<Compra> buscarCompraPorCliente(Long idUsuario) {
+        final Session session = this.sessionFactory.getCurrentSession();
+        List<Compra> lista= session.createCriteria(Compra.class)
+                .createAlias("usuario","usuario")
+                .add(Restrictions.eq("usuario.id",idUsuario)).list();
+        return lista;
+    }
+
 
     @Override
     public void guardarCompra(Compra compra) {

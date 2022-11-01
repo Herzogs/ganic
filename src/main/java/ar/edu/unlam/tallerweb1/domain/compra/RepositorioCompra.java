@@ -11,5 +11,5 @@ public interface RepositorioCompra {
     public void eliminarCompra(Compra compra);
     public Compra buscarCompra(Long idCompra);
     public List<Compra>buscarCompraPorCliente(Usuario usuario);
-
+    public List<Compra>buscarCompraPorCliente(Long idUsuario);
 }
