@@ -32,6 +32,36 @@ public class ServicioCompraImpTest extends SpringTest {
         comparoQueLasComprasSeanIguales(compra, compraBuscada);
         verificoQueSeUseElRepo();
     }
+    @Test
+    public void luegoDeHaberHechoVariasComprasPuedaBuscarLasQueHizoUnCliente(){
+        Usuario usuario = dadoQueTengoUnUsuario(1L, "diego@ganic.com", "123");
+        Usuario usuario2 = dadoQueTengoUnUsuario(2L, "messi@ganic.com", "123");
+        List<Sandwich> sandwich = dadoQueTengoSandwichsSeleccionados();
+        Compra compra1 = generoLaCompra(usuario, sandwich);
+        Compra compra2=generoLaCompra(usuario2, sandwich);
+        Compra compra3=generoLaCompra(usuario, sandwich);
+        guardoLaCompra(compra1);
+        guardoLaCompra(compra2);
+        guardoLaCompra(compra3);
+        usoDeMokitoParaLaLIstaPorUsuario(usuario);
+        List<Compra> historial= buscoTodasLasComprasPorUsuario(usuario);
+        cuentoLasComprasObtenidas(historial,2);
+    }
+
+    private void usoDeMokitoParaLaLIstaPorUsuario(Usuario usuario) {
+        List<Compra> historial= new ArrayList<>();
+        historial.add(new Compra());
+        historial.add(new Compra());
+        when(repo.buscarCompraPorCliente(usuario.getId())).thenReturn(historial);
+    }
+
+    private void cuentoLasComprasObtenidas(List<Compra> historial, int cantidadDeCompras) {
+        assertThat(historial).hasSize(cantidadDeCompras);
+    }
+
+    private List<Compra> buscoTodasLasComprasPorUsuario(Usuario usuario) {
+        return servicioCompra.buscarComprasPorUsuario(usuario.getId());
+    }
 
     private void guardoLaCompra(Compra compra) {
         servicioCompra.guardarCompra(compra);

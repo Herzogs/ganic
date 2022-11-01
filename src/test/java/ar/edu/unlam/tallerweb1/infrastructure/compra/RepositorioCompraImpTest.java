@@ -3,6 +3,7 @@ package ar.edu.unlam.tallerweb1.infrastructure.compra;
 import ar.edu.unlam.tallerweb1.SpringTest;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
 import ar.edu.unlam.tallerweb1.domain.compra.Compra;
+import ar.edu.unlam.tallerweb1.domain.compra.EstadoDeCompra;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import ar.edu.unlam.tallerweb1.infrastructure.RepositorioCompraImp;
 import org.junit.Test;
@@ -47,8 +48,46 @@ public class RepositorioCompraImpTest extends SpringTest {
         List<Sandwich> sandwich = dadoQueTengoSandwichsSeleccionados();
         Compra compra = generoLaCompra(1L, usuario, sandwich);
         Compra compra2 = generoLaCompra(2L, usuario, sandwich);
+        System.out.println(compra.getEstado() + "VEREMOS verewmos ");
         List<Compra> listaCompra = obtengoLasComprasDeUnCliente(usuario);
         comparoLaCantidadDeComprasDeUnCliente(listaCompra, 2);
+    }
+
+    @Test
+    @Transactional
+    public void luegoDeHacerUnaCompraYCancelarlaSeLaPuedaObtenerPorEstadoDeCompra() {
+        Usuario usuario = dadoQueTengoUnUsuario(1L, "diego@ganic.com", "123");
+        List<Sandwich> sandwich = dadoQueTengoSandwichsSeleccionados();
+        Compra compra = generoLaCompra(1L, usuario, sandwich);
+        Compra compra2 = generoLaCompra(2L, usuario, sandwich);
+        canceloLaCompra(usuario, compra, EstadoDeCompra.CANCELADO);
+        verificoQueSeHayaCanceladolaCompra(compra, EstadoDeCompra.CANCELADO);
+
+    }
+    @Test
+    @Transactional
+    public void dadoQueRealiceUnPedidoQueLoPedidoPuedaVerLosQueEstanEnEstadoDePEDIDO(){
+        Usuario usuario = dadoQueTengoUnUsuario(1L, "diego@ganic.com", "123");
+        List<Sandwich> sandwich = dadoQueTengoSandwichsSeleccionados();
+        Compra compra = generoLaCompra(1L, usuario, sandwich);
+
+    }
+
+    private void verificoQueSeHayaCanceladolaCompra(Compra compra, EstadoDeCompra estado) {
+        assertThat(compra.getEstado()).isEqualTo(estado);
+    }
+
+    private void canceloLaCompra(Usuario usuario, Compra compra, EstadoDeCompra cancelado) {
+        compra.setEstado(cancelado);
+        repo.actualizoLaCompra(compra);
+    }
+
+    private void canceloLaCompra(Usuario usuario, EstadoDeCompra cancelado) {
+
+    }
+
+    public void canceloLaCompra() {
+
     }
 
     private void comparoLaCantidadDeComprasDeUnCliente(List<Compra> listaCompra, int cantidadCompras) {
@@ -56,7 +95,7 @@ public class RepositorioCompraImpTest extends SpringTest {
     }
 
     private List<Compra> obtengoLasComprasDeUnCliente(Usuario usuario) {
-        return repo.buscarCompraPorCliente(usuario);
+        return repo.buscarCompraPorCliente(usuario.getId());
     }
 
 
@@ -77,10 +116,10 @@ public class RepositorioCompraImpTest extends SpringTest {
     }
 
     private Compra generoLaCompra(Long idCompra, Usuario usuario, List<Sandwich> sandwich) {
-        Compra compra = new Compra();
-        compra.setIdCompra(idCompra);
-        compra.setCliente(usuario);
-        compra.setDetalle(sandwich);
+        Compra compra = new Compra(usuario, sandwich);
+//        compra.setIdCompra(idCompra);
+//        compra.setCliente(usuario);
+//        compra.setDetalle(sandwich);
         session().save(compra);
         return compra;
     }

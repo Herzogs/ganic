@@ -24,18 +24,47 @@ public class Compra {
             inverseJoinColumns = @JoinColumn(name = "idSandwich"))
     private List<Sandwich> detalle;
     private LocalDateTime fecha;
+    @Column(name="estado", nullable = false, length = 15 )
+    @Enumerated(value = EnumType.STRING)
+    private EstadoDeCompra estado;
 
     public Compra(Long idCompra, Usuario cliente, List<Sandwich> detalle) {
         this.idCompra = idCompra;
         this.usuario = cliente;
         this.detalle = detalle;
         this.fecha = LocalDateTime.now();
+        this.estado=EstadoDeCompra.PEDIDO;
     }
     public Compra( Usuario cliente, List<Sandwich> detalle) {
         this.idCompra = idCompra;
         this.usuario = cliente;
         this.detalle = detalle;
         this.fecha = LocalDateTime.now();
+        this.estado=EstadoDeCompra.PEDIDO;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
+    }
+
+    public EstadoDeCompra getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoDeCompra estado) {
+        this.estado = estado;
     }
 
     public Compra() {

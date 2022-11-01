@@ -36,7 +36,8 @@ public class ServicioCompraImp implements ServicioCompra {
 
     @Override
     public List<Compra> buscarComprasPorUsuario(Long idUsuario) {
-        return null;
+
+        return repo.buscarCompraPorCliente(idUsuario);
     }
 
     @Override

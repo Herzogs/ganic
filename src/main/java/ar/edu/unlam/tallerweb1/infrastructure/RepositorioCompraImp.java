@@ -42,18 +42,25 @@ public class RepositorioCompraImp implements RepositorioCompra {
     @Override
     public List<Compra> buscarCompraPorCliente(Usuario usuario) {
         final Session session = this.sessionFactory.getCurrentSession();
-        List<Compra> lista= session.createCriteria(Compra.class)
-                .add(Restrictions.eq("usuario",usuario)).list();
+        List<Compra> lista = session.createCriteria(Compra.class)
+                .add(Restrictions.eq("usuario", usuario)).list();
         return lista;
     }
 
     @Override
     public List<Compra> buscarCompraPorCliente(Long idUsuario) {
         final Session session = this.sessionFactory.getCurrentSession();
-        List<Compra> lista= session.createCriteria(Compra.class)
-                .createAlias("usuario","usuario")
-                .add(Restrictions.eq("usuario.id",idUsuario)).list();
+        List lista = session.createCriteria(Compra.class)
+                .createAlias("usuario", "usuario")
+                .add(Restrictions.eq("usuario.id", idUsuario))
+                .list();
         return lista;
+    }
+
+    @Override
+    public void actualizoLaCompra(Compra compra) {
+        final Session session = this.sessionFactory.getCurrentSession();
+        session.update(compra);
     }
 
 
