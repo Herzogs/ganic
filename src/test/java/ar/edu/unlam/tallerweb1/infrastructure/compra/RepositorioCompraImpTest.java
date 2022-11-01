@@ -24,7 +24,7 @@ public class RepositorioCompraImpTest extends SpringTest {
     @Transactional
     public void luegoDeGenerarUnaCompraSePuedaBuscarlaPorIdCompra() {
         Usuario usuario = dadoQueTengoUnUsuario(1L, "diego@ganic.com", "123");
-        Set<Sandwich> sandwich = dadoQueTengoSandwichsSeleccionados();
+        List<Sandwich> sandwich = dadoQueTengoSandwichsSeleccionados();
         Compra compra = generoLaCompra(1L, usuario, sandwich);
         Compra buscado = buscoLaCompra(compra);
         comprueboQueMeDevuelvaLaCompra(buscado, compra);
@@ -34,8 +34,8 @@ public class RepositorioCompraImpTest extends SpringTest {
     @Transactional
     public void queSePuedaObtenerElListadoDeSandwichQueComponenLaCompra() {
         Usuario usuario = dadoQueTengoUnUsuario(1L, "diego@ganic.com", "123");
-        Set<Sandwich> sandwich = dadoQueTengoSandwichsSeleccionados();
-        Compra compra = generoLaCompra(1L, usuario, (Set<Sandwich>) sandwich);
+        List<Sandwich> sandwich = dadoQueTengoSandwichsSeleccionados();
+        Compra compra = generoLaCompra(1L, usuario, sandwich);
         Compra buscada = buscoLaCompra(compra);
         comprueboQueMeDevuelvaLaDosSandwich(buscada.getDetalle(), 2);
     }
@@ -44,9 +44,9 @@ public class RepositorioCompraImpTest extends SpringTest {
     @Transactional
     public void queSePuedanObtenerLasComprasDeUnCLienteListadoPorIdUsuario() {
         Usuario usuario = dadoQueTengoUnUsuario(1L, "diego@ganic.com", "123");
-        Set<Sandwich> sandwich = dadoQueTengoSandwichsSeleccionados();
-        Compra compra = generoLaCompra(1L, usuario, (Set<Sandwich>) sandwich);
-        Compra compra2 = generoLaCompra(2L, usuario, (Set<Sandwich>) sandwich);
+        List<Sandwich> sandwich = dadoQueTengoSandwichsSeleccionados();
+        Compra compra = generoLaCompra(1L, usuario, sandwich);
+        Compra compra2 = generoLaCompra(2L, usuario, sandwich);
         List<Compra> listaCompra = obtengoLasComprasDeUnCliente(usuario);
         comparoLaCantidadDeComprasDeUnCliente(listaCompra, 2);
     }
@@ -60,7 +60,7 @@ public class RepositorioCompraImpTest extends SpringTest {
     }
 
 
-    private void comprueboQueMeDevuelvaLaDosSandwich(Set<Sandwich> detalle, int cantidad) {
+    private void comprueboQueMeDevuelvaLaDosSandwich(List<Sandwich> detalle, int cantidad) {
         assertThat(detalle).hasSize(cantidad);
     }
 
@@ -76,7 +76,7 @@ public class RepositorioCompraImpTest extends SpringTest {
         return compra1;
     }
 
-    private Compra generoLaCompra(Long idCompra, Usuario usuario, Set<Sandwich> sandwich) {
+    private Compra generoLaCompra(Long idCompra, Usuario usuario, List<Sandwich> sandwich) {
         Compra compra = new Compra();
         compra.setIdCompra(idCompra);
         compra.setCliente(usuario);
@@ -85,8 +85,8 @@ public class RepositorioCompraImpTest extends SpringTest {
         return compra;
     }
 
-    private Set<Sandwich> dadoQueTengoSandwichsSeleccionados() {
-        Set<Sandwich> pedido = new HashSet<>();
+    private List<Sandwich> dadoQueTengoSandwichsSeleccionados() {
+        List<Sandwich> pedido = new ArrayList<>();
         Sandwich sandwich = new Sandwich();
         sandwich.setIdSandwich(1L);
         Sandwich sandwich2 = new Sandwich();

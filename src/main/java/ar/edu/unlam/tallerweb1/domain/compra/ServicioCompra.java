@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.Set;
 
 public interface ServicioCompra {
-    public void guardarCompra(Usuario usuario, Set<Sandwich> detalle);
+    public void guardarCompra(Compra compra);
     public void eliminarCompra(Long idCompra);
     public Compra buscarCompra(Long idCompra);
     public List<Compra> buscarComprasPorUsuario(Long idUsuario);
-
+    public void agregarSandwich(Sandwich sandwich);
+    public void eliminarSandwich(Sandwich sandwich);
 }
