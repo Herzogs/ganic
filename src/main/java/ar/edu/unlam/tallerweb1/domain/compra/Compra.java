@@ -14,6 +14,7 @@ public class Compra {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idCompra;
     @ManyToOne
+
     private Usuario usuario;
 
 
@@ -53,7 +54,7 @@ public class Compra {
     }
 
     public void setCliente(Usuario cliente) {
-     //   this.usuario = cliente;
+    this.usuario = cliente;
     }
 
     public Set<Sandwich> getDetalle() {

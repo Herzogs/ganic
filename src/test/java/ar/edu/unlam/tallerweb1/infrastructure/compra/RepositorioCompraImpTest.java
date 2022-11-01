@@ -9,7 +9,9 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
@@ -21,12 +23,28 @@ public class RepositorioCompraImpTest extends SpringTest {
     @Test
     @Transactional
     public void luegoDeGenerarUnaCompraSePuedaBuscarlaPorIdCompra() {
-        Usuario usuario = dadoQueTengoUnUsuario("diego@ganic.com", "123");
+        Usuario usuario = dadoQueTengoUnUsuario(1L, "diego@ganic.com", "123");
         Set<Sandwich> sandwich = dadoQueTengoSandwichsSeleccionados();
         Compra compra = generoLaCompra(1L, usuario, sandwich);
         Compra buscado = buscoLaCompra(compra);
         comprueboQueMeDevuelvaLaCompra(buscado, compra);
     }
+
+    @Test
+    @Transactional
+    public void queSePuedaObtenerElListadoDeSandwichQueComponenLaCompra() {
+        Usuario usuario = dadoQueTengoUnUsuario(1L, "diego@ganic.com", "123");
+        Set<Sandwich> sandwich = dadoQueTengoSandwichsSeleccionados();
+        Compra compra = generoLaCompra(1L, usuario, (Set<Sandwich>) sandwich);
+        Compra buscada = buscoLaCompra(compra);
+        comprueboQueMeDevuelvaLaDosSandwich(buscada.getDetalle(), 2);
+    }
+
+
+    private void comprueboQueMeDevuelvaLaDosSandwich(Set<Sandwich> detalle, int cantidad) {
+        assertThat(detalle).hasSize(cantidad);
+    }
+
 
     private void comprueboQueMeDevuelvaLaCompra(Compra buscado, Compra compra) {
         assertThat(buscado).isNotNull();
@@ -35,15 +53,17 @@ public class RepositorioCompraImpTest extends SpringTest {
     }
 
     private Compra buscoLaCompra(Compra compra) {
-        Compra compra1= repo.buscarCompra(compra.getIdCompra());
+        Compra compra1 = repo.buscarCompra(compra.getIdCompra());
         return compra1;
     }
 
     private Compra generoLaCompra(Long idCompra, Usuario usuario, Set<Sandwich> sandwich) {
-        Compra compra= new Compra();
+        Compra compra = new Compra();
         compra.setIdCompra(idCompra);
         compra.setCliente(usuario);
+        System.out.println(usuario.getId() + "El nombre del cliente");
         compra.setDetalle(sandwich);
+        repo.guardarCompra(compra);
         session().save(compra);
         return compra;
     }
@@ -59,10 +79,12 @@ public class RepositorioCompraImpTest extends SpringTest {
         return pedido;
     }
 
-    private Usuario dadoQueTengoUnUsuario(String email, String password) {
+    private Usuario dadoQueTengoUnUsuario(Long id, String email, String password) {
         Usuario nuevo = new Usuario();
+        nuevo.setId(id);
         nuevo.setEmail(email);
         nuevo.setPassword(password);
+        session().save(nuevo);
         return nuevo;
     }
 }
