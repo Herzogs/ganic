@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.delivery;
 
 import ar.edu.unlam.tallerweb1.domain.Email.Email;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.EnvioFueraDeZonaException;
+import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -38,8 +39,10 @@ public class ControladorDestino {
             return new ModelAndView("destino",model);
         }
         System.err.println(temp.getRecargo());
+        Sandwich sandwich = (Sandwich) request.getSession().getAttribute("sandwich");
+        System.err.println(sandwich);
 
-        return new ModelAndView("redirect:/exito");
+        return new ModelAndView("redirect:/pago");
     }
 
     private Float obtenerCostoEnvio(Float dist) throws EnvioFueraDeZonaException {

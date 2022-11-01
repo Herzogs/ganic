@@ -5,6 +5,7 @@ import ar.edu.unlam.tallerweb1.delivery.ControladorDeIngredientes;
 import ar.edu.unlam.tallerweb1.delivery.datosDelSandwich;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.IngredienteInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.PasoInvalidoException;
+import ar.edu.unlam.tallerweb1.domain.Sandwich.ServicioSandwich;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.ServicioDeIngrediente;
 import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
@@ -32,11 +33,14 @@ public class ControladorIngredientesTest extends SpringTest {
     private HttpServletRequest request;
     private HttpSession session;
 
+    private ServicioSandwich servicioSandwich;
+
     @Before
     public void init() {
         this.servicio = mock(ServicioDeIngrediente.class);
         this.servicioLogin = mock(ServicioLogin.class);
-        this.controladorDeIngredientes = new ControladorDeIngredientes(this.servicio,this.servicioLogin);
+        this.servicioSandwich = mock(ServicioSandwich.class);
+        this.controladorDeIngredientes = new ControladorDeIngredientes(this.servicio,this.servicioLogin,this.servicioSandwich);
         this.sandwich = new datosDelSandwich();
         this.request = mock(HttpServletRequest.class);
         this.session = mock(HttpSession.class);

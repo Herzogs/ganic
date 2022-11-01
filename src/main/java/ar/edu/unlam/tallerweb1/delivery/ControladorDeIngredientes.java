@@ -8,6 +8,8 @@ import ar.edu.unlam.tallerweb1.domain.Email.ServicioEmailImp;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.IngredienteInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.PasoInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioInvalidoException;
+import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
+import ar.edu.unlam.tallerweb1.domain.Sandwich.ServicioSandwich;
 import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,16 +37,19 @@ public class ControladorDeIngredientes {
     private ServicioEmail se;
     private datosDelSandwich sandwich;
 
+    private ServicioSandwich servicioSandwich;
+
     private Email email;
     private static final Integer MAX_PASOS_PERMITIDOS = 3;
 
     @Autowired
-    public ControladorDeIngredientes(ServicioDeIngrediente servicioDeIngrediente, ServicioLogin servicioLogin) {
+    public ControladorDeIngredientes(ServicioDeIngrediente servicioDeIngrediente, ServicioLogin servicioLogin ,ServicioSandwich servicioSandwich) {
         super();
         this.servicioDeIngrediente = servicioDeIngrediente;
         this.sandwich = new datosDelSandwich();
         this.se = new ServicioEmailImp();
         this.servicioLogin = servicioLogin;
+        this.servicioSandwich = servicioSandwich;
         this.email = new Email();
     }
 
@@ -112,18 +117,24 @@ public class ControladorDeIngredientes {
         if ( idLogeado != null) {
             ModelMap model = new ModelMap();
             List<Ingrediente> ingredientesSeleccionados = this.sandwich.getIngredientesSandwich();
-            /*if (ingredientesSeleccionados.size() <= 1) {
-                model.put("error", "Para poder seguir, debe seleccionar minimante 2 ingredientes");
-                return new ModelAndView(String.format("redirect:/generarPedido?paso=%d", paso), model);
-            }*/
             this.email.setLista(this.sandwich.getIngredientesSandwich());
             model.put("montoFinal", sandwich.getMonto());
             model.put("IngredientesQueElUsuarioSelecciono", sandwich.getIngredientesSandwich());
             request.getSession().setAttribute("email",this.email);
+            Sandwich nuevo = new Sandwich();
+            nuevo.setNombre("test");
+            nuevo.setDescripcion("test");
+            nuevo.setEsApto(this.sandwich.getIngredientesSandwich().get(0).getEsApto());
+            this.sandwich.getIngredientesSandwich().forEach(ingrediente -> nuevo.agregarIngrediente(ingrediente));
+            nuevo.setEnPromocion(false);
+            System.err.println(nuevo);
+            request.getSession().setAttribute("sandwich",nuevo);
             return new ModelAndView("confirmar", model);
         }
         return new ModelAndView("redirect:/login");
     }
+
+
 
     @RequestMapping(path = "/exito", method = RequestMethod.GET)
     public ModelAndView exito(HttpServletRequest request){
