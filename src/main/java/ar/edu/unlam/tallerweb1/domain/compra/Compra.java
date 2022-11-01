@@ -13,8 +13,7 @@ public class Compra {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idCompra;
-    @ManyToOne
-
+    @ManyToOne(fetch = FetchType.EAGER)
     private Usuario usuario;
 
 

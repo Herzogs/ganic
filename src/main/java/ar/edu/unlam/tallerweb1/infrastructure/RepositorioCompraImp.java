@@ -2,12 +2,15 @@ package ar.edu.unlam.tallerweb1.infrastructure;
 
 import ar.edu.unlam.tallerweb1.domain.compra.Compra;
 import ar.edu.unlam.tallerweb1.domain.compra.RepositorioCompra;
+import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.hibernate.FetchMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 
 @Repository
@@ -34,6 +37,14 @@ public class RepositorioCompraImp implements RepositorioCompra {
                 .add(Restrictions.eq("idCompra", idCompra))
                 .uniqueResult();
 
+    }
+
+    @Override
+    public List<Compra> buscarCompraPorCliente(Usuario usuario) {
+        final Session session = this.sessionFactory.getCurrentSession();
+        List<Compra> lista= session.createCriteria(Compra.class)
+                .add(Restrictions.eq("usuario",usuario)).list();
+        return lista;
     }
 
 

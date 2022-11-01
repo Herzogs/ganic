@@ -39,6 +39,24 @@ public class RepositorioCompraImpTest extends SpringTest {
         Compra buscada = buscoLaCompra(compra);
         comprueboQueMeDevuelvaLaDosSandwich(buscada.getDetalle(), 2);
     }
+    @Test
+    @Transactional
+    public void queSePuedanObtenerLasComprasDeUnCLiente(){
+        Usuario usuario = dadoQueTengoUnUsuario(1L, "diego@ganic.com", "123");
+        Set<Sandwich> sandwich = dadoQueTengoSandwichsSeleccionados();
+        Compra compra = generoLaCompra(1L, usuario, (Set<Sandwich>) sandwich);
+        Compra compra2 = generoLaCompra(2L, usuario, (Set<Sandwich>) sandwich);
+        List<Compra> listaCompra= obtengoLasComprasDeUnCliente(usuario);
+        comparoLaCantidadDeComprasDeUnCliente(listaCompra, 2);
+    }
+
+    private void comparoLaCantidadDeComprasDeUnCliente(List<Compra> listaCompra, int cantidadCompras) {
+        assertThat(listaCompra).hasSize(cantidadCompras);
+    }
+
+    private List<Compra> obtengoLasComprasDeUnCliente(Usuario usuario) {
+        return repo.buscarCompraPorCliente(usuario);
+    }
 
 
     private void comprueboQueMeDevuelvaLaDosSandwich(Set<Sandwich> detalle, int cantidad) {
