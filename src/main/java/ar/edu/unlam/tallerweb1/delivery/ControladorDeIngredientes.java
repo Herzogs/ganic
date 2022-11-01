@@ -112,10 +112,10 @@ public class ControladorDeIngredientes {
         if ( idLogeado != null) {
             ModelMap model = new ModelMap();
             List<Ingrediente> ingredientesSeleccionados = this.sandwich.getIngredientesSandwich();
-            if (ingredientesSeleccionados.size() <= 1) {
+            /*if (ingredientesSeleccionados.size() <= 1) {
                 model.put("error", "Para poder seguir, debe seleccionar minimante 2 ingredientes");
                 return new ModelAndView(String.format("redirect:/generarPedido?paso=%d", paso), model);
-            }
+            }*/
             this.email.setLista(this.sandwich.getIngredientesSandwich());
             model.put("montoFinal", sandwich.getMonto());
             model.put("IngredientesQueElUsuarioSelecciono", sandwich.getIngredientesSandwich());
