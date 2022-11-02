@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.domain.compra;
 
 import ar.edu.unlam.tallerweb1.SpringTest;
+import ar.edu.unlam.tallerweb1.domain.Excepciones.CompraNoEncontradaExeption;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.junit.Before;
@@ -23,7 +24,7 @@ public class ServicioCompraImpTest extends SpringTest {
     }
 
     @Test
-    public void luegoDeGenerarUnaCompraLaPuedaObtenerPorIdCompra() {
+    public void luegoDeGenerarUnaCompraLaPuedaObtenerPorIdCompra() throws CompraNoEncontradaExeption {
         Usuario usuario = dadoQueTengoUnUsuario(1L, "diego@ganic.com", "123");
         List<Sandwich> sandwich = dadoQueTengoSandwichsSeleccionados();
         Compra compra = generoLaCompra(usuario, sandwich);
@@ -32,35 +33,72 @@ public class ServicioCompraImpTest extends SpringTest {
         comparoQueLasComprasSeanIguales(compra, compraBuscada);
         verificoQueSeUseElRepo();
     }
+
+    @Test(expected = CompraNoEncontradaExeption.class)
+    public void siBuscoUnaCompraQueNoExistaMeLanceUnaExeption() throws CompraNoEncontradaExeption {
+        Long idCompraInexistente = 88L;
+        Compra inexistente = buscoUnaCompraQueNOExiste(idCompraInexistente);
+        verificoLoObtenido(inexistente.getIdCompra());
+    }
+
+
     @Test
-    public void luegoDeHaberHechoVariasComprasPuedaBuscarLasQueHizoUnCliente(){
+    public void luegoDeHaberHechoVariasComprasPuedaBuscarLasQueHizoUnCliente() throws CompraNoEncontradaExeption {
         Usuario usuario = dadoQueTengoUnUsuario(1L, "diego@ganic.com", "123");
         Usuario usuario2 = dadoQueTengoUnUsuario(2L, "messi@ganic.com", "123");
         List<Sandwich> sandwich = dadoQueTengoSandwichsSeleccionados();
         Compra compra1 = generoLaCompra(usuario, sandwich);
-        Compra compra2=generoLaCompra(usuario2, sandwich);
-        Compra compra3=generoLaCompra(usuario, sandwich);
+        Compra compra2 = generoLaCompra(usuario2, sandwich);
+        Compra compra3 = generoLaCompra(usuario, sandwich);
         guardoLaCompra(compra1);
         guardoLaCompra(compra2);
         guardoLaCompra(compra3);
         usoDeMokitoParaLaLIstaPorUsuario(usuario);
-        List<Compra> historial= buscoTodasLasComprasPorUsuario(usuario);
-        cuentoLasComprasObtenidas(historial,2);
+        List<Compra> historial = buscoTodasLasComprasPorUsuario(usuario);
+        cuentoLasComprasObtenidas(historial, 2);
+    }
+
+    @Test(expected = CompraNoEncontradaExeption.class)
+    public void enCasoDeBuscarCompraPorUsuarioQueNoTengaComprasDevuelvaUnaExepcion() throws CompraNoEncontradaExeption {
+        Usuario usuario = dadoQueTengoUnUsuario(1L, "diego@ganic.com", "123");
+        Usuario usuario2 = dadoQueTengoUnUsuario(2L, "messi@ganic.com", "123");
+        List<Sandwich> sandwich = dadoQueTengoSandwichsSeleccionados();
+        Compra compra1 = generoLaCompra(usuario, sandwich);
+        Compra compra2 = generoLaCompra(usuario, sandwich);
+        Compra compra3 = generoLaCompra(usuario, sandwich);
+        List<Compra> esperado = buscoCompraPorUsuarioInexistente(usuario2);
+
+
+    }
+
+    private List<Compra> buscoCompraPorUsuarioInexistente(Usuario usuario) throws CompraNoEncontradaExeption {
+
+        return servicioCompra.buscarComprasPorUsuario(usuario);
+    }
+
+
+    private void verificoLoObtenido(Long idCompra) {
+        assertThat(idCompra).isEqualTo(28L);
+    }
+
+    private Compra buscoUnaCompraQueNOExiste(Long idCompraInexistente) throws CompraNoEncontradaExeption {
+        return servicioCompra.buscarCompra(idCompraInexistente);
     }
 
     private void usoDeMokitoParaLaLIstaPorUsuario(Usuario usuario) {
-        List<Compra> historial= new ArrayList<>();
+        List<Compra> historial = new ArrayList<>();
         historial.add(new Compra());
         historial.add(new Compra());
-        when(repo.buscarCompraPorCliente(usuario.getId())).thenReturn(historial);
+        when(repo.buscarCompraPorCliente(usuario)).thenReturn(historial);
     }
 
     private void cuentoLasComprasObtenidas(List<Compra> historial, int cantidadDeCompras) {
         assertThat(historial).hasSize(cantidadDeCompras);
     }
 
-    private List<Compra> buscoTodasLasComprasPorUsuario(Usuario usuario) {
-        return servicioCompra.buscarComprasPorUsuario(usuario.getId());
+    private List<Compra> buscoTodasLasComprasPorUsuario(Usuario usuario) throws CompraNoEncontradaExeption {
+        return servicioCompra.buscarComprasPorUsuario(usuario);
+
     }
 
     private void guardoLaCompra(Compra compra) {
@@ -76,7 +114,7 @@ public class ServicioCompraImpTest extends SpringTest {
         assertThat(compra.getCliente().getEmail()).isEqualTo(compraBuscada.getCliente().getEmail());
     }
 
-    private Compra buscoLaCompraPorId(Long idCompra) {
+    private Compra buscoLaCompraPorId(Long idCompra) throws CompraNoEncontradaExeption {
         return servicioCompra.buscarCompra(idCompra);
     }
 

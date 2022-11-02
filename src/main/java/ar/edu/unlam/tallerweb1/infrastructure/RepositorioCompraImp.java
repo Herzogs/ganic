@@ -44,8 +44,10 @@ public class RepositorioCompraImp implements RepositorioCompra {
     @Override
     public List<Compra> buscarCompraPorCliente(Usuario usuario) {
         final Session session = this.sessionFactory.getCurrentSession();
-        List<Compra> lista = session.createCriteria(Compra.class)
-                .add(Restrictions.eq("usuario", usuario)).list();
+        List lista = session.createCriteria(Compra.class)
+                .createAlias("usuario", "usuario")
+                .add(Restrictions.eq("usuario", usuario))
+                .list();
         return lista;
     }
 

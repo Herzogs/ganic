@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.domain.compra;
 
+import ar.edu.unlam.tallerweb1.domain.Excepciones.CompraNoEncontradaExeption;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,15 +30,28 @@ public class ServicioCompraImp implements ServicioCompra {
     }
 
     @Override
-    public Compra buscarCompra(Long idCompra) {
-        return repo.buscarCompra(idCompra);
+    public Compra buscarCompra(Long idCompra) throws CompraNoEncontradaExeption {
+        Compra buscado = repo.buscarCompra(idCompra);
+        if (buscado != null) {
+            return buscado;
+        }
+        throw new CompraNoEncontradaExeption("No se pudo encontrar la compra");
 
     }
 
     @Override
-    public List<Compra> buscarComprasPorUsuario(Long idUsuario) {
+    public List<Compra> buscarComprasPorUsuario(Usuario usuario) throws CompraNoEncontradaExeption {
+        List<Compra> buscado = repo.buscarCompraPorCliente(usuario);
+        if (buscado.size() == 0) {
+            throw new CompraNoEncontradaExeption("No se pudo encontrar la compra");
 
-        return repo.buscarCompraPorCliente(idUsuario);
+        }
+        return buscado;
+    }
+
+    @Override
+    public List<Compra> listarComprasDeUsuarioPorEstado(Usuario usuario, EstadoDeCompra estado) {
+        return null;
     }
 
     @Override
