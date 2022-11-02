@@ -50,8 +50,12 @@ public class ServicioCompraImp implements ServicioCompra {
     }
 
     @Override
-    public List<Compra> listarComprasDeUsuarioPorEstado(Usuario usuario, EstadoDeCompra estado) {
-        return null;
+    public List<Compra> listarComprasDeUsuarioPorEstado(Usuario usuario, EstadoDeCompra estado) throws CompraNoEncontradaExeption {
+        List<Compra> buscado = repo.buscarPorEstado(usuario,estado);
+        if (buscado.size() == 0) {
+            throw new CompraNoEncontradaExeption("No se pudo encontrar la compra");
+        }
+        return buscado;
     }
 
     @Override

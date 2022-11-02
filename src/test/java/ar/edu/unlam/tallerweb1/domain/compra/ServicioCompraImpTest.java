@@ -67,9 +67,32 @@ public class ServicioCompraImpTest extends SpringTest {
         Compra compra2 = generoLaCompra(usuario, sandwich);
         Compra compra3 = generoLaCompra(usuario, sandwich);
         List<Compra> esperado = buscoCompraPorUsuarioInexistente(usuario2);
-
-
     }
+    @Test
+    public void luegoDeRealizarUnPedidoSePuedaObtenerLasComprasEsEstadoPedido() throws CompraNoEncontradaExeption {
+        Usuario usuario = dadoQueTengoUnUsuario(1L, "diego@ganic.com", "123");
+        List<Sandwich> sandwich = dadoQueTengoSandwichsSeleccionados();
+        Compra compra = generoLaCompra(usuario, sandwich);
+        List<Compra> pedido= buscarComprasEnEstadoPedidoPorCliente(usuario,EstadoDeCompra.PEDIDO);
+        verificoQueElPedidoSeaIgualALOComprado(compra,pedido);
+    }
+
+    private void verificoQueElPedidoSeaIgualALOComprado(Compra compra, List<Compra> pedido) {
+        assertThat(compra.getCliente().getEmail()).isEqualTo(pedido.get(0).getCliente().getEmail());
+        assertThat(compra.getDetalle().size()).isEqualTo(pedido.get(0).getDetalle().size());
+        assertThat(compra.getEstado()).isEqualTo(pedido.get(0).getEstado());
+    }
+
+    private List<Compra> buscarComprasEnEstadoPedidoPorCliente(Usuario usuario, EstadoDeCompra estado) throws CompraNoEncontradaExeption {
+        Usuario usu = dadoQueTengoUnUsuario(1L, "diego@ganic.com", "123");
+        List<Sandwich> sandwich = dadoQueTengoSandwichsSeleccionados();
+        Compra compra = generoLaCompra(usu, sandwich);
+        List<Compra> historial= new ArrayList<>();
+        historial.add(compra);
+        when(repo.buscarPorEstado(usuario,EstadoDeCompra.PEDIDO)).thenReturn(historial);
+        return servicioCompra.listarComprasDeUsuarioPorEstado(usuario,estado);
+    }
+
 
     private List<Compra> buscoCompraPorUsuarioInexistente(Usuario usuario) throws CompraNoEncontradaExeption {
 

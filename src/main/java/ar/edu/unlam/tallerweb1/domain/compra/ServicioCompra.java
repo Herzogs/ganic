@@ -12,7 +12,7 @@ public interface ServicioCompra {
     public void eliminarCompra(Long idCompra);
     public Compra buscarCompra(Long idCompra) throws CompraNoEncontradaExeption;
     public List<Compra> buscarComprasPorUsuario(Usuario idUsuario) throws CompraNoEncontradaExeption;
-    public List<Compra> listarComprasDeUsuarioPorEstado(Usuario usuario, EstadoDeCompra estado);
+    public List<Compra> listarComprasDeUsuarioPorEstado(Usuario usuario, EstadoDeCompra estado) throws CompraNoEncontradaExeption;
 
     public void agregarSandwich(Sandwich sandwich);
     public void eliminarSandwich(Sandwich sandwich);
