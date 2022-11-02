@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.infrastructure;
 
 import ar.edu.unlam.tallerweb1.domain.compra.Compra;
+import ar.edu.unlam.tallerweb1.domain.compra.EstadoDeCompra;
 import ar.edu.unlam.tallerweb1.domain.compra.RepositorioCompra;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.hibernate.FetchMode;
@@ -10,6 +11,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -61,6 +63,28 @@ public class RepositorioCompraImp implements RepositorioCompra {
     public void actualizoLaCompra(Compra compra) {
         final Session session = this.sessionFactory.getCurrentSession();
         session.update(compra);
+    }
+
+    @Override
+    public List<Compra> buscarPorEstado(Usuario usuario, EstadoDeCompra estado) {
+        final Session session = this.sessionFactory.getCurrentSession();
+        List lista = session.createCriteria(Compra.class)
+                .createAlias("usuario", "usuario")
+                .add(Restrictions.eq("usuario.id", usuario.getId()))
+                .add(Restrictions.eq("estado", estado))
+                .list();
+        return lista;
+    }
+
+    @Override
+    public List<Compra> buscarPorEstado(Long idUsuario, EstadoDeCompra estado) {
+        final Session session = this.sessionFactory.getCurrentSession();
+        List lista = session.createCriteria(Compra.class)
+                .createAlias("usuario", "usuario")
+                .add(Restrictions.eq("usuario.id", idUsuario))
+                .add(Restrictions.eq("estado", estado))
+                .list();
+        return lista;
     }
 
 

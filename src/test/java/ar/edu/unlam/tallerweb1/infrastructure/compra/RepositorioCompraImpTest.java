@@ -11,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
@@ -64,13 +62,25 @@ public class RepositorioCompraImpTest extends SpringTest {
         verificoQueSeHayaCanceladolaCompra(compra, EstadoDeCompra.CANCELADO);
 
     }
+
     @Test
     @Transactional
-    public void dadoQueRealiceUnPedidoQueLoPedidoPuedaVerLosQueEstanEnEstadoDePEDIDO(){
+    public void dadoQueRealiceUnPedidoPuedaVerLosQueEstanEnEstadoDePEDIDO() {
         Usuario usuario = dadoQueTengoUnUsuario(1L, "diego@ganic.com", "123");
         List<Sandwich> sandwich = dadoQueTengoSandwichsSeleccionados();
         Compra compra = generoLaCompra(1L, usuario, sandwich);
+        List<Compra> miPedido = buscoLaCompraPorUsuarioYEstado(usuario, EstadoDeCompra.PEDIDO);
+        verificoQueElPedidoSeaCorrecto(miPedido, sandwich);
+    }
 
+    private void verificoQueElPedidoSeaCorrecto(List<Compra> miPedido, List<Sandwich> sandwich) {
+        assertThat(miPedido.get(0).getDetalle().size()).isEqualTo(sandwich.size());
+        assertThat(miPedido.get(0).getDetalle().get(0)).isEqualTo(sandwich.get(0));
+    }
+
+    private List<Compra> buscoLaCompraPorUsuarioYEstado(Usuario usuario, EstadoDeCompra estado) {
+        List<Compra> lista = repo.buscarPorEstado(usuario, estado);
+        return lista;
     }
 
     private void verificoQueSeHayaCanceladolaCompra(Compra compra, EstadoDeCompra estado) {
@@ -82,20 +92,13 @@ public class RepositorioCompraImpTest extends SpringTest {
         repo.actualizoLaCompra(compra);
     }
 
-    private void canceloLaCompra(Usuario usuario, EstadoDeCompra cancelado) {
-
-    }
-
-    public void canceloLaCompra() {
-
-    }
 
     private void comparoLaCantidadDeComprasDeUnCliente(List<Compra> listaCompra, int cantidadCompras) {
         assertThat(listaCompra).hasSize(cantidadCompras);
     }
 
     private List<Compra> obtengoLasComprasDeUnCliente(Usuario usuario) {
-        return repo.buscarCompraPorCliente(usuario.getId());
+        return repo.buscarCompraPorCliente(usuario);
     }
 
 
@@ -117,9 +120,6 @@ public class RepositorioCompraImpTest extends SpringTest {
 
     private Compra generoLaCompra(Long idCompra, Usuario usuario, List<Sandwich> sandwich) {
         Compra compra = new Compra(usuario, sandwich);
-//        compra.setIdCompra(idCompra);
-//        compra.setCliente(usuario);
-//        compra.setDetalle(sandwich);
         session().save(compra);
         return compra;
     }

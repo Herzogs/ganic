@@ -25,7 +25,7 @@ public class Compra {
     private List<Sandwich> detalle;
     private LocalDateTime fecha;
     @Column(name="estado", nullable = false, length = 15 )
-    @Enumerated(value = EnumType.STRING)
+    @Enumerated( value = EnumType.STRING)
     private EstadoDeCompra estado;
 
     public Compra(Long idCompra, Usuario cliente, List<Sandwich> detalle) {
