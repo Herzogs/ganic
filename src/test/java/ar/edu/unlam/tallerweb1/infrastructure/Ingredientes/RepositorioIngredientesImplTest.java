@@ -84,7 +84,6 @@ public class RepositorioIngredientesImplTest extends SpringTest {
 
     @Test @Transactional
     public void prueboQueAlBuscarUnaListaDeIngredientesConAptitudSinRestriccionMeRetorneAlgunValor(){
-
         List<Ingrediente> valorEsperado = dadoQueTengoEstosIngredientesDeTipoSinRestriccionEnLaBaseDeDatos();
         entoncesGuardoLaListaDeIngredientesEnLaBaseDeDatos(valorEsperado);
         List<Ingrediente> valorObtenido = entoncesLeDigoAlRepositorioQueMeTraigaTodosLosIngredientesQueNoTenganRestriccion();
