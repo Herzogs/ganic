@@ -102,12 +102,13 @@ public class ControladorSandwich {
             nuevo.setUser(cliente);
             nuevo.setMetodoPago("Pago En Efectivo");
             nuevo.setLista(this.servicioSandwich.obtenerLosIngredientesDeUnSandwich(idSandwich));
+            request.getSession().setAttribute("SANDWICHELEGIDO",idSandwich);
             this.servicioEmail.sendEmail(nuevo,"Envio De Pedido");
             modelo.put("msg","Se ha enviado el email de confirmación");
         } catch (UsuarioInvalidoException | SandwichNoExistenteException e) {
             modelo.put("error", "a ocurrido un error en el proceso de envio");
         }
-        return new ModelAndView("alerta_exitosa",modelo);
+        return new ModelAndView("redirect:/pago");
     }
 
     private List<Ingrediente> convertirSetToList(Set<Ingrediente> ing){

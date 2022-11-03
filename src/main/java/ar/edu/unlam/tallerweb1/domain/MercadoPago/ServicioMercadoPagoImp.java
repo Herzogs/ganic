@@ -34,7 +34,6 @@ public class ServicioMercadoPagoImp implements ServicioMercadoPago {
     public Preference generarPago(Long sandId) {
         // Ac� va la clave privada(Access Token) que se genera en la cuenta de MercadoPago del vendedor
         MercadoPagoConfig.setAccessToken("TEST-7774580668311517-110115-54337fccea4637f92b55af7baebea669-97526199");
-        System.err.println("HOLISSSSSSSSSSSSSSSSSSS");
         Sandwich sandwich = this.repositorioSandwich.obtenerSandwichPorId(sandId);
         // Crea datos del cliente
         PreferenceClient client = new PreferenceClient();
@@ -49,7 +48,6 @@ public class ServicioMercadoPagoImp implements ServicioMercadoPago {
                         .build();
 
         items.add(item);
-        System.err.println("HOLISSSSSSSSSSSSSSSSSSS2");
 		/* Urls propias de mi app en spring a las que va a
 		redireccionar despues del pago si es exitoso o no */
         PreferenceBackUrlsRequest backUrls =
@@ -61,10 +59,9 @@ public class ServicioMercadoPagoImp implements ServicioMercadoPago {
         // Genera la petici�n para la preferencia
         PreferenceRequest request = PreferenceRequest.builder()
                 .items(items)
-               /* .backUrls(backUrls)
-                .externalReference("sandId")*/
+                .backUrls(backUrls)
+                .externalReference("sandId")
                 .build();
-        System.err.println("HOLISSSSSSSSSSSSSSSSSSS3");
 
         Preference preference = null;
 
@@ -74,8 +71,9 @@ public class ServicioMercadoPagoImp implements ServicioMercadoPago {
 			 de la preferencia. Despu�s desde el frontend se genera el bot�n del pago
 			 con ese id de preferencia. Con eso redirigo al usuario a un sitio de mercado
 			 pago para que pague con su tarjeta el item solicitado */
-            System.err.println(preference);
+
             preference = client.create(request);
+            System.err.println("HOLI" + preference);
 
 
         } catch (MPException | MPApiException e) {

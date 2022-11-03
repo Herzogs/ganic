@@ -47,16 +47,15 @@ public class ControladorPago {
     @RequestMapping(path = "/pago", method = RequestMethod.GET)
     public ModelAndView pagarSandwich (HttpServletRequest request){
         Long idCliente = (Long) request.getSession().getAttribute("id");
-        Sandwich sandwichGuardado = (Sandwich) request.getSession().getAttribute("sandwich");
-        System.err.println(sandwichGuardado);
+        Long idSand = (Long) request.getSession().getAttribute("SANDWICHELEGIDO");
+        System.err.println(idSand);
         Preference preference = null;
         Usuario us = null;
         ModelMap modelo = new ModelMap();
         try{
             us = this.servicioLogin.consultarPorID(idCliente);
 
-            this.servicioSandwich.guardarSandwich(sandwichGuardado);
-            preference  = this.servicioMercadoPago.generarPago(sandwichGuardado.getIdSandwich());
+            preference  = this.servicioMercadoPago.generarPago(idSand);
             modelo.put("preference", preference);
         }catch (UsuarioInvalidoException e) {
             throw new RuntimeException(e);
@@ -65,8 +64,8 @@ public class ControladorPago {
     }
 
 
-    @RequestMapping(path = "/payment/success/{alquilerId}", method = RequestMethod.GET)
-    public ModelAndView success(@PathVariable("alquilerId") Long alquilerId, RedirectAttributes redirectAttributes) {
+    @RequestMapping(path = "/payment/success/{sandId}", method = RequestMethod.GET)
+    public ModelAndView success(@PathVariable("sandId") Long alquilerId, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("mensaje", "Pago exitoso");
         return new ModelAndView("redirect:/homeLogeado");
     }
