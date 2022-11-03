@@ -51,7 +51,7 @@ public class ServicioCompraImp implements ServicioCompra {
 
     @Override
     public List<Compra> listarComprasDeUsuarioPorEstado(Usuario usuario, EstadoDeCompra estado) throws CompraNoEncontradaExeption {
-        List<Compra> buscado = repo.buscarPorEstado(usuario,estado);
+        List<Compra> buscado = repo.buscarPorEstado(usuario, estado);
         if (buscado.size() == 0) {
             throw new CompraNoEncontradaExeption("No se pudo encontrar la compra");
         }
@@ -64,13 +64,4 @@ public class ServicioCompraImp implements ServicioCompra {
         this.repo.actualizarCompra(compra);
     }
 
-    @Override
-    public void agregarSandwich(Sandwich sandwich) {
-
-    }
-
-    @Override
-    public void eliminarSandwich(Sandwich sandwich) {
-
-    }
 }

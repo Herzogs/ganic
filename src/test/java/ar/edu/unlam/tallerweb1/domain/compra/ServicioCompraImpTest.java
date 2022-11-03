@@ -6,10 +6,8 @@ import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.junit.Before;
 import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -68,22 +66,24 @@ public class ServicioCompraImpTest extends SpringTest {
         Compra compra3 = generoLaCompra(usuario, sandwich);
         List<Compra> esperado = buscoCompraPorUsuarioInexistente(usuario2);
     }
+
     @Test
     public void luegoDeRealizarUnPedidoSePuedaObtenerLasComprasEsEstadoPedido() throws CompraNoEncontradaExeption {
         Usuario usuario = dadoQueTengoUnUsuario(1L, "diego@ganic.com", "123");
         List<Sandwich> sandwich = dadoQueTengoSandwichsSeleccionados();
         Compra compra = generoLaCompra(usuario, sandwich);
-        List<Compra> pedido= buscarComprasEnEstadoPedidoPorCliente(usuario,EstadoDeCompra.PEDIDO);
-        verificoQueElPedidoSeaIgualALOComprado(compra,pedido);
+        List<Compra> pedido = buscarComprasEnEstadoPedidoPorCliente(usuario, EstadoDeCompra.PEDIDO);
+        verificoQueElPedidoSeaIgualALOComprado(compra, pedido);
     }
+
     @Test
     public void queLuegoDeHAcerUnaCompraLaPUedaCancelarAntesQuePase5Minutos() throws CompraNoEncontradaExeption {
         Usuario usuario = dadoQueTengoUnUsuario(1L, "diego@ganic.com", "123");
         List<Sandwich> sandwich = dadoQueTengoSandwichsSeleccionados();
         Compra compra = generoLaCompra(usuario, sandwich);
-        Compra recienPedida=buscoLaCompraPorId(compra.getIdCompra());
+        Compra recienPedida = buscoLaCompraPorId(compra.getIdCompra());
         canceloLaCompra(compra);
-       verificoQueLaCompraSeHayaCancelador(compra, EstadoDeCompra.CANCELADO);
+        verificoQueLaCompraSeHayaCancelador(compra, EstadoDeCompra.CANCELADO);
     }
 
     private void verificoQueLaCompraSeHayaCancelador(Compra compra, EstadoDeCompra cancelado) {
@@ -105,15 +105,13 @@ public class ServicioCompraImpTest extends SpringTest {
         Usuario usu = dadoQueTengoUnUsuario(1L, "diego@ganic.com", "123");
         List<Sandwich> sandwich = dadoQueTengoSandwichsSeleccionados();
         Compra compra = generoLaCompra(usu, sandwich);
-        List<Compra> historial= new ArrayList<>();
+        List<Compra> historial = new ArrayList<>();
         historial.add(compra);
-        when(repo.buscarPorEstado(usuario,EstadoDeCompra.PEDIDO)).thenReturn(historial);
-        return servicioCompra.listarComprasDeUsuarioPorEstado(usuario,estado);
+        when(repo.buscarPorEstado(usuario, EstadoDeCompra.PEDIDO)).thenReturn(historial);
+        return servicioCompra.listarComprasDeUsuarioPorEstado(usuario, estado);
     }
 
-
     private List<Compra> buscoCompraPorUsuarioInexistente(Usuario usuario) throws CompraNoEncontradaExeption {
-
         return servicioCompra.buscarComprasPorUsuario(usuario);
     }
 
