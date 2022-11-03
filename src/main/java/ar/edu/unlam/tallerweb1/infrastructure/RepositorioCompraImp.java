@@ -79,6 +79,11 @@ public class RepositorioCompraImp implements RepositorioCompra {
     }
 
     @Override
+    public void actualizarCompra(Compra compra) {
+        this.sessionFactory.getCurrentSession().update(compra);
+    }
+
+    @Override
     public List<Compra> buscarPorEstado(Long idUsuario, EstadoDeCompra estado) {
         final Session session = this.sessionFactory.getCurrentSession();
         List lista = session.createCriteria(Compra.class)

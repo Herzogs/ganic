@@ -59,6 +59,12 @@ public class ServicioCompraImp implements ServicioCompra {
     }
 
     @Override
+    public void cancelarCompra(Compra compra, EstadoDeCompra estadoDeCompra) {
+        compra.setEstado(estadoDeCompra);
+        this.repo.actualizarCompra(compra);
+    }
+
+    @Override
     public void agregarSandwich(Sandwich sandwich) {
 
     }

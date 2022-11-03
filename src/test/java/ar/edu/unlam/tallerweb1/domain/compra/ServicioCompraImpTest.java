@@ -76,6 +76,24 @@ public class ServicioCompraImpTest extends SpringTest {
         List<Compra> pedido= buscarComprasEnEstadoPedidoPorCliente(usuario,EstadoDeCompra.PEDIDO);
         verificoQueElPedidoSeaIgualALOComprado(compra,pedido);
     }
+    @Test
+    public void queLuegoDeHAcerUnaCompraLaPUedaCancelarAntesQuePase5Minutos() throws CompraNoEncontradaExeption {
+        Usuario usuario = dadoQueTengoUnUsuario(1L, "diego@ganic.com", "123");
+        List<Sandwich> sandwich = dadoQueTengoSandwichsSeleccionados();
+        Compra compra = generoLaCompra(usuario, sandwich);
+        Compra recienPedida=buscoLaCompraPorId(compra.getIdCompra());
+        canceloLaCompra(compra);
+       verificoQueLaCompraSeHayaCancelador(compra, EstadoDeCompra.CANCELADO);
+    }
+
+    private void verificoQueLaCompraSeHayaCancelador(Compra compra, EstadoDeCompra cancelado) {
+        verify(repo).actualizarCompra(any());
+        assertThat(compra.getEstado()).isEqualTo(cancelado);
+    }
+
+    private void canceloLaCompra(Compra compra) {
+        servicioCompra.cancelarCompra(compra, EstadoDeCompra.CANCELADO);
+    }
 
     private void verificoQueElPedidoSeaIgualALOComprado(Compra compra, List<Compra> pedido) {
         assertThat(compra.getCliente().getEmail()).isEqualTo(pedido.get(0).getCliente().getEmail());

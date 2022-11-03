@@ -20,6 +20,7 @@ public interface RepositorioCompra {
     public void actualizoLaCompra(Compra compra);
 
     public List<Compra> buscarPorEstado(Usuario usuario, EstadoDeCompra estado);
+    public void actualizarCompra(Compra compra);
 
     public List<Compra> buscarPorEstado(Long idUsuario, EstadoDeCompra estado);
 }
