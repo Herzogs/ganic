@@ -94,7 +94,7 @@
     // Agrega credenciales de SDK
     // Acá va la Public Key de la cuenta de mercadopago que voy a usar como
     // vendedor
-    const mp = new MercadoPago("TEST-f1370bf5-0b83-467e-9c19-d87e78137ecd", {
+    const mp = new MercadoPago("APP_USR-72e4431e-4d94-4c80-b090-08f2363302bb", {
         locale : "es-AR",
     });
     // Inicializa el checkout

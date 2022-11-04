@@ -45,34 +45,21 @@ public class ControladorPago {
     }
 
     @RequestMapping(path = "/pago", method = RequestMethod.GET)
-    public ModelAndView pagarSandwich (HttpServletRequest request){
+    public ModelAndView pagarSandwich (HttpServletRequest request) {
         Long idCliente = (Long) request.getSession().getAttribute("id");
         Long idSand = (Long) request.getSession().getAttribute("SANDWICHELEGIDO");
         System.err.println(idSand);
         Preference preference = null;
         Usuario us = null;
         ModelMap modelo = new ModelMap();
-        try{
+        try {
             us = this.servicioLogin.consultarPorID(idCliente);
 
-            preference  = this.servicioMercadoPago.generarPago(idSand);
+            preference = this.servicioMercadoPago.generarPago(idSand);
             modelo.put("preference", preference);
-        }catch (UsuarioInvalidoException e) {
+        } catch (UsuarioInvalidoException e) {
             throw new RuntimeException(e);
         }
         return new ModelAndView("pago", modelo);
-    }
-
-
-    @RequestMapping(path = "/payment/success/{sandId}", method = RequestMethod.GET)
-    public ModelAndView success(@PathVariable("sandId") Long alquilerId, RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("mensaje", "Pago exitoso");
-        return new ModelAndView("redirect:/homeLogeado");
-    }
-
-    @RequestMapping(path = "/payment/failure", method = RequestMethod.GET)
-    public ModelAndView failure(RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("error", "No se pudo comprobar el pago. Intente nuevamente más tarde");
-        return new ModelAndView("redirect:/homeLogeado");
     }
 }

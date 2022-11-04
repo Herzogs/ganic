@@ -33,7 +33,7 @@ public class ServicioMercadoPagoImp implements ServicioMercadoPago {
     @Override
     public Preference generarPago(Long sandId) {
         // Ac� va la clave privada(Access Token) que se genera en la cuenta de MercadoPago del vendedor
-        MercadoPagoConfig.setAccessToken("TEST-7774580668311517-110115-54337fccea4637f92b55af7baebea669-97526199");
+        MercadoPagoConfig.setAccessToken("APP_USR-7774580668311517-110115-cdcfe731c5f7fae554a7073a2fbe2f54-97526199");
         Sandwich sandwich = this.repositorioSandwich.obtenerSandwichPorId(sandId);
         // Crea datos del cliente
         PreferenceClient client = new PreferenceClient();
@@ -44,6 +44,7 @@ public class ServicioMercadoPagoImp implements ServicioMercadoPago {
                 PreferenceItemRequest.builder()
                         .title(sandwich.getNombre())
                         .quantity(1)
+                        .currencyId("ARS")
                         .unitPrice(new BigDecimal(this.obtenerMonto(sandwich.getIngrediente())))
                         .build();
 
@@ -52,8 +53,8 @@ public class ServicioMercadoPagoImp implements ServicioMercadoPago {
 		redireccionar despues del pago si es exitoso o no */
         PreferenceBackUrlsRequest backUrls =
                 PreferenceBackUrlsRequest.builder()
-                        .success("http://localhost:8080/proyecto-limpio-spring/payment/success/"+sandId)
-                        .failure("http://localhost:8080/proyecto-limpio-spring/payment/failure")
+                        .success("http://localhost:8080/proyecto-limpio-spring_war_exploded/alerta_exitosa")
+                        .failure("http://localhost:8080/proyecto-limpio-spring_war_exploded/alerta_exitosa")
                         .build();
 
         // Genera la petici�n para la preferencia
@@ -73,8 +74,6 @@ public class ServicioMercadoPagoImp implements ServicioMercadoPago {
 			 pago para que pague con su tarjeta el item solicitado */
 
             preference = client.create(request);
-            System.err.println("HOLI" + preference);
-
 
         } catch (MPException | MPApiException e) {
             e.printStackTrace();
