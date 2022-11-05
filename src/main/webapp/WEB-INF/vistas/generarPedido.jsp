@@ -51,16 +51,16 @@
                             <button class="btn btn-primary ms-2" Type="Submit">Filtrar</button>
                     </form:form>
 
-                <c:forEach var="pan" items="${ListaDePanes}" >
+                <c:forEach var="producto" items="${ListaDeProductos}" >
                     <div class="col-6">
                         <div class="card">
                             <div class="card-header bg-dark text-white">
-                                    ${pan.nombre}
+                                    ${producto.nombre}
                             </div>
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item">${pan.detalle}</li>
-                                <li class="list-group-item"><span class="text-primary">Precio:</span> ${pan.precio}</li>
-                                <li class="list-group-item"><a href="agregarIngrediente?id=${pan.idIngrediente}&paso=${paso}" class="btn btn-success px-3 my-3">Agregar</a></li>
+                                <li class="list-group-item">${producto.detalle}</li>
+                                <li class="list-group-item"><span class="text-primary">Precio:</span> ${producto.precio}</li>
+                                <li class="list-group-item"><a href="agregarIngrediente?id=${producto.idIngrediente}&paso=${paso}" class="btn btn-success px-3 my-3">Agregar</a></li>
                             </ul>
                         </div>
                     </div>

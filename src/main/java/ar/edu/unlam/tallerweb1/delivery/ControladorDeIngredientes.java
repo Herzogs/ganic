@@ -50,13 +50,9 @@ public class ControladorDeIngredientes {
 
     @RequestMapping(path = "/ingredientes", method = RequestMethod.GET)
     public ModelAndView ingredientes() {
-
         ModelMap model = new ModelMap();
-
         List<Ingrediente> ingrediente = servicioDeIngrediente.obtenerTodosLosIngredientes();
-
         model.put("ingredientes", ingrediente);
-
         return new ModelAndView("ingredientes", model);
 
     }
@@ -68,8 +64,7 @@ public class ControladorDeIngredientes {
         List<Ingrediente> lista = null;
         try{
             lista = this.servicioDeIngrediente.obtenerIngredientesFiltradoPorPasoYPreferencia(paso,pref);
-
-            mod.put("ListaDePanes", lista);
+            mod.put("ListaDeProductos", lista);
             mod.put("paso", paso);
             mod.put("formPref", new FormularioPreferencia());
         }catch(PasoInvalidoException e) {
@@ -94,7 +89,6 @@ public class ControladorDeIngredientes {
         Integer nuevoPaso=1;
         try {
             ing = this.servicioDeIngrediente.obtenerIngredientePorId(idIng);
-
             Integer paso = ing.getPaso();
             this.sandwich.cargarIngredienteAlSandwich(ing);
             nuevoPaso = (paso < ControladorDeIngredientes.MAX_PASOS_PERMITIDOS) ? paso + 1 : paso;
