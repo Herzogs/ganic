@@ -15,5 +15,5 @@ public interface ServicioCompra {
     public List<Compra> listarComprasDeUsuarioPorEstado(Usuario usuario, EstadoDeCompra estado) throws CompraNoEncontradaExeption;
     public void cancelarCompra(Compra compra, EstadoDeCompra estadoDeCompra);
 
-
+    public List<Compra> listarComprasPorEstado(EstadoDeCompra estadoDeCompra);
 }

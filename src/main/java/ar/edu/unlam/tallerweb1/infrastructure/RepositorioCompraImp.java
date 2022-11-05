@@ -99,4 +99,12 @@ public class RepositorioCompraImp implements RepositorioCompra {
     public void guardarCompra(Compra compra) {
         sessionFactory.getCurrentSession().save(compra);
     }
+
+    @Override
+    public List<Compra> obtenerCompraPorEstado(EstadoDeCompra estado) {
+        final Session session = this.sessionFactory.getCurrentSession();
+        return session.createCriteria(Compra.class)
+                .add(Restrictions.eq("estado", estado))
+                .list();
+    }
 }

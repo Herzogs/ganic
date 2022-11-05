@@ -64,4 +64,8 @@ public class ServicioCompraImp implements ServicioCompra {
         this.repo.actualizarCompra(compra);
     }
 
+    @Override
+    public List<Compra> listarComprasPorEstado(EstadoDeCompra estadoDeCompra) {
+        return this.repo.obtenerCompraPorEstado(estadoDeCompra);
+    }
 }
