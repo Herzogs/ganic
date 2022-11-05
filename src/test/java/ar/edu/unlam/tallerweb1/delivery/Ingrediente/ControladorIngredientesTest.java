@@ -152,13 +152,13 @@ public class ControladorIngredientesTest extends SpringTest {
         assertThat(model.getModelMap().get("IngredientesQueElUsuarioSelecciono")).isEqualTo(dadoQueTengoUnaNuevaListaDeIngredientesSeleccionados());
     }
 
-    @Test
+    /*@Test
     public void cuandoSeleccioneUnaCantidadInsuficienteDeIngredientesYQuieraConfirmarMeRedirijaALaVistaDeLPrimerIngredienteSiEstoyLogeado() {
         String vistaEsperada = "redirect:/generarPedido?paso=1";
         cuandoLePidoAlHttpServletRequestQueMeTraigaElId();
         ModelAndView model = cuandoElControladorVerifiqueQueNoSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(1, this.request);
         entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model, vistaEsperada);
-    }
+    }*/
 
     @Test
     public void cuandoSeleccioneUnaCantidadSuficienteDeIngredientesYQuieraConfirmarMeRedirijaALaVistaDeConfirmacion() {

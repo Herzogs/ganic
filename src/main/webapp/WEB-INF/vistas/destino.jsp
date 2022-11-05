@@ -34,7 +34,7 @@
             <div class="text-center">
                 <a href="home">Home</a>
                 <a href="ingredientes">Menu</a>
-                <a href="home"><img src="img/ganiclogo.png" class="img-fluid logo_style" alt="Logo"></a>
+                <a href="home"><img src="${pageContext.request.contextPath}/img/ganiclogo.png" class="img-fluid logo_style" alt="Logo"></a>
                 <a href="contacto">Contacto</a>
                 <a href="nosotros">Nosotros</a>
             </div>
@@ -47,12 +47,17 @@
                 <div class="col-12">
                     <h1>Elija su destino</h1>
                     <div id="map" class="map"></div>
-                    <p id="cargo"></p>
-                    <c:set var="${cargo}" scope="session" value="" />
-                    <h4 class="pb-3">Confirmar pago</h4>
+                    <c:if test="${not empty msg}">
+                        <h4><span>${msg}</span></h4>
+                    </c:if>
+                    <form method="get" action="seleccionarDestino">
+                        <input name="dist" id="dist" type="hidden">
+                        <h4 class="pb-3">Confirmar pago</h4>
+                        <button class="btn btn-success px-5 mb-5" type="submit">Confirmar Destino</button>
+                        <div><a href="restablecer" class="btn btn-primary px-5 my-5">Volver al Home</a></div>
+                    </form>
 
-                    <a href="seleccionarDestino?distancia=cargo" class="btn btn-success px-5 mb-5">Confirmar Metodo Pago</a>
-                    <div><a href="restablecer" class="btn btn-primary px-5 my-5">Volver al Home</a></div>
+
                 </div>
             </div>
         </div>
