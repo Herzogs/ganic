@@ -29,6 +29,7 @@ public class ControladorDestino {
         try {
            temp.setRecargo(obtenerCostoEnvio(distancia));
            request.getSession().setAttribute("email",temp);
+
        } catch (EnvioFueraDeZonaException e) {
            model.put("msg","Fuera De rango de Envio");
            return new ModelAndView("redirect:/destino",model);

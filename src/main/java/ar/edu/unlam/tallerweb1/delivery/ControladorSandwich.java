@@ -75,10 +75,12 @@ public class ControladorSandwich {
         ModelMap model = new ModelMap();
         Sandwich sandwichObtenido = null;
         Long idLogeado = (Long) request.getSession().getAttribute("id");
+
         if(idLogeado == null)
             return new ModelAndView("redirect:/login");
         try{
             sandwichObtenido = this.servicioSandwich.obtenerSandwichPorId(idSandwich);
+            request.getSession().setAttribute("sandwichElegido",sandwichObtenido);
             System.err.println(this.convertirSetToList(sandwichObtenido.getIngrediente()));
             model.put("IngredientesDelSandwich",this.convertirSetToList(sandwichObtenido.getIngrediente()));
             model.put("nombre",sandwichObtenido.getNombre());
