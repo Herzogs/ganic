@@ -4,11 +4,11 @@ import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 
 import java.util.ArrayList;
 import java.util.List;
-public class datosDelSandwich {
+public class DatosDelSandwich {
     private List<Ingrediente> ingredientesSandwich;
     private float monto;
 
-    public datosDelSandwich() {
+    public DatosDelSandwich() {
         this.ingredientesSandwich = new ArrayList<>();
         this.monto = 0.0F;
 

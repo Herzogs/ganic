@@ -13,7 +13,6 @@ import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -33,7 +32,7 @@ public class ControladorDeIngredientes {
     private ServicioDeIngrediente servicioDeIngrediente;
     private ServicioLogin servicioLogin;
     private ServicioEmail se;
-    private datosDelSandwich sandwich;
+    private DatosDelSandwich sandwich;
 
     private Email email;
     private static final Integer MAX_PASOS_PERMITIDOS = 3;
@@ -42,7 +41,7 @@ public class ControladorDeIngredientes {
     public ControladorDeIngredientes(ServicioDeIngrediente servicioDeIngrediente, ServicioLogin servicioLogin) {
         super();
         this.servicioDeIngrediente = servicioDeIngrediente;
-        this.sandwich = new datosDelSandwich();
+        this.sandwich = new DatosDelSandwich();
         this.se = new ServicioEmailImp();
         this.servicioLogin = servicioLogin;
         this.email = new Email();
@@ -146,7 +145,7 @@ public class ControladorDeIngredientes {
         return new ModelAndView("redirect:/home");
     }
 
-    public datosDelSandwich getSandwich() {
+    public DatosDelSandwich getSandwich() {
         return sandwich;
     }
 
