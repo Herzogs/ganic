@@ -30,7 +30,7 @@
         <div class="row justify-content-center my-5">
             <div class="col-6">
                 <form:form action="verificarDatos" method="POST" modelAttribute="datosUsuario">
-                    <h3 class="text-center">Verificar datos del perfil</h3>
+                    <h3 class="text-center">Actualizar datos del perfil</h3>
                     <hr class="mb-4"><br>
                     <label class="form-label">Nombre</label>
                     <form:input path="nombre" type="text" id="nombre" class="form-control" required="required" />

@@ -36,43 +36,48 @@ public class ControladorHomeTest {
     public void queAlSeleccionarElLinkNosotrosNosEnvieANosotros() {
         String vistaEsperada = dadoQueEsperoLaVistaLlamada("nosotros");
         ModelAndView model = cuandoEjecuteElMetodoIrANosotros();
-        assertThat(model.getViewName()).isEqualTo(vistaEsperada);
+        entoncesVerificoQueSeanIguales(vistaEsperada,model);
     }
 
     @Test
     public void queAlSeleccionarElLinkContactoNosEnvieAContacto() {
         String vistaEsperada = dadoQueEsperoLaVistaLlamada("contacto");
         ModelAndView model = cuandoEjecuteElMetodoIrAContacto();
-        assertThat(model.getViewName()).isEqualTo(vistaEsperada);
+        entoncesVerificoQueSeanIguales(vistaEsperada,model);
     }
-
 
     @Test
     public void queAlSeleccionarElLinkSalirDelPerfilMeEnvieAlHome() {
         String vistaEsperada = dadoQueEsperoLaVistaLlamada("redirect:/login");
-
-        this.request.getSession().setAttribute("id",null);
-        ModelAndView model = this.controladorDeHome.salirSession(request);
-
-        assertThat(model.getViewName()).isEqualTo(vistaEsperada);
+        ModelAndView model = cuandoEjecuteElMetodoSalirSession();
+        entoncesVerificoQueSeanIguales(vistaEsperada,model);
     }
 
 
     private String dadoQueEsperoLaVistaLlamada(String esperada) {
         return esperada;
     }
+
     private void entoncesVerificoQueSeanIguales(String vista, ModelAndView model) {
         assertThat(model.getViewName()).isEqualTo(vista);
     }
+
     private ModelAndView cuandoEjecuteElMetodoIrAlInicio() {
         return this.controladorDeHome.inicio();
     }
+
     private ModelAndView cuandoEjecuteElMetodoIrANosotros() {
         return this.controladorDeHome.nosotros();
     }
+
     private ModelAndView cuandoEjecuteElMetodoIrAContacto() {
         return this.controladorDeHome.contacto();
     }
 
+    private ModelAndView cuandoEjecuteElMetodoSalirSession() {
+        this.request.getSession().setAttribute("id",null);
+        ModelAndView model = this.controladorDeHome.salirSession(request);
+        return model;
+    }
 
 }

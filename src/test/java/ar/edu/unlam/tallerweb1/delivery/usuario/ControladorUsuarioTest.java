@@ -25,9 +25,7 @@ public class ControladorUsuarioTest {
     private ServicioLogin servicioLogin;
     private ControladorUsuario controladorDeRegistro;
     private DatosLogin datosLogin;
-
     private HttpServletRequest request;
-
     private HttpSession session;
 
     @Before
@@ -52,84 +50,75 @@ public class ControladorUsuarioTest {
     }
 
     @Test
-    public void alIngresarLosDatosSeGuardenEnLaBaseDeDatos() throws UsuarioNoRegistradoExepcion {
-        String vista_destino ="redirect:/login";
-        this.datosLogin = new DatosLogin();
-        this.datosLogin.setEmail("test@test.com");
-        this.datosLogin.setPassword("123");
-
-        ModelAndView model = this.controladorDeRegistro.crearRegistro(this.datosLogin);
-        assertThat(model.getViewName()).isEqualTo(vista_destino);
+    public void alIngresarLosDatosCorrectosSeCreeElRegistroYMeRedirijaAlLogin() throws UsuarioNoRegistradoExepcion {
+        String vista_destino = dadoQueTengoLaVistaDestino("redirect:/login");
+        DatosLogin nuevoDatosLogin = dadoQueTengoUnDatosLogin();
+        ModelAndView model = cuandoQuieroCrearUnNuevoRegistro(nuevoDatosLogin);
+        entoncesVerificoQueMeEnvieALaVistaCorrecta(model, vista_destino);
     }
+
     @Test
     public void queNoSePuedaGuardarUnUsuarioConEmailYaRegistrado() throws UsuarioNoRegistradoExepcion {
-        String vista_destino ="registrar";
-        DatosLogin nuevoDatosLogin = obtenerUnDatosLogin();
-        ModelAndView model;
+        String vista_destino = dadoQueTengoLaVistaDestino("registrar");
+        DatosLogin nuevoDatosLogin = dadoQueTengoUnDatosLogin();
         cuandoUnUsuarioYaExiste("test@test.com");
-        model = this.controladorDeRegistro.crearRegistro(nuevoDatosLogin);
-        assertThat(model.getViewName()).isEqualTo(vista_destino);
-
+        ModelAndView model = cuandoQuieroCrearUnNuevoRegistro(nuevoDatosLogin);
+        entoncesVerificoQueMeEnvieALaVistaCorrecta(model, vista_destino);
     }
 
     @Test
-    public void queNoMeDejeGuardarUnUsurioConFormatoDeMAilInavlido() throws UsuarioNoRegistradoExepcion {
-        String vista_destino ="registrar";
-        this.datosLogin = new DatosLogin();
-        this.datosLogin.setEmail("test@test");
-        this.datosLogin.setPassword("123");
-        ModelAndView model = this.controladorDeRegistro.crearRegistro(this.datosLogin);
-        assertThat(model.getViewName()).isEqualTo(vista_destino);
-        assertThat(model.getModel().get("msg")).isEqualTo("El mail debe ser de formato valido");
+    public void queNoMeDejeGuardarUnUsurioConFormatoDeMAilInavlido() {
+        String vista_destino = dadoQueTengoLaVistaDestino("registrar");
+        DatosLogin nuevoDatosLogin = dadoQueTengoUnDatosLoginConErrores();
+        ModelAndView model = cuandoQuieroCrearUnNuevoRegistro(nuevoDatosLogin);
+        entoncesVerificoQueMeEnvieALaVistaCorrecta(model, vista_destino);
+        entoncesVerificoQueMeEnvieElMensajeDeError(model, "El mail debe ser de formato valido");
     }
 
     @Test
-    public void cuandoIngresoAVerificarDatosMeDevuelveLaVistaVerificar() {
-        String vistaDestino = "verificar";
-        when((Long) request.getSession().getAttribute("id")).thenReturn(1L);
-        ModelAndView mod = controladorDeRegistro.verificarDatos(request);
-        assertThat(mod.getViewName()).isEqualTo(vistaDestino);
-    }
-
-    // El GetSession pasando el true por parametro, deberia generar una nueva session, pero da null
-    @Test
-    public void cuandoElUsuarioEstaLogeadoYVaAVerificar(){
-        String vistaDestino ="verificar";
-
-        when(this.request.getSession().getAttribute("id")).thenReturn(1L);
-        ModelAndView mod = controladorDeRegistro.verificarDatos(this.request);
-
-        assertThat(mod.getViewName()).isEqualTo(vistaDestino);
+    public void cuandoElUsuarioEstaLogeadoYVaAVerificarMeRedirijeAVerificar() {
+        String vista_destino = dadoQueTengoLaVistaDestino("verificar");
+        dadoQueTengoUnUsuarioLogeado(1L);
+        ModelAndView model = cuandoQuieroVerificarLosDatos();
+        entoncesVerificoQueMeEnvieALaVistaCorrecta(model, vista_destino);
     }
 
     @Test
-    public void cuandoElUsuarioNoEstaLogeadoYVaAVerificarLoRedirijoALLogin(){
-        String vistaDestino ="redirect:/login";
-
-        when(this.request.getSession().getAttribute("id")).thenReturn(null);
-        ModelAndView mod = controladorDeRegistro.verificarDatos(this.request);
-
-        assertThat(mod.getViewName()).isEqualTo(vistaDestino);
+    public void cuandoElUsuarioNoEstaLogeadoYVaAVerificarLoRedirijoALLogin() {
+        String vista_destino = dadoQueTengoLaVistaDestino("redirect:/login");
+        dadoQueTengoUnUsuarioLogeado(null);
+        ModelAndView model = cuandoQuieroVerificarLosDatos();
+        entoncesVerificoQueMeEnvieALaVistaCorrecta(model, vista_destino);
     }
 
     @Test
     public void cuandoElUsuarioEstaLogeadoYRellenoLaVistaVerificacionEnvieAHome() throws UsuarioInvalidoException {
-        DatosUsuario datosUsuario = dadoQueTengoUnosDatosDeUsuario("Juan","Galvez","Direccion","SinRestriccion");
-        Usuario usuario = dadoQueTengoUnUsuarioRegistrado("test@test.com","123");
+        DatosUsuario datosUsuario = dadoQueTengoUnosDatosDeUsuario("Juan", "Galvez", "Direccion", "SinRestriccion");
+        Usuario usuario = dadoQueTengoUnUsuarioRegistrado("test@test.com", "123");
         dadoQueTengoUnUsuarioLogeado(1L);
-        cuandoLeDigaAlServicioQueMeBusqueElUsuarioPorID(1L,usuario);
-        ModelAndView model = entoncesLlamoAlEnvioDeVerificacion(datosUsuario,this.request);
-        entoncesVerificoQueMeEnvieALaVistaCorrecta(model,"home");
+        cuandoLeDigaAlServicioQueMeBusqueElUsuarioPorID(1L, usuario);
+        ModelAndView model = entoncesLlamoAlEnvioDeVerificacion(datosUsuario, this.request);
+        entoncesVerificoQueMeEnvieALaVistaCorrecta(model, "home");
     }
 
     @Test
     public void cuandoElUsuarioNoEstaLogeadoYRellenoLaVistaVerificacionEnvieALLogin() throws UsuarioInvalidoException {
-        DatosUsuario datosUsuario = dadoQueTengoUnosDatosDeUsuario("Juan","Galvez","Direccion","SinRestriccion");
-        Usuario usuario = dadoQueTengoUnUsuarioRegistrado("test@test.com","123");
+        DatosUsuario datosUsuario = dadoQueTengoUnosDatosDeUsuario("Juan", "Galvez", "Direccion", "SinRestriccion");
+        Usuario usuario = dadoQueTengoUnUsuarioRegistrado("test@test.com", "123");
         dadoQueTengoUnUsuarioLogeado(null);
         cuandoLeDigaAlServicioQueMeBusqueElUsuarioPorIDMeLanzeExcepcion(null);
-        ModelAndView model = entoncesLlamoAlEnvioDeVerificacion(datosUsuario,this.request);
-        entoncesVerificoQueMeEnvieALaVistaCorrecta(model,"redirect:/login");
+        ModelAndView model = entoncesLlamoAlEnvioDeVerificacion(datosUsuario, this.request);
+        entoncesVerificoQueMeEnvieALaVistaCorrecta(model, "redirect:/login");
+    }
+
+    @Test
+    public void cuandoElUsuarioLogeadoEntraASuPerfilLoEnviaAMisdatos() throws UsuarioInvalidoException {
+        DatosUsuario datosUsuario = dadoQueTengoUnosDatosDeUsuario("Juan", "Galvez", "Direccion", "SinRestriccion");
+        Usuario usuario = dadoQueTengoUnUsuarioRegistrado("test@test.com", "123");
+        dadoQueTengoUnUsuarioLogeado(1L);
+        cuandoLeDigaAlServicioQueMeBusqueElUsuarioPorID(1L, usuario);
+        ModelAndView model = cuandoEjecuteElMetodoVerDatosDeUsuario();
+        entoncesVerificoQueMeEnvieALaVistaCorrecta(model, "misdatos");
     }
 
     private void cuandoLeDigaAlServicioQueMeBusqueElUsuarioPorIDMeLanzeExcepcion(Long id) throws UsuarioInvalidoException {
@@ -152,15 +141,15 @@ public class ControladorUsuarioTest {
         when(this.servicioLogin.consultarPorID(l)).thenReturn(us);
     }
 
-    private ModelAndView entoncesLlamoAlEnvioDeVerificacion(DatosUsuario du,HttpServletRequest request) {
-        return this.controladorDeRegistro.envioDeVerificacion(du,request);
+    private ModelAndView entoncesLlamoAlEnvioDeVerificacion(DatosUsuario du, HttpServletRequest request) {
+        return this.controladorDeRegistro.envioDeVerificacion(du, request);
     }
 
     private void dadoQueTengoUnUsuarioLogeado(Long l) {
         when(this.request.getSession().getAttribute("id")).thenReturn(l);
     }
 
-    private DatosUsuario dadoQueTengoUnosDatosDeUsuario(String nombre , String apellido, String direccion, String pref) {
+    private DatosUsuario dadoQueTengoUnosDatosDeUsuario(String nombre, String apellido, String direccion, String pref) {
         DatosUsuario us = new DatosUsuario();
         us.setNombre(nombre);
         us.setApellido(apellido);
@@ -169,15 +158,44 @@ public class ControladorUsuarioTest {
         return us;
     }
 
-    private DatosLogin obtenerUnDatosLogin() {
+    private DatosLogin dadoQueTengoUnDatosLogin() {
         this.datosLogin = new DatosLogin();
         this.datosLogin.setEmail("test@test.com");
         this.datosLogin.setPassword("123");
-        DatosLogin nuevoDatosLogin= datosLogin;
-        return nuevoDatosLogin;
-    }
-    private void cuandoUnUsuarioYaExiste(String mail) throws UsuarioNoRegistradoExepcion {
-         when(this.servicioLogin.estaRegistrado(mail)).thenThrow(new UsuarioNoRegistradoExepcion("usuario registrado"));
+        return datosLogin;
     }
 
+    private DatosLogin dadoQueTengoUnDatosLoginConErrores() {
+        this.datosLogin = new DatosLogin();
+        this.datosLogin.setEmail("test@test");
+        this.datosLogin.setPassword("123");
+        return datosLogin;
+    }
+
+    private void cuandoUnUsuarioYaExiste(String mail) throws UsuarioNoRegistradoExepcion {
+        when(this.servicioLogin.estaRegistrado(mail)).thenThrow(new UsuarioNoRegistradoExepcion("usuario registrado"));
+    }
+
+    private ModelAndView cuandoEjecuteElMetodoVerDatosDeUsuario() throws UsuarioInvalidoException {
+        return this.controladorDeRegistro.verDatosDeUsuario(request);
+    }
+
+    private String dadoQueTengoLaVistaDestino(String vista) {
+        String vista_destino = vista;
+        return vista_destino;
+    }
+
+    private ModelAndView cuandoQuieroCrearUnNuevoRegistro(DatosLogin datos) {
+        ModelAndView model = this.controladorDeRegistro.crearRegistro(datos);
+        return model;
+    }
+
+    private void entoncesVerificoQueMeEnvieElMensajeDeError(ModelAndView model, String mensaje) {
+        assertThat(model.getModel().get("msg")).isEqualTo(mensaje);
+    }
+
+    private ModelAndView cuandoQuieroVerificarLosDatos() {
+        ModelAndView model = controladorDeRegistro.verificarDatos(request);
+        return model;
+    }
 }

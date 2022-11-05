@@ -37,7 +37,7 @@
 								Mi perfil
 							</button>
 							<ul class="dropdown-menu">
-								<li><a class="dropdown-item text-dark py-2" href="verificar">Actulizar datos</a></li>
+								<li><a class="dropdown-item text-dark py-2" href="misdatos">Mis datos</a></li>
 								<li><a class="dropdown-item text-dark py-2" href="Salir">Salir</a></li>
 							</ul>
 						</span>
