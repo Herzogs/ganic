@@ -5,6 +5,7 @@ import ar.edu.unlam.tallerweb1.delivery.ControladorCompra;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.CompraNoEncontradaExeption;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
 import ar.edu.unlam.tallerweb1.domain.compra.Compra;
+import ar.edu.unlam.tallerweb1.domain.compra.EstadoDeCompra;
 import ar.edu.unlam.tallerweb1.domain.compra.ServicioCompra;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
@@ -41,16 +42,49 @@ public class ControladorCompraTest extends SpringTest {
     @Test
     public void queUnusuarioPuedaGenerarUnaCompra() throws CompraNoEncontradaExeption {
         //preparacion
-        Usuario usuario = dadoQueTengoUnUsuario();
+        Usuario usuario = dadoQueTengoUnUsuario("diego@gmail.com","123");
         Sandwich sandwich = dadoQueTengoUnSandwichSeleccionado();
-
         Compra compra = hagoLaCompra(usuario, sandwich);
-
         ModelAndView model = generoLaCompra(request);
-        //comprobacion
         comprueboQueSeHayaGeneradoLaCompra(usuario, sandwich);
         verificoLaCompra(model);
     }
+    @Test
+    public void luegoDeHacerUnaCompraDeUnSandwichPuedaEncontrarMiPedidoEnEstadopDePedido() throws CompraNoEncontradaExeption {
+        Usuario usuario = dadoQueTengoUnUsuario("diego@gmail.com", "123");
+        Sandwich sandwich = dadoQueTengoUnSandwichSeleccionado();
+        Compra compra = hagoLaCompra(usuario, sandwich);
+        Compra compraBuscada= buscoLaCompra(compra);
+        List<Compra> listaCompra= buscoLaCompraPorUsuarioYEstadoDePedido(usuario,EstadoDeCompra.PEDIDO);
+        listaCompra.add(compra);
+        ModelAndView modelAndView= listoLosPedidos(request);
+        verificoQueElPEdidoEsteEnestadoPedido(modelAndView,listaCompra);
+    }
+
+    private List<Compra> buscoLaCompraPorUsuarioYEstadoDePedido(Usuario usuario, EstadoDeCompra estado) throws CompraNoEncontradaExeption {
+        List<Compra> lista= new ArrayList<>();
+        List<Sandwich> pedido= new ArrayList<>();
+        Compra compra= new Compra(1L,new Usuario(),pedido);
+        when(servicio.listarComprasDeUsuarioPorEstado(usuario,estado)).thenReturn(lista);
+        return servicio.listarComprasDeUsuarioPorEstado(usuario,estado);
+    }
+
+    private void verificoQueElPEdidoEsteEnestadoPedido(ModelAndView modelAndView, List<Compra> compraBuscada) {
+        assertThat(modelAndView.getModel().get("compra")).isNotNull();
+        assertThat(modelAndView.getModelMap().get("compra")).isEqualTo(compraBuscada);
+
+    }
+
+    private ModelAndView listoLosPedidos(HttpServletRequest request) {
+        Usuario usuario= (Usuario) request.getSession().getAttribute("usuario");
+        return controladorComprapra.verMisPedidos(request);
+    }
+
+    private Compra buscoLaCompra(Compra compra) throws CompraNoEncontradaExeption {
+        when(servicio.buscarCompra(compra.getIdCompra())).thenReturn(compra);
+        return servicio.buscarCompra(compra.getIdCompra());
+    }
+
 
     private void verificoLaCompra(ModelAndView model) {
         assertThat(model.getViewName()).isEqualTo("guardarCompra");
@@ -61,7 +95,7 @@ public class ControladorCompraTest extends SpringTest {
         request.getSession().setAttribute("sandwich", sandwich);
         List<Sandwich> lista = new ArrayList<>();
         lista.add(sandwich);
-        Compra compra = new Compra(usuario, lista);
+        Compra compra = new Compra(1L,usuario, lista);
         return compra;
     }
 
@@ -85,8 +119,10 @@ public class ControladorCompraTest extends SpringTest {
 
     }
 
-    private Usuario dadoQueTengoUnUsuario() {
-        return new Usuario("diego@gmail.com", "123");
+    private Usuario dadoQueTengoUnUsuario(String email, String password) {
+        Usuario usuario= new Usuario(email,password);
+        when(request.getSession().getAttribute("usuario")).thenReturn(usuario);
+        return usuario;
 
     }
 

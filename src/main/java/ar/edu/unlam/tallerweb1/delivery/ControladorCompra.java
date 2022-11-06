@@ -1,7 +1,9 @@
 package ar.edu.unlam.tallerweb1.delivery;
 
+import ar.edu.unlam.tallerweb1.domain.Excepciones.CompraNoEncontradaExeption;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
 import ar.edu.unlam.tallerweb1.domain.compra.Compra;
+import ar.edu.unlam.tallerweb1.domain.compra.EstadoDeCompra;
 import ar.edu.unlam.tallerweb1.domain.compra.ServicioCompra;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ControladorCompra {
 
@@ -34,5 +37,22 @@ public class ControladorCompra {
         servicio.guardarCompra(compra);
         model.put("compra",compra );
         return new ModelAndView("guardarCompra");
+    }
+
+    @RequestMapping(path = "/miPedido", method = RequestMethod.GET)
+    public ModelAndView verMisPedidos(HttpServletRequest request) {
+        ModelMap model = new ModelMap();
+
+        Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
+        List<Compra>compra = new ArrayList<>();
+        try {
+            compra=  servicio.listarComprasDeUsuarioPorEstado(usuario, EstadoDeCompra.PEDIDO);
+        model.put("compra",compra);
+        } catch (CompraNoEncontradaExeption e) {
+            model.put("msj","El pedido ya ha sido entregado");
+        }
+
+
+        return new ModelAndView("miPedido", model);
     }
 }
