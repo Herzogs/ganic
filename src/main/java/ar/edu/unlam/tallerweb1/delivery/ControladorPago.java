@@ -78,12 +78,14 @@ public class ControladorPago {
             nuevoEmail.setUser(cliente);
             nuevoEmail.setMetodoPago(paymentType);
             nuevoEmail.setLista(this.convertirSetToList(nuevo.getSandwich().getIngrediente()));
+            nuevoEmail.setRecargo((Float) request.getSession().getAttribute("RECARGO"));
             this.servicioEmail.sendEmail(nuevoEmail,"Envio De Pedido");
             modelo.put("msg","Se ha enviado el email de confirmación");
         } catch (UsuarioInvalidoException e) {
             modelo.put("error", "a ocurrido un error en el proceso de envio");
         }
-        return new ModelAndView("redirect:/home");
+        /*return new ModelAndView("redirect:/home");*/
+        return new ModelAndView("alerta_exitosa");
     }
 
     private List<Ingrediente> convertirSetToList(Set<Ingrediente> ing){

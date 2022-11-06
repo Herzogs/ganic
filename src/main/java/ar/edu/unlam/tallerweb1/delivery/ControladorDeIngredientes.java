@@ -32,18 +32,16 @@ import javax.servlet.http.HttpServletRequest;
 public class ControladorDeIngredientes {
 
     private ServicioDeIngrediente servicioDeIngrediente;
-    private ServicioLogin servicioLogin;
     private datosDelSandwich sandwich;
 
 
     private static final Integer MAX_PASOS_PERMITIDOS = 3;
 
     @Autowired
-    public ControladorDeIngredientes(ServicioDeIngrediente servicioDeIngrediente, ServicioLogin servicioLogin) {
+    public ControladorDeIngredientes(ServicioDeIngrediente servicioDeIngrediente) {
         super();
         this.servicioDeIngrediente = servicioDeIngrediente;
         this.sandwich = new datosDelSandwich();
-        this.servicioLogin = servicioLogin;
     }
 
     @RequestMapping(path = "/ingredientes", method = RequestMethod.GET)

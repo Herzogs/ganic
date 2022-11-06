@@ -26,7 +26,6 @@ import static org.mockito.Mockito.when;
 public class ControladorIngredientesTest extends SpringTest {
 
     private ServicioDeIngrediente servicio;
-    private ServicioLogin servicioLogin;
 
     private ControladorDeIngredientes controladorDeIngredientes;
 
@@ -38,8 +37,7 @@ public class ControladorIngredientesTest extends SpringTest {
     @Before
     public void init() {
         this.servicio = mock(ServicioDeIngrediente.class);
-        this.servicioLogin = mock(ServicioLogin.class);
-        this.controladorDeIngredientes = new ControladorDeIngredientes(this.servicio,this.servicioLogin);
+        this.controladorDeIngredientes = new ControladorDeIngredientes(this.servicio);
         this.sandwich = new datosDelSandwich();
         this.request = mock(HttpServletRequest.class);
         this.session = mock(HttpSession.class);

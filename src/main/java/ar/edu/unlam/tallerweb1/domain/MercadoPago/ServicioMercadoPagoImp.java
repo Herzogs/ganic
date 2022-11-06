@@ -23,13 +23,10 @@ import java.util.Set;
 @Service("servicioMercadoPago")
 @Transactional
 public class ServicioMercadoPagoImp implements ServicioMercadoPago {
-    private RepositorioSandwich repositorioSandwich;
 
 
     @Autowired
-    public ServicioMercadoPagoImp(RepositorioSandwich repositorioSandwich) {
-        this.repositorioSandwich = repositorioSandwich;
-    }
+    public ServicioMercadoPagoImp() {}
     @Override
     public Preference generarPago(Pago sandPagar) {
         // Ac� va la clave privada(Access Token) que se genera en la cuenta de MercadoPago del vendedor
@@ -52,8 +49,8 @@ public class ServicioMercadoPagoImp implements ServicioMercadoPago {
 		redireccionar despues del pago si es exitoso o no */
         PreferenceBackUrlsRequest backUrls =
                 PreferenceBackUrlsRequest.builder()
-                        .success("http://localhost:8080/proyecto-limpio-spring_war_exploded/alerta_exitosa")
-                        .failure("http://localhost:8080/proyecto-limpio-spring_war_exploded/failure")
+                        .success("http://localhost:8080/proyecto_limpio_spring_war_exploded/alerta_exitosa")
+                        .failure("redirect:/falla")
                         .build();
 
         // Genera la petici�n para la preferencia
