@@ -34,26 +34,17 @@ public class ControladorPago {
 
     private ServicioEmail servicioEmail;
     private ServicioLogin servicioLogin;
-    private ServicioSandwich servicioSandwich;
 
     private ServicioMercadoPago servicioMercadoPago;
 
     private Pago nuevo;
 
     @Autowired
-    public ControladorPago(ServicioLogin servicioLogin, ServicioSandwich servicioSandwich, ServicioMercadoPago servicioMercadoPago) {
+    public ControladorPago(ServicioLogin servicioLogin, ServicioMercadoPago servicioMercadoPago) {
         this.servicioLogin = servicioLogin;
-        this.servicioSandwich = servicioSandwich;
         this.servicioMercadoPago = servicioMercadoPago;
         this.servicioEmail = new ServicioEmailImp();
         nuevo = new Pago();
-    }
-
-    @RequestMapping(path = "prepago" , method = RequestMethod.GET)
-    public ModelAndView guardar (HttpServletRequest request){
-        Sandwich sandwichGuardado = (Sandwich) request.getSession().getAttribute("sandwich");
-        this.servicioSandwich.guardarSandwich(sandwichGuardado);
-        return new ModelAndView("/pago");
     }
 
     @RequestMapping(path = "/pago", method = RequestMethod.GET)
@@ -74,7 +65,9 @@ public class ControladorPago {
         return new ModelAndView("pago", modelo);
     }
 
-    @RequestMapping(path = "/alerta_exitosa")
+    // TODO:: FIX TEST
+
+    @RequestMapping(path = "/alerta_exitosa", method = RequestMethod.GET)
     public ModelAndView pagoCorrecto(@RequestParam("payment_type") String paymentType, HttpServletRequest request){
         Usuario cliente = null;
         ModelMap modelo = new ModelMap();
