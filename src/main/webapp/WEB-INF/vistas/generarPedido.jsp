@@ -75,7 +75,11 @@
                 </div>
             </div>
             <a href="restablecer" class="btn btn-primary px-5 my-5">Volver al Home</a>
-            <a href="confirmar?paso=${paso}" class="btn btn-success px-5 my-5">Finalizar</a>
+            <c:choose>
+                <c:when test="${paso > 2}">
+                    <a href="confirmar?paso=${paso}" class="btn btn-success px-5 my-5">Finalizar</a>
+                </c:when>
+            </c:choose>
         </div>
     </section>
 </main>
