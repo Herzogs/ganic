@@ -1,4 +1,4 @@
-package ar.edu.unlam.tallerweb1.domain.Cron;
+package ar.edu.unlam.tallerweb1.domain.Scheduler;
 
 
 import ar.edu.unlam.tallerweb1.domain.Email.ServicioEmail;
@@ -9,7 +9,6 @@ import ar.edu.unlam.tallerweb1.domain.compra.EstadoDeCompra;
 import ar.edu.unlam.tallerweb1.domain.compra.ServicioCompra;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -17,27 +16,28 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Component
 @EnableScheduling
 @EnableAsync
-public class Informe {
+public class SchedulerTask {
 
     @Autowired
     private ServicioCompra servicioCompra;
-    private static final Logger log = Logger.getLogger(Informe.class);
+    private static final Logger log = Logger.getLogger(SchedulerTask.class);
 
     private static final ServicioEmail servicioEmail = new ServicioEmailImp();
 
     @Async
     @Scheduled(cron = "0/5 * * * * *",zone = "America/Buenos_Aires")
-    public void informeEmail(){
+    public void EnvioDeEmailCuandoFalten5Minutos(){
         List<Compra> compraList = null;
         try {
             compraList = this.servicioCompra.listarComprasPorEstado(EstadoDeCompra.PEDIDO);
-            LocalDateTime actual = LocalDateTime.now();
+            LocalDateTime actual = LocalDateTime.now(ZoneId.of("America/Buenos_Aires"));
             for (Compra comp : compraList) {
                 LocalDateTime venc = comp.getFecha().plusMinutes(5);
                 log.info("HORA DE ENTREGA: " + venc + " , DEL PEDIDO: "+ comp.getIdCompra());
@@ -53,13 +53,13 @@ public class Informe {
         }
     }
 
-    @Scheduled(cron = "1 * * * * *",zone = "America/Buenos_Aires")
+    @Scheduled(cron = "0/1 * * * * *",zone = "America/Buenos_Aires")
     @Async
-    public void entregarCompra(){
+    public void actualizarEstadoDeEntrega(){
         List<Compra> compraList = null;
         try {
             compraList = this.servicioCompra.listarComprasPorEstado(EstadoDeCompra.PEDIDO);
-            LocalDateTime actual = LocalDateTime.now();
+            LocalDateTime actual = LocalDateTime.now(ZoneId.of("America/Buenos_Aires"));
             for (Compra comp : compraList) {
                 if (actual.withNano(0).withSecond(0).equals(comp.getFechaEntrega())) {
                     this.servicioCompra.entregarCompra(comp.getIdCompra());
