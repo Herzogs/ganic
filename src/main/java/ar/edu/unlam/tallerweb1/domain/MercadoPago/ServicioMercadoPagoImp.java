@@ -33,7 +33,7 @@ public class ServicioMercadoPagoImp implements ServicioMercadoPago {
     @Override
     public Preference generarPago(Long sandId) {
         // Ac� va la clave privada(Access Token) que se genera en la cuenta de MercadoPago del vendedor
-        MercadoPagoConfig.setAccessToken("APP_USR-7774580668311517-110115-cdcfe731c5f7fae554a7073a2fbe2f54-97526199");
+        MercadoPagoConfig.setAccessToken("APP_USR-5684748532955528-110615-806d19bf45980658f2a6db8c0cd17bae-1229699166");
         Sandwich sandwich = this.repositorioSandwich.obtenerSandwichPorId(sandId);
         // Crea datos del cliente
         PreferenceClient client = new PreferenceClient();
