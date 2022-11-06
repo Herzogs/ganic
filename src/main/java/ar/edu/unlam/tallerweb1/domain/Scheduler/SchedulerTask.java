@@ -32,7 +32,7 @@ public class SchedulerTask {
     private static final ServicioEmail servicioEmail = new ServicioEmailImp();
 
     @Async
-    @Scheduled(cron = "0/5 * * * * *",zone = "America/Buenos_Aires")
+    @Scheduled(cron = "5 * * * * *",zone = "America/Buenos_Aires")
     public void EnvioDeEmailCuandoFalten5Minutos(){
         List<Compra> compraList = null;
         try {
@@ -53,7 +53,7 @@ public class SchedulerTask {
         }
     }
 
-    @Scheduled(cron = "0/1 * * * * *",zone = "America/Buenos_Aires")
+    @Scheduled(cron = "1 * * * * *",zone = "America/Buenos_Aires")
     @Async
     public void actualizarEstadoDeEntrega(){
         List<Compra> compraList = null;

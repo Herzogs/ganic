@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.delivery;
 
 import ar.edu.unlam.tallerweb1.domain.Email.Email;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.EnvioFueraDeZonaException;
+import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -24,12 +25,9 @@ public class ControladorDestino {
 
     @RequestMapping(path = "/seleccionarDestino", method = RequestMethod.GET)
     public ModelAndView irASeleccionDestino(@RequestParam(value = "dist") Float distancia, HttpServletRequest request){
-        Email temp = (Email) request.getSession().getAttribute("email");
         ModelMap model = new ModelMap();
-        System.err.println(distancia);
         try {
-           temp.setRecargo(obtenerCostoEnvio(distancia));
-           request.getSession().setAttribute("email",temp);
+           request.getSession().setAttribute("RECARGO",obtenerCostoEnvio(distancia));
        } catch (EnvioFueraDeZonaException e) {
            model.put("msg","Fuera De rango de Envio");
            return new ModelAndView("destino",model);
@@ -37,9 +35,7 @@ public class ControladorDestino {
             model.put("msg","Debe seleccionar un destino para continuar");
             return new ModelAndView("destino",model);
         }
-        System.err.println(temp.getRecargo());
-
-        return new ModelAndView("redirect:/exito");
+        return new ModelAndView("redirect:/pago");
     }
 
     private Float obtenerCostoEnvio(Float dist) throws EnvioFueraDeZonaException {
