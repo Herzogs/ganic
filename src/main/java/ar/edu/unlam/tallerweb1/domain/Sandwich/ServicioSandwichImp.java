@@ -64,4 +64,8 @@ public class ServicioSandwichImp implements ServicioSandwich {
         return obtenido.getIngrediente().stream().collect(Collectors.toCollection(ArrayList::new)); //convierte de Set a List
     }
 
+    @Override
+    public void guardarSandwich(Sandwich sandwich) {
+        this.repositorioSandwich.guardarSandwich(sandwich);
+    }
 }

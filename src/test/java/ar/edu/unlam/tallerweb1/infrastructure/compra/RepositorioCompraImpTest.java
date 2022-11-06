@@ -4,6 +4,7 @@ import ar.edu.unlam.tallerweb1.SpringTest;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
 import ar.edu.unlam.tallerweb1.domain.compra.Compra;
 import ar.edu.unlam.tallerweb1.domain.compra.EstadoDeCompra;
+import ar.edu.unlam.tallerweb1.domain.compra.RepositorioCompra;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import ar.edu.unlam.tallerweb1.infrastructure.RepositorioCompraImp;
 import org.junit.Test;
@@ -17,7 +18,7 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 
 public class RepositorioCompraImpTest extends SpringTest {
     @Autowired
-    RepositorioCompraImp repo;
+    private RepositorioCompra repo;
 
     @Test
     @Transactional

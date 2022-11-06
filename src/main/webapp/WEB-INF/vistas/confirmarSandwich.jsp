@@ -51,7 +51,7 @@
                 </div>
                 <div class="col-6">
                     <h4 class="pb-3">Confirmar pago</h4>
-                    <a href="envioDeConfirmacion?idSandwich=${idSandwich}" class="btn btn-success px-5 mb-5">Confirmar</a>
+                    <a href="destino" class="btn btn-success px-5 mb-5">Confirmar</a>
                     <div><a href="restablecer" class="btn btn-primary px-5 my-5">Volver al Home</a></div>
                 </div>
             </div>

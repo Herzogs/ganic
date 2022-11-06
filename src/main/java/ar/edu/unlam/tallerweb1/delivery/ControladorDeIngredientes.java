@@ -1,5 +1,9 @@
 package ar.edu.unlam.tallerweb1.delivery;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import ar.edu.unlam.tallerweb1.domain.Email.Email;
@@ -8,6 +12,11 @@ import ar.edu.unlam.tallerweb1.domain.Email.ServicioEmailImp;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.IngredienteInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.PasoInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioInvalidoException;
+import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
+import ar.edu.unlam.tallerweb1.domain.Sandwich.ServicioSandwich;
+import ar.edu.unlam.tallerweb1.domain.compra.Compra;
+import ar.edu.unlam.tallerweb1.domain.compra.EstadoDeCompra;
+import ar.edu.unlam.tallerweb1.domain.compra.ServicioCompra;
 import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +44,7 @@ public class ControladorDeIngredientes {
     private ServicioEmail se;
     private datosDelSandwich sandwich;
 
+    private Sandwich sand;
     private Email email;
     private static final Integer MAX_PASOS_PERMITIDOS = 3;
 
@@ -43,6 +53,11 @@ public class ControladorDeIngredientes {
         super();
         this.servicioDeIngrediente = servicioDeIngrediente;
         this.sandwich = new datosDelSandwich();
+        this.sand = new Sandwich();
+        this.sand.setNombre("Ganic 1");
+        this.sand.setDescripcion("Sandwich Personalizado");
+        this.sand.setEnPromocion(false);
+
         this.se = new ServicioEmailImp();
         this.servicioLogin = servicioLogin;
         this.email = new Email();
@@ -94,7 +109,6 @@ public class ControladorDeIngredientes {
         Integer nuevoPaso=1;
         try {
             ing = this.servicioDeIngrediente.obtenerIngredientePorId(idIng);
-
             Integer paso = ing.getPaso();
             this.sandwich.cargarIngredienteAlSandwich(ing);
             nuevoPaso = (paso < ControladorDeIngredientes.MAX_PASOS_PERMITIDOS) ? paso + 1 : paso;
@@ -111,15 +125,8 @@ public class ControladorDeIngredientes {
         Long idLogeado = (Long) request.getSession().getAttribute("id");
         if ( idLogeado != null) {
             ModelMap model = new ModelMap();
-            List<Ingrediente> ingredientesSeleccionados = this.sandwich.getIngredientesSandwich();
-            /*if (ingredientesSeleccionados.size() <= 1) {
-                model.put("error", "Para poder seguir, debe seleccionar minimante 2 ingredientes");
-                return new ModelAndView(String.format("redirect:/generarPedido?paso=%d", paso), model);
-            }*/
-            this.email.setLista(this.sandwich.getIngredientesSandwich());
             model.put("montoFinal", sandwich.getMonto());
             model.put("IngredientesQueElUsuarioSelecciono", sandwich.getIngredientesSandwich());
-            request.getSession().setAttribute("email",this.email);
             return new ModelAndView("confirmar", model);
         }
         return new ModelAndView("redirect:/login");
@@ -223,5 +230,16 @@ public class ControladorDeIngredientes {
         mod.put("pref",du.getPreferencia());
         mod.put("paso",du.getPaso());
         return new ModelAndView("redirect:/modifcarIngrediente",mod);
+    }
+
+    @RequestMapping(path = "/salvarSandwich", method = RequestMethod.GET)
+    public ModelAndView salvarSandwich(HttpServletRequest request){
+        this.email.setLista(this.sandwich.getIngredientesSandwich());
+        request.getSession().setAttribute("email",this.email);
+        List<Ingrediente> ing = this.sandwich.getIngredientesSandwich();
+        this.sand.setEsApto(ing.get(0).getEsApto());
+        ing.forEach(ingrediente -> this.sand.agregarIngrediente(ingrediente));
+        request.getSession().setAttribute("SANDWICH_GUARDADO",this.sand);
+        return new ModelAndView("destino");
     }
 }

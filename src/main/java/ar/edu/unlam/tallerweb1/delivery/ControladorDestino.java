@@ -39,7 +39,7 @@ public class ControladorDestino {
         }
         System.err.println(temp.getRecargo());
 
-        return new ModelAndView("redirect:/exito");
+        return new ModelAndView("envioDeConfirmacion");
     }
 
     private Float obtenerCostoEnvio(Float dist) throws EnvioFueraDeZonaException {

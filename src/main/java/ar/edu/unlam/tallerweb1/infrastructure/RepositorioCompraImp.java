@@ -4,20 +4,23 @@ import ar.edu.unlam.tallerweb1.domain.compra.Compra;
 import ar.edu.unlam.tallerweb1.domain.compra.EstadoDeCompra;
 import ar.edu.unlam.tallerweb1.domain.compra.RepositorioCompra;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
+import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-@Repository
+@Repository("repositorioCompra")
+@Transactional
 public class RepositorioCompraImp implements RepositorioCompra {
-    SessionFactory sessionFactory;
+    private final SessionFactory sessionFactory;
 
     @Autowired
     public RepositorioCompraImp(SessionFactory sessionFactory) {
@@ -57,6 +60,7 @@ public class RepositorioCompraImp implements RepositorioCompra {
         List lista = session.createCriteria(Compra.class)
                 .createAlias("usuario", "usuario")
                 .add(Restrictions.eq("usuario.id", idUsuario))
+                .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
                 .list();
         return lista;
     }
@@ -72,6 +76,7 @@ public class RepositorioCompraImp implements RepositorioCompra {
         final Session session = this.sessionFactory.getCurrentSession();
         List lista = session.createCriteria(Compra.class)
                 .createAlias("usuario", "usuario")
+                .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
                 .add(Restrictions.eq("usuario.id", usuario.getId()))
                 .add(Restrictions.eq("estado", estado))
                 .list();
@@ -88,6 +93,7 @@ public class RepositorioCompraImp implements RepositorioCompra {
         final Session session = this.sessionFactory.getCurrentSession();
         List lista = session.createCriteria(Compra.class)
                 .createAlias("usuario", "usuario")
+                .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
                 .add(Restrictions.eq("usuario.id", idUsuario))
                 .add(Restrictions.eq("estado", estado))
                 .list();
@@ -103,7 +109,8 @@ public class RepositorioCompraImp implements RepositorioCompra {
     @Override
     public List<Compra> obtenerCompraPorEstado(EstadoDeCompra estado) {
         final Session session = this.sessionFactory.getCurrentSession();
-        return session.createCriteria(Compra.class)
+        return (List<Compra>) session.createCriteria(Compra.class)
+                .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
                 .add(Restrictions.eq("estado", estado))
                 .list();
     }
