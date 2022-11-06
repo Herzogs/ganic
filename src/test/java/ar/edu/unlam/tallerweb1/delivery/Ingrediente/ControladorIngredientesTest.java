@@ -5,6 +5,8 @@ import ar.edu.unlam.tallerweb1.delivery.ControladorDeIngredientes;
 import ar.edu.unlam.tallerweb1.delivery.datosDelSandwich;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.IngredienteInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.PasoInvalidoException;
+import ar.edu.unlam.tallerweb1.domain.Sandwich.ServicioSandwich;
+import ar.edu.unlam.tallerweb1.domain.compra.ServicioCompra;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.ServicioDeIngrediente;
 import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
@@ -25,6 +27,7 @@ public class ControladorIngredientesTest extends SpringTest {
 
     private ServicioDeIngrediente servicio;
     private ServicioLogin servicioLogin;
+
     private ControladorDeIngredientes controladorDeIngredientes;
 
     private datosDelSandwich sandwich;
@@ -152,13 +155,13 @@ public class ControladorIngredientesTest extends SpringTest {
         assertThat(model.getModelMap().get("IngredientesQueElUsuarioSelecciono")).isEqualTo(dadoQueTengoUnaNuevaListaDeIngredientesSeleccionados());
     }
 
-    @Test
+    /*@Test
     public void cuandoSeleccioneUnaCantidadInsuficienteDeIngredientesYQuieraConfirmarMeRedirijaALaVistaDeLPrimerIngredienteSiEstoyLogeado() {
         String vistaEsperada = "redirect:/generarPedido?paso=1";
         cuandoLePidoAlHttpServletRequestQueMeTraigaElId();
         ModelAndView model = cuandoElControladorVerifiqueQueNoSeleccioneLaCantidadDeIngredientesParaFormarUnSandwich(1, this.request);
         entoncesVerificoQueElControladorMeLLeveALaVistaSolicitada(model, vistaEsperada);
-    }
+    }*/
 
     @Test
     public void cuandoSeleccioneUnaCantidadSuficienteDeIngredientesYQuieraConfirmarMeRedirijaALaVistaDeConfirmacion() {

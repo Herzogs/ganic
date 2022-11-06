@@ -24,6 +24,9 @@ public class Compra {
             inverseJoinColumns = @JoinColumn(name = "idSandwich"))
     private List<Sandwich> detalle;
     private LocalDateTime fecha;
+
+    private LocalDateTime fechaEntrega;
+
     @Column(name="estado", nullable = false, length = 15 )
     @Enumerated( value = EnumType.STRING)
     private EstadoDeCompra estado;
@@ -92,5 +95,13 @@ public class Compra {
 
     public void setDetalle(List<Sandwich> detalle) {
         this.detalle = detalle;
+    }
+
+    public LocalDateTime getFechaEntrega() {
+        return fechaEntrega;
+    }
+
+    public void setFechaEntrega(LocalDateTime fechaEntrega) {
+        this.fechaEntrega = fechaEntrega;
     }
 }

@@ -63,7 +63,7 @@ public class ControladorDestinoTest extends SpringTest {
     }
 
     private void entoncesVerificoQueMeMuestreElMsgDeError(ModelAndView model, String msg) {
-        assertThat(model.getViewName()).isEqualTo("redirect:/destino");
+        assertThat(model.getViewName()).isEqualTo("destino");
         assertThat(model.getModel().get("msg")).isEqualTo(msg);
     }
 

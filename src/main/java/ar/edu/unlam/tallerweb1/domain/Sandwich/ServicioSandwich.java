@@ -14,4 +14,6 @@ public interface ServicioSandwich {
     public List<Sandwich> obtenerTodosLosSandwichesDeUnTipo(String pref) throws SandwichNoExistenteException;
 
     public List<Ingrediente> obtenerLosIngredientesDeUnSandwich(Long id) throws SandwichNoExistenteException;
+
+    public void guardarSandwich(Sandwich sandwich);
 }

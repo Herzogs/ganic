@@ -5,7 +5,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
-
 public class ServicioEmailImp implements ServicioEmail {
     private final Properties props = new Properties();
     private String username;

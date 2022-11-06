@@ -17,8 +17,8 @@ $(document).ready(()=>{
             array.push(home);
             L.polyline(array, {color: 'red'}).addTo(map);
             marcas +=1;
-            document.getElementById('cargo').innerHTML = (unlam_home.distanceTo(home));
-            console.log(unlam_home.distanceTo(home))
+            $("#dist").val(unlam_home.distanceTo(home));
+
         }
     });
 });
