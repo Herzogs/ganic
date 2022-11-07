@@ -1,5 +1,8 @@
 package ar.edu.unlam.tallerweb1.delivery;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.unlam.tallerweb1.domain.Email.Email;
@@ -8,6 +11,11 @@ import ar.edu.unlam.tallerweb1.domain.Email.ServicioEmailImp;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.IngredienteInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.PasoInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioInvalidoException;
+import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
+import ar.edu.unlam.tallerweb1.domain.Sandwich.ServicioSandwich;
+import ar.edu.unlam.tallerweb1.domain.compra.Compra;
+import ar.edu.unlam.tallerweb1.domain.compra.EstadoDeCompra;
+import ar.edu.unlam.tallerweb1.domain.compra.ServicioCompra;
 import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,29 +41,29 @@ public class ControladorDeIngredientes {
     private ServicioLogin servicioLogin;
     private ServicioEmail se;
     private DatosDelSandwich sandwich;
+    private ServicioCompra servicioCompra;
+    private ServicioSandwich servicioSandwich;
 
     private Email email;
     private static final Integer MAX_PASOS_PERMITIDOS = 3;
 
     @Autowired
-    public ControladorDeIngredientes(ServicioDeIngrediente servicioDeIngrediente, ServicioLogin servicioLogin) {
+    public ControladorDeIngredientes(ServicioDeIngrediente servicioDeIngrediente, ServicioLogin servicioLogin ,ServicioCompra servicioCompra,ServicioSandwich servicioSandwich) {
         super();
         this.servicioDeIngrediente = servicioDeIngrediente;
         this.sandwich = new DatosDelSandwich();
         this.se = new ServicioEmailImp();
         this.servicioLogin = servicioLogin;
         this.email = new Email();
+        this.servicioCompra= servicioCompra;
+        this.servicioSandwich= servicioSandwich;
     }
 
     @RequestMapping(path = "/ingredientes", method = RequestMethod.GET)
     public ModelAndView ingredientes() {
-
         ModelMap model = new ModelMap();
-
         List<Ingrediente> ingrediente = servicioDeIngrediente.obtenerTodosLosIngredientes();
-
         model.put("ingredientes", ingrediente);
-
         return new ModelAndView("ingredientes", model);
 
     }
@@ -67,8 +75,7 @@ public class ControladorDeIngredientes {
         List<Ingrediente> lista = null;
         try{
             lista = this.servicioDeIngrediente.obtenerIngredientesFiltradoPorPasoYPreferencia(paso,pref);
-
-            mod.put("ListaDePanes", lista);
+            mod.put("ListaDeProductos", lista);
             mod.put("paso", paso);
             mod.put("formPref", new FormularioPreferencia());
         }catch(PasoInvalidoException e) {
@@ -93,7 +100,6 @@ public class ControladorDeIngredientes {
         Integer nuevoPaso=1;
         try {
             ing = this.servicioDeIngrediente.obtenerIngredientePorId(idIng);
-
             Integer paso = ing.getPaso();
             this.sandwich.cargarIngredienteAlSandwich(ing);
             nuevoPaso = (paso < ControladorDeIngredientes.MAX_PASOS_PERMITIDOS) ? paso + 1 : paso;
@@ -111,10 +117,10 @@ public class ControladorDeIngredientes {
         if ( idLogeado != null) {
             ModelMap model = new ModelMap();
             List<Ingrediente> ingredientesSeleccionados = this.sandwich.getIngredientesSandwich();
-            /*if (ingredientesSeleccionados.size() <= 1) {
+            if (ingredientesSeleccionados.size() <= 1) {
                 model.put("error", "Para poder seguir, debe seleccionar minimante 2 ingredientes");
                 return new ModelAndView(String.format("redirect:/generarPedido?paso=%d", paso), model);
-            }*/
+            }
             this.email.setLista(this.sandwich.getIngredientesSandwich());
             model.put("montoFinal", sandwich.getMonto());
             model.put("IngredientesQueElUsuarioSelecciono", sandwich.getIngredientesSandwich());
@@ -129,9 +135,12 @@ public class ControladorDeIngredientes {
         Long idLogeado = (Long) request.getSession().getAttribute("id");
         Usuario user = null;
         try {
+
             user = this.servicioLogin.consultarPorID(idLogeado);
             email.setUser(user);
             this.se.sendEmail(this.email,"Pedido");
+
+            generarCompra(user,generarSandwich(sandwich.getIngredientesSandwich()));
         }catch(UsuarioInvalidoException ex){
             System.err.println(ex.getMessage());
         }
@@ -223,4 +232,28 @@ public class ControladorDeIngredientes {
         mod.put("paso",du.getPaso());
         return new ModelAndView("redirect:/modifcarIngrediente",mod);
     }
+    private void generarCompra(Usuario usuario, Sandwich sandwich){
+        List<Sandwich> listaSandwiches= new ArrayList<>();
+        LocalDateTime localDateTime=LocalDateTime.now(ZoneId.of("America/Buenos_Aires"));
+        listaSandwiches.add(sandwich);
+        Compra compra= new Compra();
+        compra.setCliente(usuario);
+        compra.setDetalle(listaSandwiches);
+        compra.setEstado(EstadoDeCompra.PEDIDO);
+        compra.setFechaEntrega(localDateTime.plusMinutes(5));
+        compra.setFecha(localDateTime );
+        servicioCompra.guardarCompra(compra);
+
+    }
+    private Sandwich generarSandwich(List<Ingrediente> lista){
+        Sandwich sand = new Sandwich();
+        sand.setNombre("Ganic personalizado");
+        sand.setDescripcion("Sandwich personalizado");
+        sand.setEnPromocion(false);
+        sand.setEsApto(lista.get(0).getEsApto());
+        lista.forEach(ingrediente -> sand.agregarIngrediente(ingrediente));
+        servicioSandwich.guardarSandwich(sand);
+        return sand;
+    }
+
 }

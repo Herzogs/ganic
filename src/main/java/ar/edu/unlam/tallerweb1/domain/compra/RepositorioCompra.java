@@ -23,4 +23,6 @@ public interface RepositorioCompra {
     public void actualizarCompra(Compra compra);
 
     public List<Compra> buscarPorEstado(Long idUsuario, EstadoDeCompra estado);
+
+    public List<Compra> obtenerCompraPorEstado(EstadoDeCompra estado);
 }

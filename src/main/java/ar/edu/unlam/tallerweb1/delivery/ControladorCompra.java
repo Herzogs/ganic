@@ -29,6 +29,7 @@ public class ControladorCompra {
     @RequestMapping(path = "/guardarCompra", method = RequestMethod.POST)
     public ModelAndView guardarCompra(HttpServletRequest request) {
         ModelMap model = new ModelMap();
+        Long id = (Long) request.getSession().getAttribute("");
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
         Sandwich sandwich = (Sandwich) request.getSession().getAttribute("sandwich");
         List<Sandwich> lista = new ArrayList<>();
@@ -36,7 +37,7 @@ public class ControladorCompra {
         Compra compra= new Compra(usuario, lista);
         servicio.guardarCompra(compra);
         model.put("compra",compra );
-        return new ModelAndView("guardarCompra");
+        return new ModelAndView("alerta_exitosa");
     }
 
     @RequestMapping(path = "/miPedido", method = RequestMethod.GET)
@@ -55,4 +56,5 @@ public class ControladorCompra {
 
         return new ModelAndView("miPedido", model);
     }
+
 }

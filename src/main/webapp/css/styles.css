@@ -6,6 +6,9 @@ body {
     box-sizing: border-box;
     font-family: "Encode Sans", sans-serif;
 }
+main{
+    min-height: calc(100vh - 200px) !important;
+}
 .text-success {
     color: #829302 !important;
 }

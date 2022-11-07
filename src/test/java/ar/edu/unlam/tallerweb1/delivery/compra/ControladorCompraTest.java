@@ -87,7 +87,7 @@ public class ControladorCompraTest extends SpringTest {
 
 
     private void verificoLaCompra(ModelAndView model) {
-        assertThat(model.getViewName()).isEqualTo("guardarCompra");
+        assertThat(model.getViewName()).isEqualTo("alerta_exitosa");
     }
 
     private Compra hagoLaCompra(Usuario usuario, Sandwich sandwich) throws CompraNoEncontradaExeption {

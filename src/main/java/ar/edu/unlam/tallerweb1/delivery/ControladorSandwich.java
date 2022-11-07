@@ -8,6 +8,9 @@ import ar.edu.unlam.tallerweb1.domain.Excepciones.SandwichNoExistenteException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.ServicioSandwich;
+import ar.edu.unlam.tallerweb1.domain.compra.Compra;
+import ar.edu.unlam.tallerweb1.domain.compra.EstadoDeCompra;
+import ar.edu.unlam.tallerweb1.domain.compra.ServicioCompra;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
@@ -20,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -34,12 +39,14 @@ public class ControladorSandwich {
     private final ServicioLogin servicioLogin;
 
     private final ServicioEmail servicioEmail;
+    private ServicioCompra servicioCompra;
 
     @Autowired
-    public ControladorSandwich(ServicioSandwich servicioSandwich, ServicioLogin servicioLogin) {
+    public ControladorSandwich(ServicioSandwich servicioSandwich, ServicioLogin servicioLogin, ServicioCompra servicioCompra) {
         this.servicioSandwich = servicioSandwich;
         this.servicioLogin = servicioLogin;
         this.servicioEmail = new ServicioEmailImp();
+        this.servicioCompra= servicioCompra;
     }
 
     @RequestMapping(path = "/home", method = RequestMethod.GET)
@@ -86,6 +93,7 @@ public class ControladorSandwich {
             model.put("nombre",sandwichObtenido.getNombre());
             model.put("idSandwich",sandwichObtenido.getIdSandwich());
             model.put("montoFinal", this.obtenerMontoFinalDeUnSandwich(this.convertirSetToList(sandwichObtenido.getIngrediente())));
+            request.getSession().setAttribute("SANDWICH_GUARDADO",sandwichObtenido);
             return new ModelAndView("confirmarSandwich",model);
         } catch (SandwichNoExistenteException e) {
             model.put("error", "No existe el sandwich");
@@ -94,18 +102,26 @@ public class ControladorSandwich {
     }
 
     @RequestMapping(path = "/envioDeConfirmacion")
-    public ModelAndView envioDeConfirmacion(@RequestParam(value = "idSandwich") Long idSandwich, HttpServletRequest request) {
+    public ModelAndView envioDeConfirmacion(@RequestParam(value = "idSandwich",defaultValue = "0",required = false) Long idSandwich, HttpServletRequest request) {
         Usuario cliente = null;
         ModelMap modelo = new ModelMap();
         Email nuevo = new Email();
         Long idCliente = (Long) request.getSession().getAttribute("id");
+        Sandwich sand = null;
+        request.getSession().setAttribute("email",nuevo);
         try{
+            if (idSandwich != 0) {
+                nuevo.setLista(this.servicioSandwich.obtenerLosIngredientesDeUnSandwich(idSandwich));
+            }else{
+                sand = (Sandwich) request.getSession().getAttribute("SANDWICH_GUARDADO");
+                nuevo.setLista(convertirSetToList(sand.getIngrediente()));
+            }
             cliente = this.servicioLogin.consultarPorID(idCliente);
             nuevo.setUser(cliente);
             nuevo.setMetodoPago("Pago En Efectivo");
-            nuevo.setLista(this.servicioSandwich.obtenerLosIngredientesDeUnSandwich(idSandwich));
             this.servicioEmail.sendEmail(nuevo,"Envio De Pedido");
             modelo.put("msg","Se ha enviado el email de confirmación");
+            generarCompra(cliente,sand);
         } catch (UsuarioInvalidoException | SandwichNoExistenteException e) {
             modelo.put("error", "a ocurrido un error en el proceso de envio");
         }
@@ -122,5 +138,18 @@ public class ControladorSandwich {
             monto += ing.getPrecio();
         }
         return monto;
+    }
+    private void generarCompra(Usuario usuario, Sandwich sandwich){
+        List<Sandwich> listaSandwiches= new ArrayList<>();
+        LocalDateTime localDateTime=LocalDateTime.now(ZoneId.of("America/Buenos_Aires"));
+        listaSandwiches.add(sandwich);
+        Compra compra= new Compra();
+        compra.setCliente(usuario);
+        compra.setDetalle(listaSandwiches);
+        compra.setEstado(EstadoDeCompra.PEDIDO);
+        compra.setFechaEntrega(localDateTime.plusMinutes(2));
+        compra.setFecha(localDateTime );
+        servicioCompra.guardarCompra(compra);
+
     }
 }

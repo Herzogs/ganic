@@ -1,8 +1,10 @@
 package ar.edu.unlam.tallerweb1.delivery;
 
 import ar.edu.unlam.tallerweb1.domain.Excepciones.LoginInvalidoException;
+import ar.edu.unlam.tallerweb1.domain.Excepciones.NoHaySandwichEnPromocionException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioNoRegistradoExepcion;
+import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
 import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 public class ControladorUsuario {
@@ -111,6 +114,19 @@ public class ControladorUsuario {
     private boolean esValido(String email) {
 
         return email.matches("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$");
+    }
+
+    @RequestMapping("/misdatos")
+    public ModelAndView verDatosDeUsuario(HttpServletRequest request) throws UsuarioInvalidoException {
+        Long idLogeado = (Long) request.getSession().getAttribute("id");
+        if (idLogeado != null) {
+            ModelMap modelo = new ModelMap();
+            Usuario miUsuario = null;
+            miUsuario = servicioLogin.consultarPorID(idLogeado);
+            modelo.put("miUsuario", miUsuario);
+            return new ModelAndView("misdatos", modelo);
+        }
+        return new ModelAndView("redirect:/login");
     }
 
 }

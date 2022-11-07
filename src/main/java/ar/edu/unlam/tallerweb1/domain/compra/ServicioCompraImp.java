@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 
-@Service
+
+@Service("servicioCompra")
 @Transactional
 public class ServicioCompraImp implements ServicioCompra {
 
@@ -66,4 +66,21 @@ public class ServicioCompraImp implements ServicioCompra {
         this.repo.actualizarCompra(compra);
     }
 
+    @Override
+    public List<Compra> listarComprasPorEstado(EstadoDeCompra estadoDeCompra) throws CompraNoEncontradaExeption {
+        List<Compra> list = this.repo.obtenerCompraPorEstado(EstadoDeCompra.PEDIDO);
+        if (list.isEmpty())
+            throw new CompraNoEncontradaExeption("No hay compra en marcha");
+        return list;
+    }
+
+    @Override
+    public void entregarCompra(Long idCompra) throws CompraNoEncontradaExeption {
+        Compra compra = this.repo.buscarCompra(idCompra);
+        if (compra == null)
+            throw new CompraNoEncontradaExeption("No existe la compra");
+        compra.setEstado(EstadoDeCompra.ENTREGADO);
+        this.repo.actualizarCompra(compra);
+
+    }
 }

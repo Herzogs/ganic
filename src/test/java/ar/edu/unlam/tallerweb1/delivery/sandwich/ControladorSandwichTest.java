@@ -9,6 +9,7 @@ import ar.edu.unlam.tallerweb1.domain.Excepciones.SandwichNoExistenteException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.ServicioSandwich;
+import ar.edu.unlam.tallerweb1.domain.compra.ServicioCompra;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
@@ -33,9 +34,11 @@ public class ControladorSandwichTest extends SpringTest {
     private ServicioSandwich servicioSandwich;
 
     private ServicioLogin servicioLogin;
+
     private ControladorSandwich controladorSandwich;
     private HttpSession session;
     private HttpServletRequest request;
+    private  ServicioCompra servicioCompra;
 
     private ServicioEmail servicioEmail;
 
@@ -43,9 +46,10 @@ public class ControladorSandwichTest extends SpringTest {
     public void init() {
         this.servicioSandwich = mock(ServicioSandwich.class);
         this.servicioLogin = mock(ServicioLogin.class);
+        this.servicioCompra=mock(ServicioCompra.class);
         this.session = mock(HttpSession.class);
         this.request = mock(HttpServletRequest.class);
-        this.controladorSandwich = new ControladorSandwich(this.servicioSandwich,this.servicioLogin);
+        this.controladorSandwich = new ControladorSandwich(this.servicioSandwich,this.servicioLogin,servicioCompra);
         this.servicioEmail = mock(ServicioEmail.class);
         when(this.request.getSession()).thenReturn(this.session);
     }
