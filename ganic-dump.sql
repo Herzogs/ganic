@@ -51,15 +51,7 @@ CREATE TABLE `Compra` (
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Ingrediente` (
-  `idIngrediente` bigint(20) NOT NULL,
-  `detalle` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `esApto` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `nombre` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `paso` int(11) DEFAULT NULL,
-  `precio` float DEFAULT NULL,
-  PRIMARY KEY (`idIngrediente`)
-);
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -98,10 +90,7 @@ INSERT INTO `Ingrediente` (`idIngrediente`, `detalle`, `esApto`, `nombre`, `paso
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Pedido` (
-  `id` bigint(20) NOT NULL,
-  PRIMARY KEY (`id`)
-);
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -115,14 +104,7 @@ CREATE TABLE `Pedido` (
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Sandwich` (
-  `idSandwich` bigint(20) NOT NULL,
-  `descripcion` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `enPromocion` bit(1) DEFAULT NULL,
-  `esApto` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `nombre` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`idSandwich`)
-);
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -142,16 +124,7 @@ INSERT INTO `Sandwich` (`idSandwich`, `descripcion`, `enPromocion`, `esApto`, `n
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Usuario` (
-  `id` bigint(20) NOT NULL,
-  `apellido` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `direccion` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `nombre` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `preferencia` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`id`)
-);
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -166,14 +139,7 @@ INSERT INTO `Usuario` (`id`, `apellido`, `direccion`, `email`, `nombre`, `passwo
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `compuesto_por` (
-  `idSandwich` bigint(20) NOT NULL,
-  `idIngrediente` bigint(20) NOT NULL,
-  PRIMARY KEY (`idSandwich`,`idIngrediente`),
-  KEY `FKh0fp8hwcwr091ii0cc99i2vhn` (`idIngrediente`),
-  CONSTRAINT `FK4wdawm4jec9dattj0fdkhhetf` FOREIGN KEY (`idSandwich`) REFERENCES `Sandwich` (`idSandwich`),
-  CONSTRAINT `FKh0fp8hwcwr091ii0cc99i2vhn` FOREIGN KEY (`idIngrediente`) REFERENCES `Ingrediente` (`idIngrediente`)
-);
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -227,9 +193,7 @@ INSERT INTO `detalle` (`idCompra`, `idSandwich`) VALUES (4,416);
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `hibernate_sequence` (
-  `next_val` bigint(20) DEFAULT NULL
-);
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

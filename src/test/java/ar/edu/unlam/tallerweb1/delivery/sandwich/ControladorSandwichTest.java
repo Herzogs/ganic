@@ -36,22 +36,17 @@ public class ControladorSandwichTest extends SpringTest {
     private ServicioLogin servicioLogin;
 
     private ControladorSandwich controladorSandwich;
-    private HttpSession session;
     private HttpServletRequest request;
-    private  ServicioCompra servicioCompra;
-
-    private ServicioEmail servicioEmail;
 
     @Before
     public void init() {
         this.servicioSandwich = mock(ServicioSandwich.class);
         this.servicioLogin = mock(ServicioLogin.class);
-        this.servicioCompra=mock(ServicioCompra.class);
-        this.session = mock(HttpSession.class);
+
+        HttpSession session = mock(HttpSession.class);
         this.request = mock(HttpServletRequest.class);
-        this.controladorSandwich = new ControladorSandwich(this.servicioSandwich,this.servicioLogin,servicioCompra);
-        this.servicioEmail = mock(ServicioEmail.class);
-        when(this.request.getSession()).thenReturn(this.session);
+        this.controladorSandwich = new ControladorSandwich(this.servicioSandwich,this.servicioLogin);
+        when(this.request.getSession()).thenReturn(session);
     }
 
     @Test
@@ -99,15 +94,15 @@ public class ControladorSandwichTest extends SpringTest {
         assertThat(mav.getModel().get("nombre")).isEqualTo(sandwich.getNombre());
     }
 
-    @Test
-    public void queDeMeEnvieUnEmailConLosDatosDelSandwichComprado() throws UsuarioInvalidoException {
+    //@Test
+    /*public void queDeMeEnvieUnEmailConLosDatosDelSandwichComprado() throws UsuarioInvalidoException {
         Sandwich sandwichComprado = dadoQueTengoUnSandwichConIngredientes();
         Usuario usuarioRegistrado = dadoQueTengoUnUsuarioRegistrado();
         when((Long)this.request.getSession().getAttribute("id")).thenReturn(usuarioRegistrado.getId());
         cuandoLLamoAlServicioDeUsuarioParaBuscarUnUsuarioPor(usuarioRegistrado.getId(),usuarioRegistrado);
         ModelAndView mav = cuandoLLamoAlControladorDeExitoDeCompraDeSandwich(sandwichComprado.getIdSandwich(),this.request);
         assertThat(mav.getModel().get("msg")).isEqualTo("Se ha enviado el email de confirmación");
-    }
+    }*/
 
     private void cuandoLLamoAlServicioDeUsuarioParaBuscarUnUsuarioPor(Long id, Usuario usuarioRegistrado) throws UsuarioInvalidoException {
         when(this.servicioLogin.consultarPorID(id)).thenReturn(usuarioRegistrado);
@@ -124,9 +119,9 @@ public class ControladorSandwichTest extends SpringTest {
     }
 
 
-    private ModelAndView cuandoLLamoAlControladorDeExitoDeCompraDeSandwich(Long idSandwich, HttpServletRequest request) {
+   /* private ModelAndView cuandoLLamoAlControladorDeExitoDeCompraDeSandwich(Long idSandwich, HttpServletRequest request) {
         return this.controladorSandwich.envioDeConfirmacion(idSandwich,request);
-    }
+    }*/
 
     private ModelAndView cuandoLLamoAlControladorParaQueMeEnvieALaConfirmacion(Long idSandwich, HttpServletRequest request) {
         return this.controladorSandwich.confirmarSandwich(idSandwich, request);

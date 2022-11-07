@@ -104,6 +104,14 @@ public class Sandwich {
         return getIdSandwich().equals(sandwich.getIdSandwich()) && getNombre().equals(sandwich.getNombre()) && getDescripcion().equals(sandwich.getDescripcion()) && Objects.equals(getIngrediente(), sandwich.getIngrediente());
     }
 
+    public Float obtenerMonto(){
+        Float tot=0F;
+        for (Ingrediente ing: this.ingrediente) {
+            tot += ing.getPrecio();
+        }
+        return tot;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(getIdSandwich(), getIngrediente());
