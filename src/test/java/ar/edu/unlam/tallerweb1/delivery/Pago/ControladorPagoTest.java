@@ -59,6 +59,9 @@ public class ControladorPagoTest extends SpringTest {
     @Test
     public void prueboQueSiHayErroresEnLaTarjetaIngresadaMeRedirijeALaVistaDePagoYMuestraMsgError(){
         FormularioDePago fp = dadoQueTengoUnaTarjetaIngresadaConErrores();
+        Sandwich sandwich = dadoQueTengoUnSandwich();
+        cuandoLeDigoAlServletQueDevuelvaUnSandwichQueDevuelva(sandwich);
+        cuandoLePidaAlServletQueDevuelvaElRecargoDevuelva(100F);
         ModelAndView model = cuandoLeEnvioAlControladorParaQueVerifiqueLosDatosDeLaTarjeta(fp,this.request);
         entoncesVerificoQueMeDevuelvaElMensajeDeError(model);
     }
@@ -66,6 +69,9 @@ public class ControladorPagoTest extends SpringTest {
     @Test
     public void prueboQueSiNoHayErroresEnLaTarjetaIngresadaMeRedirijeALaVistaDePagoCorrecto(){
         FormularioDePago fp = dadoQueTengoUnaTarjetaIngresadaSinErrores();
+        Sandwich sandwich = dadoQueTengoUnSandwich();
+        cuandoLeDigoAlServletQueDevuelvaUnSandwichQueDevuelva(sandwich);
+        cuandoLePidaAlServletQueDevuelvaElRecargoDevuelva(100F);
         ModelAndView model = cuandoLeEnvioAlControladorParaQueVerifiqueLosDatosDeLaTarjeta(fp, this.request);
         entoncesVerificoQueMeRedirijaALaVistaDe(model,"redirect:/alerta_exitosa");
     }
