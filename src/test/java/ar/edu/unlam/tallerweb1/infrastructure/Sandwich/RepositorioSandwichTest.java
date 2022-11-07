@@ -140,7 +140,8 @@ public class RepositorioSandwichTest extends SpringTest {
     }
 
     private void guardoElSandwichCreado(Sandwich valorEsperado) {
-        session().save(valorEsperado);
+        /*session().save(valorEsperado);*/
+        this.repositorioSandwich.guardarSandwich(valorEsperado);
     }
 
     private void agregarIngredientesAlSandwich(Sandwich valorEsperado, Ingrediente pan, Ingrediente principal, Ingrediente opcional) {

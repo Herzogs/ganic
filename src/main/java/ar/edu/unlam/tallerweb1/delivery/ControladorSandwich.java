@@ -8,8 +8,6 @@ import ar.edu.unlam.tallerweb1.domain.Excepciones.SandwichNoExistenteException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.ServicioSandwich;
-import ar.edu.unlam.tallerweb1.domain.compra.Compra;
-import ar.edu.unlam.tallerweb1.domain.compra.EstadoDeCompra;
 import ar.edu.unlam.tallerweb1.domain.compra.ServicioCompra;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
@@ -23,8 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -35,18 +31,13 @@ import java.util.stream.Collectors;
 public class ControladorSandwich {
 
 
-    private final ServicioSandwich servicioSandwich;
-    private final ServicioLogin servicioLogin;
-
-    private final ServicioEmail servicioEmail;
-    private ServicioCompra servicioCompra;
+    private ServicioSandwich servicioSandwich;
 
     @Autowired
-    public ControladorSandwich(ServicioSandwich servicioSandwich, ServicioLogin servicioLogin, ServicioCompra servicioCompra) {
+    public ControladorSandwich(ServicioSandwich servicioSandwich) {
         this.servicioSandwich = servicioSandwich;
-        this.servicioLogin = servicioLogin;
-        this.servicioEmail = new ServicioEmailImp();
-        this.servicioCompra= servicioCompra;
+
+
     }
 
     @RequestMapping(path = "/home", method = RequestMethod.GET)
@@ -87,13 +78,13 @@ public class ControladorSandwich {
             return new ModelAndView("redirect:/login");
         try{
             sandwichObtenido = this.servicioSandwich.obtenerSandwichPorId(idSandwich);
-            request.getSession().setAttribute("sandwichElegido",sandwichObtenido);
-            System.err.println(this.convertirSetToList(sandwichObtenido.getIngrediente()));
-            model.put("IngredientesDelSandwich",this.convertirSetToList(sandwichObtenido.getIngrediente()));
+            request.getSession().setAttribute("SANDWICH_ELEGIDO",sandwichObtenido);
+            System.err.println(sandwichObtenido.getIngrediente());
+            model.put("IngredientesDelSandwich",sandwichObtenido.getIngrediente());
             model.put("nombre",sandwichObtenido.getNombre());
             model.put("idSandwich",sandwichObtenido.getIdSandwich());
-            model.put("montoFinal", this.obtenerMontoFinalDeUnSandwich(this.convertirSetToList(sandwichObtenido.getIngrediente())));
-            request.getSession().setAttribute("SANDWICH_GUARDADO",sandwichObtenido);
+            model.put("montoFinal", sandwichObtenido.obtenerMonto());
+
             return new ModelAndView("confirmarSandwich",model);
         } catch (SandwichNoExistenteException e) {
             model.put("error", "No existe el sandwich");
@@ -101,55 +92,8 @@ public class ControladorSandwich {
         return new ModelAndView("redirect:/home",model);
     }
 
-    @RequestMapping(path = "/envioDeConfirmacion")
-    public ModelAndView envioDeConfirmacion(@RequestParam(value = "idSandwich",defaultValue = "0",required = false) Long idSandwich, HttpServletRequest request) {
-        Usuario cliente = null;
-        ModelMap modelo = new ModelMap();
-        Email nuevo = new Email();
-        Long idCliente = (Long) request.getSession().getAttribute("id");
-        Sandwich sand = null;
-        request.getSession().setAttribute("email",nuevo);
-        try{
-            if (idSandwich != 0) {
-                nuevo.setLista(this.servicioSandwich.obtenerLosIngredientesDeUnSandwich(idSandwich));
-            }else{
-                sand = (Sandwich) request.getSession().getAttribute("SANDWICH_GUARDADO");
-                nuevo.setLista(convertirSetToList(sand.getIngrediente()));
-            }
-            cliente = this.servicioLogin.consultarPorID(idCliente);
-            nuevo.setUser(cliente);
-            nuevo.setMetodoPago("Pago En Efectivo");
-            this.servicioEmail.sendEmail(nuevo,"Envio De Pedido");
-            modelo.put("msg","Se ha enviado el email de confirmación");
-            generarCompra(cliente,sand);
-        } catch (UsuarioInvalidoException | SandwichNoExistenteException e) {
-            modelo.put("error", "a ocurrido un error en el proceso de envio");
-        }
-        return new ModelAndView("alerta_exitosa",modelo);
-    }
-
     private List<Ingrediente> convertirSetToList(Set<Ingrediente> ing){
         return ing.stream().collect(Collectors.toCollection(ArrayList::new));
     }
 
-    private Float obtenerMontoFinalDeUnSandwich(List<Ingrediente> listaIngrediente){
-        Float monto = 0F;
-        for (Ingrediente ing: listaIngrediente) {
-            monto += ing.getPrecio();
-        }
-        return monto;
-    }
-    private void generarCompra(Usuario usuario, Sandwich sandwich){
-        List<Sandwich> listaSandwiches= new ArrayList<>();
-        LocalDateTime localDateTime=LocalDateTime.now(ZoneId.of("America/Buenos_Aires"));
-        listaSandwiches.add(sandwich);
-        Compra compra= new Compra();
-        compra.setCliente(usuario);
-        compra.setDetalle(listaSandwiches);
-        compra.setEstado(EstadoDeCompra.PEDIDO);
-        compra.setFechaEntrega(localDateTime.plusMinutes(2));
-        compra.setFecha(localDateTime );
-        servicioCompra.guardarCompra(compra);
-
-    }
 }

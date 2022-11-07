@@ -1,5 +1,13 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: h3rz
+  Date: 1/11/22
+  Time: 17:34
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="f" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -44,14 +52,27 @@
                         </div>
                     </div>
                     <%--Bloque que es visible si el elemento error no esta vacio	--%>
-                    <c:if test="${not empty error}">
-                        <h4><span>${error}</span></h4>
+                    <c:if test="${not empty msg}">
+                        <h4 class="text-danger"><span>${msg}</span></h4>
                         <br>
                     </c:if>
                 </div>
                 <div class="col-6">
-                    <h4 class="pb-3">Confirmar pago</h4>
-                    <a href="destino" class="btn btn-success px-5 mb-5">Confirmar Destino</a>
+                    <h4 class="pb-3">Ingrese pago</h4>
+                    <div class="w3-col s9 w3-padding-top-64 w3-center w3-">
+                        <f:form action="validarPago" method="POST" modelAttribute="formPago" class="m-0">
+                            Numero de la Tarjeta
+                            <f:input path="nroTarjeta" type="text" maxlength="16" size="16" required="required"/>
+                            <br/>
+                           Vencimiento
+                            <f:input path="vencTarjeta" type="date" required="required"/>
+                            <br/>
+                            Tres ultimos Digitos:
+                            <f:input path="codSeguridad" type="text" size="3" required="required"/>
+                            <br/>
+                            <button class="btn btn-primary ms-2" Type="Submit">Pagar</button>
+                        </f:form>
+                    </div>
                     <div><a href="restablecer" class="btn btn-primary px-5 my-5">Volver al Home</a></div>
                 </div>
             </div>
@@ -79,5 +100,26 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
         crossorigin="anonymous"></script>
+<script src="https://sdk.mercadopago.com/js/v2"></script>
+<script>
+    // Agrega credenciales de SDK
+    // Acá va la Public Key de la cuenta de mercadopago que voy a usar como
+    // vendedor
+    const mp = new MercadoPago("APP_USR-b80d8e26-f1e7-4970-9308-37f7159ae8d7", {
+        locale : "es-AR",
+    });
+    // Inicializa el checkout
+    mp.checkout({
+        preference : {
+            // Se le pasa el id de la preferencia de pago generada con el backend
+            // desde spring
+            id : '<c:out value="${preference.id}"/>',
+        },
+        render : {
+            container : ".cho-container", // Indica el nombre de la clase donde se mostrará el botón de pago
+            label : "Pagar", // Cambia el texto del botón de pago (opcional)
+        },
+    });
+</script>
 </body>
 </html>
