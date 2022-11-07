@@ -24,9 +24,12 @@ import java.util.Set;
 @Transactional
 public class ServicioMercadoPagoImp implements ServicioMercadoPago {
 
+    private RepositorioSandwich sandwich;
 
     @Autowired
-    public ServicioMercadoPagoImp() {}
+    public ServicioMercadoPagoImp(RepositorioSandwich sandwich) {
+        this.sandwich = sandwich;
+    }
     @Override
     public Preference generarPago(Pago sandPagar) {
         // Ac� va la clave privada(Access Token) que se genera en la cuenta de MercadoPago del vendedor

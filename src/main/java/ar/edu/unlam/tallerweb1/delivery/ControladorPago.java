@@ -3,12 +3,13 @@ package ar.edu.unlam.tallerweb1.delivery;
 import ar.edu.unlam.tallerweb1.domain.Email.Email;
 import ar.edu.unlam.tallerweb1.domain.Email.ServicioEmail;
 import ar.edu.unlam.tallerweb1.domain.Email.ServicioEmailImp;
-import ar.edu.unlam.tallerweb1.domain.Excepciones.SandwichNoExistenteException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.MercadoPago.Pago;
 import ar.edu.unlam.tallerweb1.domain.MercadoPago.ServicioMercadoPago;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.ServicioSandwich;
+import ar.edu.unlam.tallerweb1.domain.compra.Compra;
+import ar.edu.unlam.tallerweb1.domain.compra.ServicioCompra;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
@@ -16,14 +17,14 @@ import com.mercadopago.resources.preference.Preference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -32,18 +33,23 @@ import java.util.stream.Collectors;
 @Controller
 public class ControladorPago {
 
-    private ServicioEmail servicioEmail;
-    private ServicioLogin servicioLogin;
+    private final ServicioEmail servicioEmail;
+    private final ServicioLogin servicioLogin;
 
-    private ServicioMercadoPago servicioMercadoPago;
+    private final ServicioMercadoPago servicioMercadoPago;
 
-    private Pago nuevo;
+    private final ServicioSandwich servicioSandwich;
+    private final ServicioCompra servicioCompra;
+
+    private final Pago nuevo;
 
     @Autowired
-    public ControladorPago(ServicioLogin servicioLogin, ServicioMercadoPago servicioMercadoPago) {
+    public ControladorPago(ServicioLogin servicioLogin, ServicioMercadoPago servicioMercadoPago, ServicioCompra servicioCompra, ServicioSandwich servicioSandwich) {
         this.servicioLogin = servicioLogin;
         this.servicioMercadoPago = servicioMercadoPago;
         this.servicioEmail = new ServicioEmailImp();
+        this.servicioSandwich = servicioSandwich;
+        this.servicioCompra = servicioCompra;
         nuevo = new Pago();
     }
 
@@ -79,6 +85,8 @@ public class ControladorPago {
             nuevoEmail.setMetodoPago(paymentType);
             nuevoEmail.setLista(this.convertirSetToList(nuevo.getSandwich().getIngrediente()));
             nuevoEmail.setRecargo((Float) request.getSession().getAttribute("RECARGO"));
+            this.servicioSandwich.guardarSandwich(nuevo.getSandwich());
+            this.servicioCompra.guardarCompra(generarCompra(cliente,nuevo.getSandwich()));
             this.servicioEmail.sendEmail(nuevoEmail,"Envio De Pedido");
             modelo.put("msg","Se ha enviado el email de confirmación");
         } catch (UsuarioInvalidoException e) {
@@ -90,5 +98,16 @@ public class ControladorPago {
 
     private List<Ingrediente> convertirSetToList(Set<Ingrediente> ing){
         return ing.stream().collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    private Compra generarCompra(Usuario user, Sandwich sandwich){
+        Compra nueva = new Compra();
+        nueva.setCliente(user);
+        List<Sandwich> list = new ArrayList<>();
+        list.add(sandwich);
+        nueva.setDetalle(list);
+        nueva.setFecha(LocalDateTime.now(ZoneId.of("America/Buenos_Aires")));
+        nueva.setFechaEntrega(LocalDateTime.now(ZoneId.of("America/Buenos_Aires")).plusMinutes(5));
+        return nueva;
     }
 }

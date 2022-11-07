@@ -31,8 +31,8 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class ControladorDeIngredientes {
 
-    private ServicioDeIngrediente servicioDeIngrediente;
-    private datosDelSandwich sandwich;
+    private final ServicioDeIngrediente servicioDeIngrediente;
+    private final datosDelSandwich sandwich;
 
 
     private static final Integer MAX_PASOS_PERMITIDOS = 3;
