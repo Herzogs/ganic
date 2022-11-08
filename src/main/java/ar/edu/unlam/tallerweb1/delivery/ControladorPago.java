@@ -95,9 +95,6 @@ public class ControladorPago {
         return new ModelAndView("redirect:/alerta_exitosa");
     }
 
-
-
-
     @RequestMapping(path = "/alerta_exitosa", method = RequestMethod.GET)
     public ModelAndView pagoCorrecto(HttpServletRequest request){
         Usuario cliente = null;
@@ -110,8 +107,6 @@ public class ControladorPago {
             nuevoEmail.setMetodoPago("Tarjeta");
             nuevoEmail.setLista(this.convertirSetToList(nuevo.getSandwich().getIngrediente()));
             nuevoEmail.setRecargo((Float) request.getSession().getAttribute("RECARGO"));
-            nuevo.getSandwich().setEnPromocion(false);
-            this.servicioSandwich.guardarSandwich(nuevo.getSandwich());
             this.servicioCompra.guardarCompra(generarCompra(cliente,nuevo.getSandwich()));
             this.servicioEmail.sendEmail(nuevoEmail,"Envio De Pedido");
             modelo.put("msg","Se ha enviado el email de confirmación");

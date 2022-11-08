@@ -51,27 +51,28 @@
                                     class="text-primary">$${montoFinal}</span></p>
                         </div>
                     </div>
-                    <%--Bloque que es visible si el elemento error no esta vacio	--%>
-                    <c:if test="${not empty msg}">
-                        <h4 class="text-danger"><span>${msg}</span></h4>
-                        <br>
-                    </c:if>
+
                 </div>
                 <div class="col-6">
                     <h4 class="pb-3">Ingrese pago</h4>
                     <div class="w3-col s9 w3-padding-top-64 w3-center w3-">
                         <f:form action="validarPago" method="POST" modelAttribute="formPago" class="m-0">
-                            Numero de la Tarjeta
+                            <span>Numero de la Tarjeta</span>
                             <f:input path="nroTarjeta" type="text" maxlength="16" size="16" required="required"/>
                             <br/>
-                           Vencimiento
+                           <span>Vencimiento</span>
                             <f:input path="vencTarjeta" type="date" required="required"/>
                             <br/>
-                            Tres ultimos Digitos:
+                            <span>Tres ultimos Digitos</span>
                             <f:input path="codSeguridad" type="text" size="3" required="required"/>
                             <br/>
                             <button class="btn btn-primary ms-2" Type="Submit">Pagar</button>
                         </f:form>
+
+                        <%--Bloque que es visible si el elemento error no esta vacio	--%>
+                        <c:if test="${not empty msg}">
+                            <span class="text-danger my-4">${msg}</span>
+                        </c:if>
                     </div>
                     <div><a href="restablecer" class="btn btn-primary px-5 my-5">Volver al Home</a></div>
                 </div>

@@ -9,6 +9,7 @@ import ar.edu.unlam.tallerweb1.domain.Excepciones.IngredienteInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.PasoInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
+import ar.edu.unlam.tallerweb1.domain.Sandwich.ServicioSandwich;
 import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +35,15 @@ public class ControladorDeIngredientes {
     private final ServicioDeIngrediente servicioDeIngrediente;
     private final DatosDelSandwich sandwich;
 
+    private final ServicioSandwich servicioSandwich;
+
 
     private static final Integer MAX_PASOS_PERMITIDOS = 3;
 
     @Autowired
-    public ControladorDeIngredientes(ServicioDeIngrediente servicioDeIngrediente) {
+    public ControladorDeIngredientes(ServicioDeIngrediente servicioDeIngrediente, ServicioSandwich servicioSandwich) {
         this.servicioDeIngrediente = servicioDeIngrediente;
+        this.servicioSandwich = servicioSandwich;
         this.sandwich = new DatosDelSandwich();
     }
 
@@ -190,6 +194,13 @@ public class ControladorDeIngredientes {
         mod.put("pref",du.getPreferencia());
         mod.put("paso",du.getPaso());
         return new ModelAndView("redirect:/modifcarIngrediente",mod);
+    }
+
+    @RequestMapping(path = "/salvarSandwich", method = RequestMethod.GET)
+    public ModelAndView salvarSandwich(HttpServletRequest request) {
+        Sandwich sandwich = (Sandwich) request.getSession().getAttribute("SANDWICH_ELEGIDO");
+        servicioSandwich.guardarSandwich(sandwich);
+        return new ModelAndView("destino");
     }
 
     private Sandwich generarSandwich(List<Ingrediente> lista){
