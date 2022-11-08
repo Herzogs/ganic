@@ -63,6 +63,8 @@ public class ControladorCompraTest extends SpringTest {
         verificoQueMeMandeElMensajeDeError(model, msg);
     }
 
+
+
     private void verificoQueMeMandeElMensajeDeError(ModelAndView model, String msg) {
         assertThat(model.getModel().get("msg")).isEqualTo(msg);
     }

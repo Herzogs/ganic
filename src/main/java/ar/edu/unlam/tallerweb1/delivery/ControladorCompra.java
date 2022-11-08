@@ -27,23 +27,6 @@ public class ControladorCompra {
         this.servicioLogin= servicioLogin;
     }
 
-
-    @RequestMapping(path = "/miPedido", method = RequestMethod.GET)
-    public ModelAndView verMisPedidos(HttpServletRequest request) {
-        ModelMap model = new ModelMap();
-
-        Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
-        List<Compra>compra = null;
-        try {
-            compra=  servicio.listarComprasDeUsuarioPorEstado(usuario, EstadoDeCompra.PREPARACION);
-        model.put("compra",compra);
-        } catch (CompraNoEncontradaExeption e) {
-            model.put("msj","El pedido ya ha sido entregado");
-        }
-
-
-        return new ModelAndView("miPedido", model);
-    }
     @RequestMapping(path = "/historial", method = RequestMethod.GET)
     public ModelAndView listarTodasLasCompras(HttpServletRequest request) {
         ModelMap model= new ModelMap();
@@ -51,7 +34,6 @@ public class ControladorCompra {
         Long idUsuario= 0L;
         try {
             idUsuario= (Long) request.getSession().getAttribute("id");
-         //  Usuario usuario= servicioLogin.consultarPorID(idUsuario);
             listaComprado= servicio.listarTodasLasCompras(idUsuario);
             model.put("listaDeCompras",listaComprado);
 
