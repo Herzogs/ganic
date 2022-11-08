@@ -6,7 +6,6 @@ import ar.edu.unlam.tallerweb1.domain.compra.Compra;
 import ar.edu.unlam.tallerweb1.domain.compra.EstadoDeCompra;
 import ar.edu.unlam.tallerweb1.domain.compra.RepositorioCompra;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
-import ar.edu.unlam.tallerweb1.infrastructure.RepositorioCompraImp;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,7 +69,7 @@ public class RepositorioCompraImpTest extends SpringTest {
         Usuario usuario = dadoQueTengoUnUsuario(1L, "diego@ganic.com", "123");
         List<Sandwich> sandwich = dadoQueTengoSandwichsSeleccionados();
         Compra compra = generoLaCompra(1L, usuario, sandwich);
-        List<Compra> miPedido = buscoLaCompraPorUsuarioYEstado(usuario, EstadoDeCompra.PEDIDO);
+        List<Compra> miPedido = buscoLaCompraPorUsuarioYEstado(usuario, EstadoDeCompra.PREPARACION);
         verificoQueElPedidoSeaCorrecto(miPedido, sandwich);
     }
 

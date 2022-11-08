@@ -72,7 +72,7 @@ public class ServicioCompraImpTest extends SpringTest {
         Usuario usuario = dadoQueTengoUnUsuario(1L, "diego@ganic.com", "123");
         List<Sandwich> sandwich = dadoQueTengoSandwichsSeleccionados();
         Compra compra = generoLaCompra(usuario, sandwich);
-        List<Compra> pedido = buscarComprasEnEstadoPedidoPorCliente(usuario, EstadoDeCompra.PEDIDO);
+        List<Compra> pedido = buscarComprasEnEstadoPedidoPorCliente(usuario, EstadoDeCompra.PREPARACION);
         verificoQueElPedidoSeaIgualALOComprado(compra, pedido);
     }
 
@@ -107,7 +107,7 @@ public class ServicioCompraImpTest extends SpringTest {
         Compra compra = generoLaCompra(usu, sandwich);
         List<Compra> historial = new ArrayList<>();
         historial.add(compra);
-        when(repo.buscarPorEstado(usuario, EstadoDeCompra.PEDIDO)).thenReturn(historial);
+        when(repo.buscarPorEstado(usuario, EstadoDeCompra.PREPARACION)).thenReturn(historial);
         return servicioCompra.listarComprasDeUsuarioPorEstado(usuario, estado);
     }
 

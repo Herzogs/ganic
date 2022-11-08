@@ -7,7 +7,6 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 import java.util.List;
-import java.util.Set;
 
 @Entity
 public class Compra {
@@ -26,24 +25,34 @@ public class Compra {
     private LocalDateTime fecha;
 
     private LocalDateTime fechaEntrega;
+    @Column(name="comentario", nullable = true, length = 250 )
+    private String comentario;
 
     @Column(name="estado", nullable = false, length = 15 )
     @Enumerated( value = EnumType.STRING)
     private EstadoDeCompra estado;
+
+    public String getComentario() {
+        return comentario;
+    }
+
+    public void setComentario(String comentario) {
+        this.comentario = comentario;
+    }
 
     public Compra(Long idCompra, Usuario cliente, List<Sandwich> detalle) {
         this.idCompra = idCompra;
         this.usuario = cliente;
         this.detalle = detalle;
         this.fecha = LocalDateTime.now();
-        this.estado=EstadoDeCompra.PEDIDO;
+        this.estado=EstadoDeCompra.PREPARACION;
     }
     public Compra( Usuario cliente, List<Sandwich> detalle) {
-        this.idCompra = idCompra;
         this.usuario = cliente;
         this.detalle = detalle;
         this.fecha = LocalDateTime.now();
-        this.estado=EstadoDeCompra.PEDIDO;
+        this.estado=EstadoDeCompra.PREPARACION;
+        this.fechaEntrega= this.fecha.plusMinutes(5);
     }
 
     public Usuario getUsuario() {

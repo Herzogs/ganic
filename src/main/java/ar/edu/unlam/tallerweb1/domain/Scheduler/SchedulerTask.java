@@ -36,7 +36,7 @@ public class SchedulerTask {
     public void EnvioDeEmailCuandoFalten5Minutos(){
         List<Compra> compraList = null;
         try {
-            compraList = this.servicioCompra.listarComprasPorEstado(EstadoDeCompra.PEDIDO);
+            compraList = this.servicioCompra.listarComprasPorEstado(EstadoDeCompra.PREPARACION);
             LocalDateTime actual = LocalDateTime.now(ZoneId.of("America/Buenos_Aires"));
             for (Compra comp : compraList) {
                 LocalDateTime venc = comp.getFecha().plusMinutes(5);
@@ -57,7 +57,7 @@ public class SchedulerTask {
     public void actualizarEstadoDeEntrega(){
         List<Compra> compraList = null;
         try {
-            compraList = this.servicioCompra.listarComprasPorEstado(EstadoDeCompra.PEDIDO);
+            compraList = this.servicioCompra.listarComprasPorEstado(EstadoDeCompra.PREPARACION);
             LocalDateTime actual = LocalDateTime.now(ZoneId.of("America/Buenos_Aires"));
             for (Compra comp : compraList) {
                 if (actual.withNano(0).withSecond(0).equals(comp.getFechaEntrega().withNano(0).withSecond(0))) {

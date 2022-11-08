@@ -1,11 +1,9 @@
 package ar.edu.unlam.tallerweb1.domain.compra;
 
 import ar.edu.unlam.tallerweb1.domain.Excepciones.CompraNoEncontradaExeption;
-import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 
 import java.util.List;
-import java.util.Set;
 
 public interface ServicioCompra {
     public void guardarCompra(Compra compra);
@@ -16,6 +14,8 @@ public interface ServicioCompra {
     public void cancelarCompra(Compra compra, EstadoDeCompra estadoDeCompra);
 
     public List<Compra> listarComprasPorEstado(EstadoDeCompra estadoDeCompra) throws CompraNoEncontradaExeption;
-
+    public void actualizarCompra(Compra compra);
     public void entregarCompra(Long idCompra) throws CompraNoEncontradaExeption;
+
+    List<Compra> listarTodasLasCompras(Long idUsuario) throws CompraNoEncontradaExeption;
 }

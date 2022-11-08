@@ -1,7 +1,6 @@
 package ar.edu.unlam.tallerweb1.domain.compra;
 
 import ar.edu.unlam.tallerweb1.domain.Excepciones.CompraNoEncontradaExeption;
-import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,12 +65,19 @@ public class ServicioCompraImp implements ServicioCompra {
         this.repo.actualizarCompra(compra);
     }
 
+
     @Override
     public List<Compra> listarComprasPorEstado(EstadoDeCompra estadoDeCompra) throws CompraNoEncontradaExeption {
-        List<Compra> list = this.repo.obtenerCompraPorEstado(EstadoDeCompra.PEDIDO);
+        List<Compra> list = this.repo.obtenerCompraPorEstado(EstadoDeCompra.PREPARACION);
         if (list.isEmpty())
             throw new CompraNoEncontradaExeption("No hay compra en marcha");
         return list;
+    }
+
+    @Override
+   public void actualizarCompra(Compra compra){
+        repo.actualizarCompra(compra);
+
     }
 
     @Override
@@ -81,6 +87,13 @@ public class ServicioCompraImp implements ServicioCompra {
             throw new CompraNoEncontradaExeption("No existe la compra");
         compra.setEstado(EstadoDeCompra.ENTREGADO);
         this.repo.actualizarCompra(compra);
+    }
 
+    @Override
+    public List<Compra> listarTodasLasCompras(Long idUsuario) throws CompraNoEncontradaExeption {
+       List<Compra> lista= repo.buscarCompraPorCliente(idUsuario);
+       if(lista.isEmpty())
+           throw  new CompraNoEncontradaExeption("No existe compra");
+       return lista;
     }
 }
