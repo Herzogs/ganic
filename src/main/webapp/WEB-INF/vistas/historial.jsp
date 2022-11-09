@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
 <!DOCTYPE html>
 <html>
 <%@ include file="../vistas/header.jsp" %>
@@ -27,7 +28,7 @@
                                 <h4 class="mb-3">Nro de compra: ${ compra.idCompra } <span class="ms-5 text-primary">${ compra.estado }</span> </h4>
                                 <span class="pe-5">Nombre del Sandwich:   ${ compra.detalle.get(0).nombre }</span>
                                 <span class="pe-5">Preferencia:   ${ compra.detalle.get(0).esApto }</span>
-                                <span class="pe-5">Fecha:   ${ compra.fecha.withSecond(0).withNano(0) }</span>
+                                <span class="pe-5">Fecha:   ${ compra.fecha.format(DateTimeFormatter.ofPattern("yyyy/mm/dd - hh:mm:ss")) }</span>
                                 <span class="pe-5">Precio:   ${ compra.detalle.get(0).obtenerMonto()}</span>
                             </div>
                             <c:choose>

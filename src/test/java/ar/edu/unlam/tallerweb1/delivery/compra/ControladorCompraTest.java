@@ -27,7 +27,6 @@ import static org.mockito.Mockito.*;
 public class ControladorCompraTest extends SpringTest {
     private ControladorCompra controladorComprapra;
     private ServicioCompra servicio;
-    private HttpSession session;
     private HttpServletRequest request;
     private ServicioLogin servicioLogin;
 
@@ -37,8 +36,8 @@ public class ControladorCompraTest extends SpringTest {
         this.servicioLogin = mock(ServicioLogin.class);
         this.controladorComprapra = new ControladorCompra(this.servicio, servicioLogin);
         this.request = mock(HttpServletRequest.class);
-        this.session = mock(HttpSession.class);
-        when(this.request.getSession()).thenReturn(this.session);
+        HttpSession session = mock(HttpSession.class);
+        when(this.request.getSession()).thenReturn(session);
     }
 
     @Test
