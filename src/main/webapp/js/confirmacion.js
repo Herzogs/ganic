@@ -13,7 +13,7 @@ $(document).ready(()=>{
     map.on("click",function (e) {
         if(marcas === 0) {
             home = L.latLng(e.latlng.lat, e.latlng.lng);
-            L.Marker(home).addTo(map);
+            L.marker(home).addTo(map);
             array.push(home);
             L.polyline(array, {color: 'red'}).addTo(map);
             marcas +=1;

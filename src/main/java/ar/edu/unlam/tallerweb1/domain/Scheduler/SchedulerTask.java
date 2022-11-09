@@ -33,13 +33,13 @@ public class SchedulerTask {
     private static final ServicioEmail servicioEmail = new ServicioEmailImp();
 
     @Async
-    @Scheduled(cron = "0 */5 * ? * *",zone = "America/Buenos_Aires")
-    public void EnvioDeEmailCuandoFalten5Minutos(){
+    @Scheduled(cron = "0 */5 * ? * *", zone = "America/Buenos_Aires")
+    public void EnvioDeEmailCuandoFalten5Minutos() {
         List<Compra> compraList = null;
         try {
             compraList = this.servicioCompra.listarComprasPorEstado(EstadoDeCompra.PREPARACION);
             LocalDateTime actual = LocalDateTime.now(ZoneId.of("America/Buenos_Aires")).withNano(0);
-            for (Compra comp : compraList) {
+           /* for (Compra comp : compraList) {
                 LocalDateTime venc = comp.getFechaEntrega().minusMinutes(5);
                 log.info("FECHA DE AVISO: " + venc + " , DEL PEDIDO: "+ comp.getIdCompra()+ " , FECHA ACTUAL: "+ actual);
                 Long minutes = actual.until(venc, ChronoUnit.MINUTES);
@@ -48,25 +48,46 @@ public class SchedulerTask {
                     servicioEmail.sendEmail(comp.getUsuario().getEmail(), "Envio de Pedido", "Ya se le enviara el pedido");
                     log.info(String.format("Enviando email a %s", comp.getUsuario().getEmail()));
                 }
-            }
-        }catch (CompraNoEncontradaExeption e){
+            }*/
+            compraList.forEach(compra -> {
+                LocalDateTime venc = compra.getFechaEntrega().minusMinutes(5);
+                log.info("FECHA DE AVISO: " + venc + " , DEL PEDIDO: " + compra.getIdCompra() + " , FECHA ACTUAL: " + actual);
+                Long minutes = actual.until(venc, ChronoUnit.MINUTES);
+                log.info("CANTIDAD DE MINUTOS FALTANTES: " + minutes + ", DEL PEDIDO: " + compra.getIdCompra());
+                if (minutes >= 0 && minutes <= 5) {
+                    servicioEmail.sendEmail(compra.getUsuario().getEmail(), "Envio de Pedido", "Ya se le enviara el pedido");
+                    log.info(String.format("Enviando email a %s", compra.getUsuario().getEmail()));
+                }
+            });
+        } catch (CompraNoEncontradaExeption e) {
             log.info("No hay entregas en estado pendientes en la base de datos");
         }
     }
+
     @Async
-    @Scheduled(cron = "0 * * ? * *",zone = "America/Buenos_Aires")
-    public void actualizarEstadoDeEntrega(){
+    @Scheduled(cron = "0 * * ? * *", zone = "America/Buenos_Aires")
+    public void actualizarEstadoDeEntrega() {
         List<Compra> compraList = null;
         try {
             compraList = this.servicioCompra.listarComprasPorEstado(EstadoDeCompra.PREPARACION);
             LocalDateTime actual = LocalDateTime.now(ZoneId.of("America/Buenos_Aires"));
-            for (Compra comp : compraList) {
+            /*for (Compra comp : compraList) {
                 if (actual.withNano(0).withSecond(0).equals(comp.getFechaEntrega().withNano(0).withSecond(0))) {
                     this.servicioCompra.entregarCompra(comp.getIdCompra());
-                    log.info("ENTREGANDO EL PEDIDO: "+ comp.getIdCompra());
+                    log.info("ENTREGANDO EL PEDIDO: " + comp.getIdCompra());
                 }
-            }
-        }catch (CompraNoEncontradaExeption e){
+            }*/
+            compraList.forEach(compra -> {
+                if (actual.withNano(0).withSecond(0).equals(compra.getFechaEntrega().withNano(0).withSecond(0))) {
+                    try {
+                        this.servicioCompra.entregarCompra(compra.getIdCompra());
+                    } catch (CompraNoEncontradaExeption e) {
+                        log.warn("no se puede entregar la compra");
+                    }
+                    log.info("ENTREGANDO EL PEDIDO: " + compra.getIdCompra());
+                }
+            });
+        } catch (CompraNoEncontradaExeption e) {
             log.info("No hay pedidos en espera en la cola");
         }
     }
