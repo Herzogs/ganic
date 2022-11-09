@@ -32,11 +32,36 @@
     <nav class="nav_style d-flex align-items-center">
         <div class="container">
             <div class="text-center">
+                <a href="home"><img src="img/ganiclogo.png" class="img-fluid logo_style" alt="Logo"></a>
                 <a href="home">Home</a>
                 <a href="ingredientes">Menu</a>
-                <a href="home"><img src="${pageContext.request.contextPath}/img/ganiclogo.png" class="img-fluid logo_style" alt="Logo"></a>
                 <a href="contacto">Contacto</a>
                 <a href="nosotros">Nosotros</a>
+                <c:choose>
+                    <c:when test="${sessionScope.id == null}">
+						<span class="dropdown ps-5">
+							<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+								Mi perfil
+							</button>
+							<ul class="dropdown-menu">
+								<li><a class="dropdown-item text-dark py-2" href="login">Login</a></li>
+								<li><a class="dropdown-item text-dark py-2" href="registrar">Registrar</a></li>
+							</ul>
+						</span>
+                    </c:when>
+                    <c:otherwise>
+						<span class="dropdown ps-5">
+							<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+								Mi perfil
+							</button>
+							<ul class="dropdown-menu">
+								<li><a class="dropdown-item text-dark py-2" href="misdatos">Mis datos</a></li>
+								<li><a class="dropdown-item text-dark py-2" href="historial">Mis pedidos</a></li>
+								<li><a class="dropdown-item text-dark py-2" href="Salir">Salir</a></li>
+							</ul>
+						</span>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </div>
     </nav>
@@ -48,7 +73,7 @@
                     <h1>Elija su destino</h1>
                     <div id="map" class="map"></div>
                     <c:if test="${not empty msg}">
-                        <h4><span>${msg}</span></h4>
+                        <h4 class="text-center text-danger">${msg}</h4>
                     </c:if>
                     <form method="get" action="seleccionarDestino">
                         <input name="dist" id="dist" type="hidden">
@@ -63,23 +88,7 @@
         </div>
     </section>
 </main>
-<footer style="background-color: #000000; height: 100px">
-    <div class="container">
-        <div class="row pt-3 text-white">
-            <div class="col-6 pt-3">
-                <span class="ms-5">Seguinos en</span>
-                <i class="bi bi-facebook ms-3" style="font-size: 20px"></i>
-                <i class="bi bi-instagram ms-3" style="font-size: 20px"></i>
-            </div>
-            <div class="col-3 text-end pt-3">
-                <h2>GANIC</h2>
-            </div>
-            <div class="col-3 text-end">
-                <img src="img/ganiclogo.png" class="img-fluid logo_style" alt="Logo">
-            </div>
-        </div>
-    </div>
-</footer>
+<%@ include file="../vistas/footer.jsp" %>
 <!-- JavaScript Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
