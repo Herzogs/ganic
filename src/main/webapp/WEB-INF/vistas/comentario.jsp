@@ -18,14 +18,20 @@
 
     <section>
         <div class="container">
+            <h2 class="mt-5 text-center">Agregar comentario</h2>
 
-            <h2 class="my-5">Agregar comentario:</h2>
+                <div class="text-center">
+                    <img src="img/coment.png" class="img-fluid" alt="coments" style="max-width: 300px">
+                </div>
+
 
             <form:form action="agregarComentario" method="POST" modelAttribute="formularioComentario">
-                <h3>Comentario sobre su pedido</h3>
+                <h3 class="mb-3">Dejanos tu opinión sobre nuestros productos y atención !</h3>
                 <form:input path="comentario" type="text" class="form-control" />
                 <form:input path="idCompra" type="text" class="form-control d-none" value="${compra.idCompra}" />
-                    <button class="btn btn-success mt-5 mb-4" Type="Submit">Enviar</button>
+                   <div class="text-end my-5">
+                       <button class="btn btn-success px-5" Type="Submit">Enviar</button>
+                   </div>
             </form:form>
 
 

@@ -20,7 +20,7 @@
         <div class="container">
 
             <div class="row">
-                <h2 class="mt-5 mb-3">Mis pedidos:</h2>
+                <h2 class="mt-5 mb-3"><i class="bi bi-bag-heart text-primary ms-2"></i> Mis pedidos:</h2>
                 <c:forEach var="compra" items="${listaDeCompras}" >
                     <div class="col-12 g-5">
                             <div class="p-3 bg-dark text-white rounded-top">
