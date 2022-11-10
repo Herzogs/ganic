@@ -73,7 +73,7 @@ public class ControladorPagoTest extends SpringTest {
         cuandoLeDigoAlServletQueDevuelvaUnSandwichQueDevuelva(sandwich);
         cuandoLePidaAlServletQueDevuelvaElRecargoDevuelva(100F);
         ModelAndView model = cuandoLeEnvioAlControladorParaQueVerifiqueLosDatosDeLaTarjeta(fp, this.request);
-        entoncesVerificoQueMeRedirijaALaVistaDe(model,"redirect:/alerta_exitosa");
+        entoncesVerificoQueMeRedirijaALaVistaDe(model,"pago");
     }
 
     private void entoncesVerificoQueMeRedirijaALaVistaDe(ModelAndView model, String alerta_exitosa) {
