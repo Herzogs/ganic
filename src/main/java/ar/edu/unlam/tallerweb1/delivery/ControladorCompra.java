@@ -42,7 +42,7 @@ public class ControladorCompra {
             model.put("listaDeCompras", listaComprado);
 
         } catch (CompraNoEncontradaExeption e) {
-            model.put("msg", "Todavía no realizó ninguna compra");
+            model.put("msg", "Todavía no realizo ninguna compra");
             return new ModelAndView("historial", model);
         }
 
@@ -50,12 +50,20 @@ public class ControladorCompra {
     }
 
     @RequestMapping(path = "/comentarios", method = RequestMethod.GET)
-    public ModelAndView comentario(@RequestParam(value = "idCompra") Long idCompra) throws CompraNoEncontradaExeption {
+    public ModelAndView comentario(@RequestParam(value = "idCompra") Long idCompra)  {
         ModelMap model = new ModelMap();
         Compra compraObtenida = null;
-        compraObtenida = servicio.buscarCompra(idCompra);
-        model.put("formularioComentario", new FormularioComentario());
-        model.put("compra", compraObtenida);
+        try {
+            compraObtenida = servicio.buscarCompra(idCompra);
+            model.put("formularioComentario", new FormularioComentario());
+            model.put("compra", compraObtenida);
+
+        } catch (CompraNoEncontradaExeption e) {
+            model.put("msg", "Todavía no realizo ninguna compra");
+            return new ModelAndView("redirect:/home", model);
+        }
+
+
         return new ModelAndView("comentario", model);
     }
 

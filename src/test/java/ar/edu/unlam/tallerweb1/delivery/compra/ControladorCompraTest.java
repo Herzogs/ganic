@@ -59,7 +59,7 @@ public class ControladorCompraTest extends SpringTest {
         when(request.getSession().getAttribute("id")).thenReturn(1L);
         cuandoLLameAlServicioDeListarComprasYNoTengaComprasMeLanceExeption(1L);
         ModelAndView model = cuandoNoTengoComprasMeMuestreUnMensajeDeError(request);
-        String msg = "Todavía no realizó ninguna compra";
+        String msg = "Todavía no realizo ninguna compra";
         verificoQueMeMandeElMensajeDeError(model, msg);
     }
 
