@@ -19,7 +19,7 @@
     <section>
         <div class="container">
 
-            <div class="row">
+            <div class="row mb-5">
                 <h2 class="mt-5 mb-3"><i class="bi bi-bag-heart text-primary ms-2"></i> Mis pedidos:</h2>
                 <c:forEach var="compra" items="${listaDeCompras}" >
                     <div class="col-12 g-5">
@@ -28,7 +28,7 @@
                                 <span class="pe-5">Nombre del Sandwich:   ${ compra.detalle.get(0).nombre }</span>
                                 <span class="pe-5">Preferencia:   ${ compra.detalle.get(0).esApto }</span>
                                 <span class="pe-5">Fecha:   ${ compra.fecha.withSecond(0).withNano(0) }</span>
-                                <span class="pe-5">Precio:   ${ compra.detalle.get(0).obtenerMonto()}</span>
+                                <span class="pe-5">Precio:   $${ compra.detalle.get(0).obtenerMonto()}</span>
                             </div>
                             <c:choose>
                                 <c:when test="${compra.comentario == null}">

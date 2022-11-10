@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.delivery.compra;
 
 import ar.edu.unlam.tallerweb1.SpringTest;
 import ar.edu.unlam.tallerweb1.delivery.ControladorCompra;
+import ar.edu.unlam.tallerweb1.delivery.FormularioComentario;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.CompraNoEncontradaExeption;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
 import ar.edu.unlam.tallerweb1.domain.compra.Compra;
@@ -43,7 +44,7 @@ public class ControladorCompraTest extends SpringTest {
 
     @Test
     public void queSiElUSuarioRealizoAlgunPedidoPuedaListarTodasLasCompras() throws CompraNoEncontradaExeption {
-        Usuario usuario = dadoQueTengoUnUsurio();
+        Usuario usuario = dadoQueTengoUnUsuario();
         Sandwich sandwich = dadoQueTengoUnSandwich();
         Compra compra = dadoQueTengoUnaCompra(usuario, sandwich);
         List<Compra> listaComprados = dadoQueTengoUnaListaDeCompras(compra);
@@ -63,6 +64,37 @@ public class ControladorCompraTest extends SpringTest {
         verificoQueMeMandeElMensajeDeError(model, msg);
     }
 
+
+    @Test
+    public void siElUsuarioListaSusComprasPuedeAgregarUnComentario() throws CompraNoEncontradaExeption {
+        Usuario usuario = dadoQueTengoUnUsuario();
+        Sandwich sandwich = dadoQueTengoUnSandwich();
+        Compra compra = dadoQueTengoUnaCompra(usuario, sandwich);
+
+        FormularioComentario miComentario = dadoQueTengoUnModeloDeDatos();
+        cuandoIngresoDatosAlComentario(miComentario);
+        cuandoBuscoUnaDeLasCompras(usuario.getId(), compra);
+
+        entoncesVerificoQueTengoUnComentario(miComentario);
+
+    }
+
+    private void entoncesVerificoQueTengoUnComentario(FormularioComentario comentario) {
+        assertThat(comentario).isNotNull();
+    }
+
+    private FormularioComentario dadoQueTengoUnModeloDeDatos() {
+        FormularioComentario coment = new FormularioComentario();
+        coment.setComentario("Muy rico");
+        coment.setIdCompra(1L);
+        return coment;
+    }
+
+    private FormularioComentario cuandoIngresoDatosAlComentario(FormularioComentario comentario) {
+        comentario.setComentario("Muy rico");
+        comentario.setIdCompra(1L);
+        return comentario;
+    }
 
 
     private void verificoQueMeMandeElMensajeDeError(ModelAndView model, String msg) {
@@ -90,6 +122,10 @@ public class ControladorCompraTest extends SpringTest {
         when(servicio.listarTodasLasCompras(idUsuario)).thenReturn(compra);
     }
 
+    private void cuandoBuscoUnaDeLasCompras(Long idUsuario,Compra compra) throws CompraNoEncontradaExeption {
+        when(servicio.buscarCompra(idUsuario)).thenReturn(compra);
+    }
+
     private List<Compra> dadoQueTengoUnaListaDeCompras(Compra compra) {
         List<Compra> lista = new ArrayList<>();
         lista.add(compra);
@@ -114,7 +150,7 @@ public class ControladorCompraTest extends SpringTest {
 
     }
 
-    private Usuario dadoQueTengoUnUsurio() {
+    private Usuario dadoQueTengoUnUsuario() {
         return new Usuario("diego@gmail.com", "123");
     }
 
