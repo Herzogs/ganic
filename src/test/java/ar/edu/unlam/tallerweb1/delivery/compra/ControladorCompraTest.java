@@ -69,11 +69,9 @@ public class ControladorCompraTest extends SpringTest {
         Usuario usuario = dadoQueTengoUnUsuario();
         Sandwich sandwich = dadoQueTengoUnSandwich();
         Compra compra = dadoQueTengoUnaCompra(usuario, sandwich);
-
         FormularioComentario miComentario = dadoQueTengoUnModeloDeDatos();
         cuandoIngresoDatosAlComentario(miComentario);
         cuandoBuscoUnaDeLasCompras(usuario.getId(), compra);
-
         entoncesVerificoQueTengoUnComentario(miComentario);
 
     }
@@ -84,8 +82,8 @@ public class ControladorCompraTest extends SpringTest {
 
     private FormularioComentario dadoQueTengoUnModeloDeDatos() {
         FormularioComentario coment = new FormularioComentario();
-        coment.setComentario("Muy rico");
-        coment.setIdCompra(1L);
+        coment.setComentario(null);
+        coment.setIdCompra(null);
         return coment;
     }
 
