@@ -2,14 +2,11 @@ package ar.edu.unlam.tallerweb1.delivery;
 
 import java.util.List;
 
-import ar.edu.unlam.tallerweb1.domain.Email.Email;
-import ar.edu.unlam.tallerweb1.domain.Email.ServicioEmail;
-import ar.edu.unlam.tallerweb1.domain.Email.ServicioEmailImp;
+
 import ar.edu.unlam.tallerweb1.domain.Excepciones.IngredienteInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.PasoInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
-import ar.edu.unlam.tallerweb1.domain.Sandwich.ServicioSandwich;
 import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,15 +32,13 @@ public class ControladorDeIngredientes {
     private final ServicioDeIngrediente servicioDeIngrediente;
     private final DatosDelSandwich sandwich;
 
-    private final ServicioSandwich servicioSandwich;
-
 
     private static final Integer MAX_PASOS_PERMITIDOS = 3;
 
     @Autowired
-    public ControladorDeIngredientes(ServicioDeIngrediente servicioDeIngrediente, ServicioSandwich servicioSandwich) {
+    public ControladorDeIngredientes(ServicioDeIngrediente servicioDeIngrediente) {
+        super();
         this.servicioDeIngrediente = servicioDeIngrediente;
-        this.servicioSandwich = servicioSandwich;
         this.sandwich = new DatosDelSandwich();
     }
 
@@ -126,6 +121,10 @@ public class ControladorDeIngredientes {
         return new ModelAndView("redirect:/home");
     }
 
+    public DatosDelSandwich getSandwich() {
+        return sandwich;
+    }
+
     @RequestMapping(path = "eliminarIngrediente", method = RequestMethod.GET)
     public ModelAndView eliminarIngredienteSeleccionado(@RequestParam(value = "ing") Long id){
         ModelMap model = new ModelMap();
@@ -147,6 +146,10 @@ public class ControladorDeIngredientes {
         return new ModelAndView("confirmar", model);
     }
 
+    private boolean compararIngredienteEnLaPosicion(int i, Ingrediente ing) {
+        return this.sandwich.getIngredientesSandwich().get(i).equals(ing);
+    }
+
     @RequestMapping(path = "modificarIngrediente", method = RequestMethod.GET)
     public ModelAndView generarPaginaDeIngredienteParaCambiar(@RequestParam(value = "ing", defaultValue = "1", required = false) Long id) {
         ModelMap mod = new ModelMap();
@@ -165,7 +168,8 @@ public class ControladorDeIngredientes {
             mod.put("paso",ingrediente.getPaso());
             mod.put("formPref",new FormularioPreferencia());
         }catch(IngredienteInvalidoException  | PasoInvalidoException e) {
-
+            /*mod.put("error", "Paso Incorrecto");
+            this.sandwich.borrarDatosDelSandwich();*/
             return new ModelAndView("redirect:/error404", mod);
         }
         return new ModelAndView("modificarIngrediente",mod);
@@ -196,28 +200,13 @@ public class ControladorDeIngredientes {
         return new ModelAndView("redirect:/modifcarIngrediente",mod);
     }
 
-    @RequestMapping(path = "/salvarSandwich", method = RequestMethod.GET)
-    public ModelAndView salvarSandwich(HttpServletRequest request) {
-        Sandwich sandwich = (Sandwich) request.getSession().getAttribute("SANDWICH_ELEGIDO");
-        servicioSandwich.guardarSandwich(sandwich);
-        return new ModelAndView("destino");
-    }
-
     private Sandwich generarSandwich(List<Ingrediente> lista){
         Sandwich sand = new Sandwich();
         sand.setNombre("Ganic personalizado");
         sand.setDescripcion("Sandwich personalizado");
         sand.setEnPromocion(false);
         sand.setEsApto(lista.get(0).getEsApto());
-        lista.forEach(sand::agregarIngrediente);
+        lista.forEach(ingrediente -> sand.agregarIngrediente(ingrediente));
         return sand;
-    }
-
-    private boolean compararIngredienteEnLaPosicion(int i, Ingrediente ing) {
-        return this.sandwich.getIngredientesSandwich().get(i).equals(ing);
-    }
-
-    public DatosDelSandwich getSandwich() {
-        return sandwich;
     }
 }
