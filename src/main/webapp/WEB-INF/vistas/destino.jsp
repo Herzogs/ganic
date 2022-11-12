@@ -14,9 +14,11 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
           integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14="
           crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-geosearch@3.0.0/dist/geosearch.css"/>
     <script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js"
             integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg="
             crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet-geosearch@3.0.0/dist/geosearch.umd.js"></script>
     <script src="${pageContext.request.contextPath}/js/jquery-1.11.3.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/confirmacion.js" type="text/javascript"></script>
     <title>Destino</title>
@@ -82,7 +84,7 @@
                         <div><a href="restablecer" class="btn btn-primary px-5 my-5">Volver al Home</a></div>
                     </form>
 
-
+                <p id="info"></p>
                 </div>
             </div>
         </div>

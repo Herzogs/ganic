@@ -10,7 +10,29 @@ $(document).ready(()=>{
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
     L.marker(unlam_home).bindPopup('Los mejores sandwiches de San Justo').addTo(map);
-    map.on("click",function (e) {
+    new GeoSearch.GeoSearchControl({
+        provider: new GeoSearch.OpenStreetMapProvider({
+            params: {
+                email: 'john@example.com', // auth for large number of requests
+            }
+        }),
+        notFoundMessage: 'Lo sentimos, no existe esa dirección',
+        style: 'bar',
+        marker: {
+            // optional: L.Marker    - default L.Icon.Default
+            icon: new L.Icon.Default(),
+            draggable: false,
+        },
+        autoComplete: true,
+        autoCompleteDelay: 250
+    }).addTo(map);
+
+    /*map.on('geosearch/showlocation',function (e) {
+        $("#dist").val(unlam_home.distanceTo(home));
+        $("#info").val(e.label);
+    })*/
+
+    /*map.on("click",function (e) {
         if(marcas === 0) {
             home = L.latLng(e.latlng.lat, e.latlng.lng);
             L.marker(home).addTo(map);
@@ -19,7 +41,7 @@ $(document).ready(()=>{
             marcas +=1;
             $("#dist").val(unlam_home.distanceTo(home));
         }
-    });
+    });*/
 });
 
 
