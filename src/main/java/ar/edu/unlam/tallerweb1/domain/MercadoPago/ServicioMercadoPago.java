@@ -4,6 +4,5 @@ import com.mercadopago.resources.preference.Preference;
 
 public interface ServicioMercadoPago {
 
-    Preference generarPago(Pago sandPagar);
-
+    Preference generarPago(Long alquilerId);
 }
