@@ -78,12 +78,4 @@ public class ServicioMercadoPagoImp implements ServicioMercadoPago {
         }
         return preference;
     }
-
-    private Float obtenerMonto(Set<Ingrediente> lista){
-        Float imp = 0F;
-        for (Ingrediente ing: lista) {
-            imp += ing.getPrecio();
-        }
-        return imp;
-    }
 }

@@ -41,7 +41,7 @@ public class ControladorPago {
 
     private final ServicioCompra servicioCompra;
 
-    private final Pago nuevo;
+    private Pago nuevo;
 
     @Autowired
     public ControladorPago(ServicioLogin servicioLogin, ServicioMercadoPago servicioMercadoPago, ServicioCompra servicioCompra) {
@@ -91,7 +91,7 @@ public class ControladorPago {
             modelo.put("error", "a ocurrido un error en el proceso de envio");
         }
         /*return new ModelAndView("redirect:/home");*/
-        return new ModelAndView("alerta_exitosa");
+        return new ModelAndView("alerta_exitosa",modelo);
     }
 
     private List<Ingrediente> convertirSetToList(Set<Ingrediente> ing){
@@ -114,5 +114,10 @@ public class ControladorPago {
     private String generateDomicilio(String dest){
         String aux[] = dest.split(",");
         return String.format("%s %s - %s - %s - %s",aux[1],aux[0],aux[2],aux[3],aux[4]);
+    }
+
+
+    public void setPago(Pago p){
+        this.nuevo = p;
     }
 }
