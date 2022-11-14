@@ -6,6 +6,7 @@ import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,18 +17,18 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class ControladorDestino {
 
-    private Float distancia;
+
 
     public ControladorDestino() {
-        this.distancia = 0F;
     }
 
 
-    @RequestMapping(path = "/seleccionarDestino", method = RequestMethod.GET)
-    public ModelAndView irASeleccionDestino(@RequestParam(value = "dist") Float distancia, HttpServletRequest request){
+    @RequestMapping(path = "/seleccionarDestino", method = RequestMethod.POST)
+    public ModelAndView irASeleccionDestino(@ModelAttribute("formDestino") FormularioDestino dest, HttpServletRequest request){
         ModelMap model = new ModelMap();
         try {
-           request.getSession().setAttribute("RECARGO",obtenerCostoEnvio(distancia));
+           request.getSession().setAttribute("RECARGO",obtenerCostoEnvio(dest.getDistance()));
+           request.getSession().setAttribute("DESTINO",dest.getDestino());
        } catch (EnvioFueraDeZonaException e) {
            model.put("msg","Fuera De rango de Envio");
            return new ModelAndView("destino",model);
@@ -53,6 +54,8 @@ public class ControladorDestino {
 
     @RequestMapping(path = "/destino", method = RequestMethod.GET)
     public ModelAndView renderizadoPaginaDestino(){
-        return new ModelAndView("destino");
+        ModelMap mod = new ModelMap();
+        mod.put("formDestino", new FormularioDestino());
+        return new ModelAndView("destino", mod);
     }
 }

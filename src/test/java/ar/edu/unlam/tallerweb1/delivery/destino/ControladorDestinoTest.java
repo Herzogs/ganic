@@ -3,6 +3,7 @@ package ar.edu.unlam.tallerweb1.delivery.destino;
 import ar.edu.unlam.tallerweb1.SpringTest;
 import ar.edu.unlam.tallerweb1.delivery.ControladorDestino;
 
+import ar.edu.unlam.tallerweb1.delivery.FormularioDestino;
 import ar.edu.unlam.tallerweb1.domain.Email.Email;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.EnvioFueraDeZonaException;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
@@ -43,8 +44,9 @@ public class ControladorDestinoTest extends SpringTest {
        List<Ingrediente> lista = dadoQueTengoUnaListaDeIngredientesSinRestriccion();
        Email email = dadoQueTengoUnEmailConUnPedido(cliente,lista);
        Float distancia = dadoQueTengoUnaDistanciaEnMtrs(250F);
+       FormularioDestino fd = dadoQueTengoUnDestino(250F,"test");
         cuandoLePidaAlRequestElEmailConLosDatosDelPedido(email);
-       ModelAndView model = cuandoSeLoPasoAlControladorLaDistancia(distancia,this.request);
+       ModelAndView model = cuandoSeLoPasoAlControladorLaDistancia(fd,this.request);
         entoncesVerificoQueNoHuboRecargo(email);
 
    }
@@ -55,11 +57,18 @@ public class ControladorDestinoTest extends SpringTest {
         Usuario cliente = dadoQueTengoUnUsuario("Damian","Spizzirri","test@tes.com","123");
         List<Ingrediente> lista = dadoQueTengoUnaListaDeIngredientesSinRestriccion();
         Email email = dadoQueTengoUnEmailConUnPedido(cliente,lista);
-        Float distancia = dadoQueTengoUnaDistanciaEnMtrs(4000F);
+        FormularioDestino fd = dadoQueTengoUnDestino(4000F,"Test");
         cuandoLePidaAlRequestElEmailConLosDatosDelPedido(email);
-        ModelAndView model = cuandoSeLoPasoAlControladorLaDistancia(distancia,this.request);
+        ModelAndView model = cuandoSeLoPasoAlControladorLaDistancia(fd,this.request);
         entoncesVerificoQueMeMuestreElMsgDeError(model,msg);
 
+    }
+
+    private FormularioDestino dadoQueTengoUnDestino(float v, String test) {
+        FormularioDestino fd = new FormularioDestino();
+        fd.setDestino(test);
+        fd.setDistance(v);
+        return fd;
     }
 
     private void entoncesVerificoQueMeMuestreElMsgDeError(ModelAndView model, String msg) {
@@ -100,8 +109,8 @@ public class ControladorDestinoTest extends SpringTest {
         return nuevo;
     }
 
-    private ModelAndView cuandoSeLoPasoAlControladorLaDistancia(Float distancia, HttpServletRequest request) {
-        return this.controladorDestino.irASeleccionDestino(distancia, request);
+    private ModelAndView cuandoSeLoPasoAlControladorLaDistancia(FormularioDestino fd, HttpServletRequest request) {
+        return this.controladorDestino.irASeleccionDestino(fd, request);
     }
 
     private Float dadoQueTengoUnaDistanciaEnMtrs(Float i) {

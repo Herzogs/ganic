@@ -9,6 +9,7 @@ import ar.edu.unlam.tallerweb1.domain.MercadoPago.ServicioMercadoPago;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.ServicioSandwich;
 import ar.edu.unlam.tallerweb1.domain.compra.Compra;
+import ar.edu.unlam.tallerweb1.domain.compra.EstadoDeCompra;
 import ar.edu.unlam.tallerweb1.domain.compra.ServicioCompra;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
@@ -38,17 +39,15 @@ public class ControladorPago {
 
     private final ServicioMercadoPago servicioMercadoPago;
 
-    private final ServicioSandwich servicioSandwich;
     private final ServicioCompra servicioCompra;
 
     private final Pago nuevo;
 
     @Autowired
-    public ControladorPago(ServicioLogin servicioLogin, ServicioMercadoPago servicioMercadoPago, ServicioCompra servicioCompra, ServicioSandwich servicioSandwich) {
+    public ControladorPago(ServicioLogin servicioLogin, ServicioMercadoPago servicioMercadoPago, ServicioCompra servicioCompra) {
         this.servicioLogin = servicioLogin;
         this.servicioMercadoPago = servicioMercadoPago;
         this.servicioEmail = new ServicioEmailImp();
-        this.servicioSandwich = servicioSandwich;
         this.servicioCompra = servicioCompra;
         nuevo = new Pago();
     }
@@ -71,21 +70,20 @@ public class ControladorPago {
         return new ModelAndView("pago", modelo);
     }
 
-    // TODO:: FIX TEST
-
     @RequestMapping(path = "/alerta_exitosa", method = RequestMethod.GET)
     public ModelAndView pagoCorrecto(@RequestParam("payment_type") String paymentType, HttpServletRequest request){
         Usuario cliente = null;
         ModelMap modelo = new ModelMap();
         Email nuevoEmail = new Email();
         Long idCliente = (Long) request.getSession().getAttribute("id");
+        String dir = (String) request.getSession().getAttribute("DESTINO");
         try{
             cliente = this.servicioLogin.consultarPorID(idCliente);
+            cliente.setDireccion(generateDomicilio(dir));
             nuevoEmail.setUser(cliente);
             nuevoEmail.setMetodoPago(paymentType);
             nuevoEmail.setLista(this.convertirSetToList(nuevo.getSandwich().getIngrediente()));
             nuevoEmail.setRecargo((Float) request.getSession().getAttribute("RECARGO"));
-            this.servicioSandwich.guardarSandwich(nuevo.getSandwich());
             this.servicioCompra.guardarCompra(generarCompra(cliente,nuevo.getSandwich()));
             this.servicioEmail.sendEmail(nuevoEmail,"Envio De Pedido");
             modelo.put("msg","Se ha enviado el email de confirmación");
@@ -106,8 +104,15 @@ public class ControladorPago {
         List<Sandwich> list = new ArrayList<>();
         list.add(sandwich);
         nueva.setDetalle(list);
+        nueva.setEstado(EstadoDeCompra.PREPARACION);
         nueva.setFecha(LocalDateTime.now(ZoneId.of("America/Buenos_Aires")));
         nueva.setFechaEntrega(LocalDateTime.now(ZoneId.of("America/Buenos_Aires")).plusMinutes(5));
         return nueva;
+    }
+
+
+    private String generateDomicilio(String dest){
+        String aux[] = dest.split(",");
+        return String.format("%s %s - %s - %s - %s",aux[1],aux[0],aux[2],aux[3],aux[4]);
     }
 }

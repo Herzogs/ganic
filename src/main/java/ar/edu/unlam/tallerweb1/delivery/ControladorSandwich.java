@@ -30,14 +30,11 @@ import java.util.stream.Collectors;
 @Controller
 public class ControladorSandwich {
 
-
     private ServicioSandwich servicioSandwich;
 
     @Autowired
     public ControladorSandwich(ServicioSandwich servicioSandwich) {
         this.servicioSandwich = servicioSandwich;
-
-
     }
 
     @RequestMapping(path = "/home", method = RequestMethod.GET)
@@ -84,16 +81,11 @@ public class ControladorSandwich {
             model.put("nombre",sandwichObtenido.getNombre());
             model.put("idSandwich",sandwichObtenido.getIdSandwich());
             model.put("montoFinal", sandwichObtenido.obtenerMonto());
-
             return new ModelAndView("confirmarSandwich",model);
         } catch (SandwichNoExistenteException e) {
             model.put("error", "No existe el sandwich");
         }
         return new ModelAndView("redirect:/home",model);
-    }
-
-    private List<Ingrediente> convertirSetToList(Set<Ingrediente> ing){
-        return ing.stream().collect(Collectors.toCollection(ArrayList::new));
     }
 
 }

@@ -29,6 +29,8 @@ public class ControladorIngredientesTest extends SpringTest {
 
     private ControladorDeIngredientes controladorDeIngredientes;
 
+    private ServicioSandwich servicioSandwich;
+
     private DatosDelSandwich sandwich;
 
     private HttpServletRequest request;
@@ -37,7 +39,8 @@ public class ControladorIngredientesTest extends SpringTest {
     @Before
     public void init() {
         this.servicio = mock(ServicioDeIngrediente.class);
-        this.controladorDeIngredientes = new ControladorDeIngredientes(this.servicio);
+        this.servicioSandwich = mock(ServicioSandwich.class);
+        this.controladorDeIngredientes = new ControladorDeIngredientes(this.servicio,this.servicioSandwich);
         this.sandwich = new DatosDelSandwich();
         this.request = mock(HttpServletRequest.class);
         this.session = mock(HttpSession.class);
