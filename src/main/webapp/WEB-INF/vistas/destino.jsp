@@ -14,14 +14,18 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
           integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14="
           crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css"/>
     <script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js"
             integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg="
             crossorigin=""></script>
+
+
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <script src="${pageContext.request.contextPath}/js/jquery-1.11.3.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/confirmacion.js" type="text/javascript"></script>
     <title>Destino</title>
     <style type="text/css">
-        .map{
+        .map {
             height: 500px;
             width: 100%;
         }
@@ -40,7 +44,8 @@
                 <c:choose>
                     <c:when test="${sessionScope.id == null}">
 						<span class="dropdown ps-5">
-							<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+							<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
 								Mi perfil
 							</button>
 							<ul class="dropdown-menu">
@@ -51,7 +56,8 @@
                     </c:when>
                     <c:otherwise>
 						<span class="dropdown ps-5">
-							<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+							<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
 								Mi perfil
 							</button>
 							<ul class="dropdown-menu">
@@ -67,24 +73,27 @@
     </nav>
 </header>
 <main>
-    <section>
-        <div class="container">
-                <div class="col-12">
-                    <h1>Elija su destino</h1>
-                    <div id="map" class="map"></div>
-                    <c:if test="${not empty msg}">
-                        <h4 class="text-center text-danger">${msg}</h4>
-                    </c:if>
-                    <form method="get" action="seleccionarDestino">
-                        <input name="dist" id="dist" type="hidden">
-                        <h4 class="pb-3">Confirmar pago</h4>
-                        <button class="btn btn-success px-5 mb-5" type="submit">Confirmar Destino</button>
-                        <div><a href="restablecer" class="btn btn-primary px-5 my-5">Volver al Home</a></div>
-                    </form>
 
+    <section class="container">
+        <div class="row">
 
-                </div>
+            <div class="col">
+                <h1>Elija su destino</h1>
+                <div id="map" class="map"></div>
+                <c:if test="${not empty msg}">
+                    <h4 class="text-center text-danger">${msg}</h4>
+                </c:if>
             </div>
+
+            <div class="w3-col s9 w3-padding-top-64 w3-center w3-">
+                <f:form method="post" action="seleccionarDestino" modelAttribute="formDestino">
+                    <f:input path="destino" id="dest" type="hidden"/>
+                    <f:input path="distance" id="dist" type="hidden"/>
+                    <button class="btn btn-success px-5 mb-5" type="submit">Confirmar Destino</button>
+                    <div><a href="restablecer" class="btn btn-primary px-5 my-5">Volver al Home</a></div>
+                </f:form>
+            </div>
+
         </div>
     </section>
 </main>

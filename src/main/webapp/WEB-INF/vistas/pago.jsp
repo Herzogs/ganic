@@ -1,9 +1,36 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: h3rz
+  Date: 1/11/22
+  Time: 17:34
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="f" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
-<%@ include file="../vistas/header.jsp" %>
+<head>
+    <meta charset="utf-8">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <link href="css/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+</head>
+<body>
+<header>
+    <nav class="nav_style d-flex align-items-center">
+        <div class="container">
+            <div class="text-center">
+                <a href="home">Home</a>
+                <a href="ingredientes">Menu</a>
+                <a href="home"><img src="img/ganiclogo.png" class="img-fluid logo_style" alt="Logo"></a>
+                <a href="contacto">Contacto</a>
+                <a href="nosotros">Nosotros</a>
+            </div>
+        </div>
+    </nav>
+</header>
 <main>
     <section>
         <div class="container py-5">
@@ -23,30 +50,17 @@
                                     class="text-primary">$${montoFinal}</span></p>
                         </div>
                     </div>
-
+                    <%--Bloque que es visible si el elemento error no esta vacio	--%>
+                    <c:if test="${not empty error}">
+                        <h4><span>${error}</span></h4>
+                        <br>
+                    </c:if>
                 </div>
                 <div class="col-6">
-                    <h4 class="pb-3">Ingrese los datos para realizar el pago</h4>
+                    <h4 class="pb-3">Confirmar pago</h4>
                     <div class="w3-col s9 w3-padding-top-64 w3-center w3-">
-                        <f:form action="validarPago" method="POST" modelAttribute="formPago" class="m-0">
-                            <label class="form-label">Numero de la Tarjeta</label>
-                            <f:input path="nroTarjeta" type="text" maxlength="16" size="16" class="form-control"  required="required"/>
-                            <br/>
-                           <label class="form-label">Vencimiento</label>
-                            <f:input path="vencTarjeta" type="date" class="form-control"  required="required"/>
-                            <br/>
-                            <label class="form-label">Código de seguridad</label>
-                            <f:input path="codSeguridad" type="number" size="3" class="form-control"  required="required"/>
-                            <br/>
-                            <div class="text-end">
-                                <button class="btn btn-success px-5" Type="Submit">Pagar</button>
-                            </div>
-                        </f:form>
-
-                        <%--Bloque que es visible si el elemento error no esta vacio	--%>
-                        <c:if test="${not empty msg}">
-                            <span class="text-danger my-4">${msg}</span>
-                        </c:if>
+                        <a class="cho-container w3-btn w3-blue"></a>
+                        <img src="img/mercadoPago.png" alt="mpz" />
                     </div>
                     <div><a href="restablecer" class="btn btn-primary px-5 my-5">Volver al Home</a></div>
                 </div>
@@ -54,7 +68,23 @@
         </div>
     </section>
 </main>
-<%@ include file="../vistas/footer.jsp" %>
+<footer style="background-color: #000000; height: 100px">
+    <div class="container">
+        <div class="row pt-3 text-white">
+            <div class="col-6 pt-3">
+                <span class="ms-5">Seguinos en</span>
+                <i class="bi bi-facebook ms-3" style="font-size: 20px"></i>
+                <i class="bi bi-instagram ms-3" style="font-size: 20px"></i>
+            </div>
+            <div class="col-3 text-end pt-3">
+                <h2>GANIC</h2>
+            </div>
+            <div class="col-3 text-end">
+                <img src="img/ganiclogo.png" class="img-fluid logo_style" alt="Logo">
+            </div>
+        </div>
+    </div>
+</footer>
 <!-- JavaScript Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"

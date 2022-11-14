@@ -81,12 +81,13 @@ public class ServicioCompraImp implements ServicioCompra {
     }
 
     @Override
-    public void entregarCompra(Long idCompra) throws CompraNoEncontradaExeption {
+    public Boolean entregarCompra(Long idCompra) throws CompraNoEncontradaExeption {
         Compra compra = this.repo.buscarCompra(idCompra);
         if (compra == null)
             throw new CompraNoEncontradaExeption("No existe la compra");
         compra.setEstado(EstadoDeCompra.ENTREGADO);
         this.repo.actualizarCompra(compra);
+        return true;
     }
 
     @Override

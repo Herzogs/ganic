@@ -1,7 +1,6 @@
 package ar.edu.unlam.tallerweb1.domain.MercadoPago;
 
 import ar.edu.unlam.tallerweb1.domain.Sandwich.RepositorioSandwich;
-import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
@@ -60,7 +59,7 @@ public class ServicioMercadoPagoImp implements ServicioMercadoPago {
         PreferenceRequest request = PreferenceRequest.builder()
                 .items(items)
                 .backUrls(backUrls)
-                .externalReference("sandId")
+                .externalReference("sandID")
                 .build();
 
         Preference preference = null;
@@ -78,13 +77,5 @@ public class ServicioMercadoPagoImp implements ServicioMercadoPago {
             e.printStackTrace();
         }
         return preference;
-    }
-
-    private Float obtenerMonto(Set<Ingrediente> lista){
-        Float imp = 0F;
-        for (Ingrediente ing: lista) {
-            imp += ing.getPrecio();
-        }
-        return imp;
     }
 }

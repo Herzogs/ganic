@@ -15,7 +15,7 @@ public interface ServicioCompra {
 
     public List<Compra> listarComprasPorEstado(EstadoDeCompra estadoDeCompra) throws CompraNoEncontradaExeption;
     public void actualizarCompra(Compra compra);
-    public void entregarCompra(Long idCompra) throws CompraNoEncontradaExeption;
+    public Boolean entregarCompra(Long idCompra) throws CompraNoEncontradaExeption;
 
     List<Compra> listarTodasLasCompras(Long idUsuario) throws CompraNoEncontradaExeption;
 }

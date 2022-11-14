@@ -1,0 +1,45 @@
+#+title:     Cuentas De Prueba
+#+author:    Cristian Eduardo Feldman
+#+email:     cris@d4rk.ml
+
+* Cuentas de Prueba
+
+Son las cuentas de para prueba de Mercado Pago
+
+** Usuarios De Prueba
+
+|------------------+--------------+------------|
+| Identificador    | Usuario      | Contraseña |
+|------------------+--------------+------------|
+| Vendedor         | TETE7532563  | 61m76khgmF |
+| Comprador_Nahuel | TESTYZCMDRL7 | 5GQx5TaAd7 |
+| Comprador_Ivan   | TESTFIKV5I2D | QLlWdyCWvu |
+| Comprador 3      | TETE2975547  | nLoxyQSD4p |
+|------------------+--------------+------------|
+
+** Tarjetas de Prueba
+
+|------------------+---------------------+---------------+-------------------|
+| Tarjeta          | Numero              | Cód Seguridad | Fecha Vencimiento |
+|------------------+---------------------+---------------+-------------------|
+| Mastercard       | 5031 7557 3453 0604 |           123 | 11/25             |
+| Visa             | 4509 9535 6623 3704 |           123 | 11/25             |
+| American Express | 3711 803032 57522   |          1234 | 11/25             |
+|------------------+---------------------+---------------+-------------------|
+
+** Resultado de Pago
+
+|-------------+--------------------------------------------------------+---------------------------|
+| Estado Pago | Descripción                                            | Documento Identidad       |
+|-------------+--------------------------------------------------------+---------------------------|
+| APRO        | Pago aprobado                                          | DNI del usuario de prueba |
+| OTHE        | Rechazado por error general                            | DNI del usuario de prueba |
+| CONT        | Pendiente de pago                                      | -                         |
+| CALL        | Rechazado con validación para autorizar                | -                         |
+| FUND        | Rechazado por importe insuficiente                     | -                         |
+| SECU        | Rechazado por código de seguridad inválido             | -                         |
+| EXPI        | Rechazado debido a un problema de fecha de vencimiento | -                         |
+| FORM        | Rechazado debido a un error de formulario              | -                         |
+|-------------+--------------------------------------------------------+---------------------------|
+
+Para *probar diferentes resultado de pago* poner en el nombre del titular de la tarjeta el estado deseado de pago
