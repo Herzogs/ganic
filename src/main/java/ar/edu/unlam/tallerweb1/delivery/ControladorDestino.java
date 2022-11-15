@@ -36,7 +36,7 @@ public class ControladorDestino {
             model.put("msg","Debe seleccionar un destino para continuar");
             return new ModelAndView("destino",model);
         }
-        return new ModelAndView("redirect:/pago");
+        return new ModelAndView("redirect:/prepago");
     }
 
     private Float obtenerCostoEnvio(Float dist) throws EnvioFueraDeZonaException {

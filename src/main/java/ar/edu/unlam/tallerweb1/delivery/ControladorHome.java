@@ -12,7 +12,8 @@ public class ControladorHome {
 
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
-    public ModelAndView inicio() {
+    public ModelAndView inicio(HttpServletRequest request) {
+        request.getSession().setAttribute("SANDWICH_ELEGIDO",null);
         return new ModelAndView("redirect:/home");
     }
 

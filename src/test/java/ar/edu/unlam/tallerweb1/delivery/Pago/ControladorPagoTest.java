@@ -6,6 +6,7 @@ import ar.edu.unlam.tallerweb1.domain.Email.ServicioEmail;
 import ar.edu.unlam.tallerweb1.domain.Email.ServicioEmailImp;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioNoRegistradoExepcion;
+import ar.edu.unlam.tallerweb1.domain.MercadoPago.MpEntidad;
 import ar.edu.unlam.tallerweb1.domain.MercadoPago.Pago;
 import ar.edu.unlam.tallerweb1.domain.MercadoPago.ServicioMercadoPago;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
@@ -56,7 +57,7 @@ public class ControladorPagoTest extends SpringTest {
         Sandwich sandwich = dadoQueTengoUnSandwich();
         when(this.request.getSession().getAttribute("SANDWICH_ELEGIDO")).thenReturn(sandwich);
         when(this.request.getSession().getAttribute("RECARGO")).thenReturn(0F);
-        Pago pago = dadoQueTengoUnPago(sandwich);
+        this.controladorPago.setPago(dadoQueTengoUnPago(sandwich));
         ModelAndView model = this.controladorPago.pagarSandwich(this.request);
         assertThat(model.getModel().get("nombre")).isEqualTo(sandwich.getNombre());
     }
@@ -107,7 +108,10 @@ public class ControladorPagoTest extends SpringTest {
 
     private Pago dadoQueTengoUnPago(Sandwich sandwich) {
         Pago pago = new Pago();
-        pago.setSandwich(sandwich);
+        MpEntidad entidad = new MpEntidad();
+        entidad.setCant(1);
+        entidad.setSandwich(sandwich);
+        pago.getListaCobrar().add(entidad);
         pago.setImpTot(sandwich.obtenerMonto());
         return pago;
     }

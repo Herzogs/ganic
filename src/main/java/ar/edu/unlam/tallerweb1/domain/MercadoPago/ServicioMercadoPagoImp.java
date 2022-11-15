@@ -38,15 +38,17 @@ public class ServicioMercadoPagoImp implements ServicioMercadoPago {
 
         // Crea un �tem en la preferencia para el pago
         List<PreferenceItemRequest> items = new ArrayList<>();
-        PreferenceItemRequest item =
-                PreferenceItemRequest.builder()
-                        .title(sandPagar.getSandwich().getNombre())
-                        .quantity(1)
-                        .currencyId("ARS")
-                        .unitPrice(new BigDecimal(sandPagar.getImpTot()))
-                        .build();
+        sandPagar.getListaCobrar().forEach(pago -> {
+            PreferenceItemRequest item =
+                    PreferenceItemRequest.builder()
+                            .title(pago.getSandwich().getNombre())
+                            .quantity(pago.getCant())
+                            .currencyId("ARS")
+                            .unitPrice(new BigDecimal(pago.getSandwich().obtenerMonto()))
+                            .build();
+            items.add(item);
+        });
 
-        items.add(item);
 		/* Urls propias de mi app en spring a las que va a
 		redireccionar despues del pago si es exitoso o no */
         PreferenceBackUrlsRequest backUrls =
@@ -59,7 +61,7 @@ public class ServicioMercadoPagoImp implements ServicioMercadoPago {
         PreferenceRequest request = PreferenceRequest.builder()
                 .items(items)
                 .backUrls(backUrls)
-                .externalReference("sandID")
+                .externalReference("1L")
                 .build();
 
         Preference preference = null;
