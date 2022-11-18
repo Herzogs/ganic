@@ -25,6 +25,7 @@
                 <p class="mb-0">Recibira un email con la información del estado de su pedido.</p>
             </div>
             <a href="home" class="btn btn-primary px-5 my-5">Volver al Home</a>
+            <a href="seguimiento" class="btn btn-primary px-5 my-5">Seguir Compra</a>
         </div>
     </section>
 </main>

@@ -114,6 +114,11 @@ public class ControladorPago {
         return new ModelAndView("alerta_exitosa",modelo);
     }
 
+    @RequestMapping(path = "/seguimiento", method = RequestMethod.GET)
+    public ModelAndView irASeguimiento(){
+        return new ModelAndView("seguimiento");
+    }
+
     private void guardarCompra(Usuario cliente) {
         nuevo.getListaCobrar().forEach(mpEntidad -> {
             this.servicioCompra.guardarCompra(generarCompra(cliente,mpEntidad.getSandwich()));

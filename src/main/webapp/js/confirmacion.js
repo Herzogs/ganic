@@ -14,6 +14,8 @@ $(document).ready(()=>{
         showResultIcons:true
     }).on('markgeocode',function (e) {
         var home = e.geocode.center;
+        const json = JSON.stringify(home);
+        localStorage.setItem("destino",json)
         $("#dist").val(unlam_home.distanceTo(home));
         $("#dest").val(e.geocode.name);
     }).addTo(map);
