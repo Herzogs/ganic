@@ -5,20 +5,23 @@ $(document).ready(()=>{
         maxZoom: 16,
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
-    var unlam_marker = L.marker(unlam_home)/*.bindPopup('Los mejores sandwiches de San Justo').addTo(map)*/;
+    var unlam_marker = L.marker(unlam_home).addTo(map);
     const obj = JSON.parse(localStorage.getItem("destino"));
+    var secondLatLng = L.latLng(obj.lat,obj.lng);
     L.Routing.control({
         waypoints:[
             unlam_home,
-            L.latLng(obj.lat,obj.lng)
-        ]
+            secondLatLng
+        ],
+        routeWhileDragging: true,
     }).on('routesfound',function (e) {
+
         e.routes[0].coordinates.forEach(function (coord,index) {
             setTimeout(()=>{
-                unlam_marker.setLatLng(coord.lat,coord.lng);
-                console.log(unlam_marker);
-            }, 100* index);
-        })
+                console.warn(coord[index]);
+                unlam_marker.setLatLng(coord);
+            }, 10000 * index);
+        });
 
     }).addTo(map);
 });
