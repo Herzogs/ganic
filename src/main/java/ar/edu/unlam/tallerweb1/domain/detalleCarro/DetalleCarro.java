@@ -24,7 +24,6 @@ public class DetalleCarro {
     }
 
     public DetalleCarro() {
-
     }
 
     public Long getIdDetalleCarroUsuario() {

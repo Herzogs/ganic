@@ -20,15 +20,6 @@ public class ServicioCarroImp implements ServicioCarro{
         repo.guardarCarro(carro);
     }
 
-    @Override
-    public void actrualizarCarro(Carro carro) {
-        repo.actualizarCarro(carro);
-    }
-
-    @Override
-    public void eliminarCarro(Carro carro) {
-
-    }
 
     @Override
     public Carro obtenerCarro(Long idCarro) throws CarroInexistenteExeption {
@@ -50,4 +41,6 @@ public class ServicioCarroImp implements ServicioCarro{
         repo.guardarCarro(nuevo);
         return nuevo;
     }
+
+
 }

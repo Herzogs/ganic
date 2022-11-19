@@ -31,7 +31,6 @@ public class ServicioCarroImpTest extends SpringTest {
     }
 
 
-
     @Test
     @Transactional
     public void siExisteCarroDeUsuarioLoPuedaBUscarPorIdCarro() throws CarroInexistenteExeption {
@@ -47,6 +46,7 @@ public class ServicioCarroImpTest extends SpringTest {
      when(repo.obtenerCarro(3L)).thenReturn(null);
       servicio.obtenerCarro(3L);
     }
+
 
     private void cuandoLePidaAlRepoMoquiteado(Long idCarroQueNoExiste) {
         when(repo.obtenerCarro(idCarroQueNoExiste)).thenReturn(null);
