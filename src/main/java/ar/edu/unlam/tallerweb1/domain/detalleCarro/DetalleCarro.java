@@ -9,7 +9,7 @@ import javax.persistence.*;
 public class DetalleCarro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idDetalleCarroUsuario;
+    private Long idDetalleCarro;
     @ManyToOne(fetch = FetchType.EAGER)
     private Carro carro;
     @ManyToOne(fetch = FetchType.EAGER)
@@ -17,7 +17,7 @@ public class DetalleCarro {
     private Integer cantidad;
 
     public DetalleCarro(Long idDetalleCarroUsuario, Carro carro, Sandwich sandwich, Integer cantidad) {
-        this.idDetalleCarroUsuario = idDetalleCarroUsuario;
+        this.idDetalleCarro = idDetalleCarroUsuario;
         this.carro = carro;
         this.sandwich = sandwich;
         this.cantidad = cantidad;
@@ -26,12 +26,12 @@ public class DetalleCarro {
     public DetalleCarro() {
     }
 
-    public Long getIdDetalleCarroUsuario() {
-        return idDetalleCarroUsuario;
+    public Long getIdDetalleCarro() {
+        return idDetalleCarro;
     }
 
-    public void setIdDetalleCarroUsuario(Long idDetalleCarroUsuario) {
-        this.idDetalleCarroUsuario = idDetalleCarroUsuario;
+    public void setIdDetalleCarro(Long idDetalleCarroUsuario) {
+        this.idDetalleCarro = idDetalleCarroUsuario;
     }
 
     public Carro getCarro() {

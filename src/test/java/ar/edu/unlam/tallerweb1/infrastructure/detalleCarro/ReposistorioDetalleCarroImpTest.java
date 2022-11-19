@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.assertj.core.api.Java6Assertions.setRemoveAssertJRelatedElementsFromStackTrace;
 
 public class ReposistorioDetalleCarroImpTest extends SpringTest {
     @Autowired
@@ -51,6 +52,41 @@ public class ReposistorioDetalleCarroImpTest extends SpringTest {
         verificoQueEstenMisSandwich(detalles, detalleCarro, detalleCarro2);
 
     }
+    @Test
+    @Transactional
+    @Rollback
+    public  void dadoQueTengoUnDetalleDeCarroLoPuedaEliminar(){
+        Usuario usuario = dadoQueTengoUnUsuario(2L, "diego@ganic.com", "123");
+        Carro carro = dadoQueTengoUnCarro(usuario, 2L);
+        Sandwich sandwich = dadoQueTengoUnSandwich(1L, "sandwichDePruba", "miPedido");
+        DetalleCarro detalleCarro = dadoQueTengoUnDetalleDeCarro(carro, sandwich, 1);
+        guardoLosDetalleDeCarro(detalleCarro);
+        DetalleCarro detalleBuscado= buscoElDetalleGuardadoPorIdDeDetalle(detalleCarro.getIdDetalleCarro());
+        eliminoElDetalleGuardado(detalleBuscado);
+        DetalleCarro detalleEliminado=buscoElDetalleGuardadoPorIdDeDetalle(detalleCarro.getIdDetalleCarro());
+       verificoQueMeHayaDevueltoElDetalleBuscado(detalleBuscado, detalleCarro);
+        verificoQueMeDevuelvaUnNull(detalleEliminado);
+
+    }
+
+    private void verificoQueMeHayaDevueltoElDetalleBuscado(DetalleCarro detalleBuscado, DetalleCarro detalleCarro) {
+    assertThat(detalleBuscado).isNotNull();
+    assertThat(detalleBuscado).isEqualTo(detalleCarro);
+
+    }
+
+    private void verificoQueMeDevuelvaUnNull(DetalleCarro detalleEliminado) {
+        assertThat(detalleEliminado).isNull();
+    }
+
+    private void eliminoElDetalleGuardado(DetalleCarro detalleBuscado) {
+    repo.borrarDetalleDeCarro(detalleBuscado);
+    }
+
+    private DetalleCarro buscoElDetalleGuardadoPorIdDeDetalle(Long idDetalleCarroUsuario) {
+        return  repo.obtnerDetalleCarro(idDetalleCarroUsuario);
+    }
+
 
     private void verificoQueEstenMisSandwich(List<DetalleCarro> detalles, DetalleCarro detalleCarro, DetalleCarro detalleCarro2) {
         assertThat(detalles).hasSize(2);

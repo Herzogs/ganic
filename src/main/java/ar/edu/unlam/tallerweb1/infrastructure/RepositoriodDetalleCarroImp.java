@@ -32,17 +32,20 @@ public class RepositoriodDetalleCarroImp implements RepositorioDetalleCarro {
 
     @Override
     public void actualizarDetalleCarro(DetalleCarro detalleCarro) {
-
+        sessionFactory.getCurrentSession().update(detalleCarro);
     }
 
-    @Override
-    public void vaciarDetalleDeCarro(DetalleCarro detalleCarro) {
 
-    }
 
     @Override
     public DetalleCarro obtnerDetalleCarro(Long idDetalleCarro) {
-        return null;
+        final Session session = this.sessionFactory.getCurrentSession();
+        DetalleCarro detalleCarro= (DetalleCarro) session.createCriteria(DetalleCarro.class)
+                .add(Restrictions.eq("idDetalleCarro",idDetalleCarro))
+                .uniqueResult();
+
+
+        return detalleCarro;
     }
 
     @Override
@@ -53,5 +56,11 @@ public class RepositoriodDetalleCarroImp implements RepositorioDetalleCarro {
                 .add(Restrictions.eq("carro.usuario",usuario))
                 .list();
         return detalleCarro;
+    }
+
+
+    @Override
+    public void borrarDetalleDeCarro(DetalleCarro detalleDeCarro) {
+        sessionFactory.getCurrentSession().delete(detalleDeCarro);
     }
 }

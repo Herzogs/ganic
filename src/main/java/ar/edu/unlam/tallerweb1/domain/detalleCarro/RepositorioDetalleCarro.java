@@ -7,9 +7,11 @@ import java.util.List;
 public interface RepositorioDetalleCarro {
     public void guardarDetalleCarro(DetalleCarro detalleCarro);
     public void actualizarDetalleCarro(DetalleCarro detalleCarro);
-    public  void vaciarDetalleDeCarro(DetalleCarro detalleCarro);
+
     public DetalleCarro obtnerDetalleCarro(Long idDetalleCarro);
 
 
     public List<DetalleCarro> obtenerDetalleDeCarrPorUsuario(Usuario usuario);
+
+    void borrarDetalleDeCarro(DetalleCarro detalleBuscado);
 }
