@@ -4,6 +4,7 @@ import ar.edu.unlam.tallerweb1.domain.Email.Email;
 import ar.edu.unlam.tallerweb1.domain.Email.ServicioEmail;
 import ar.edu.unlam.tallerweb1.domain.Email.ServicioEmailImp;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioInvalidoException;
+import ar.edu.unlam.tallerweb1.domain.MercadoPago.MpEntidad;
 import ar.edu.unlam.tallerweb1.domain.MercadoPago.Pago;
 import ar.edu.unlam.tallerweb1.domain.MercadoPago.ServicioMercadoPago;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
@@ -41,7 +42,7 @@ public class ControladorPago {
 
     private final ServicioCompra servicioCompra;
 
-    private final Pago nuevo;
+    private Pago nuevo;
 
     @Autowired
     public ControladorPago(ServicioLogin servicioLogin, ServicioMercadoPago servicioMercadoPago, ServicioCompra servicioCompra) {
@@ -51,20 +52,39 @@ public class ControladorPago {
         this.servicioCompra = servicioCompra;
         nuevo = new Pago();
     }
+    @RequestMapping(path = "/prepago",  method = RequestMethod.GET)
+    public ModelAndView generarPago(HttpServletRequest request){
+        String rec= (String)request.getSession().getAttribute("DONDE_VENGO"); // NORMAL,CARRITO
+        System.err.println(rec);
+        MpEntidad producto = new MpEntidad();
+        if(rec.equals("NORMAL")){
+            Sandwich sandwich_elegido = (Sandwich) request.getSession().getAttribute("SANDWICH_ELEGIDO");
+            producto.setSandwich(sandwich_elegido);
+            producto.setCant(1);
+            nuevo.getListaCobrar().add(producto);
+            nuevo.setImpTot(nuevo.getListaCobrar().get(0).getSandwich().obtenerMonto());
+        }
+
+        return new ModelAndView("redirect:/pago");
+    }
 
     @RequestMapping(path = "/pago", method = RequestMethod.GET)
     public ModelAndView pagarSandwich (HttpServletRequest request) {
-        Sandwich sandwich_elegido = (Sandwich) request.getSession().getAttribute("SANDWICH_ELEGIDO");
+        //Sandwich sandwich_elegido = (Sandwich) request.getSession().getAttribute("SANDWICH_ELEGIDO");
+        //Carrito carritoSalvado = (Carrito) request.getSession().getAttribute("CARRITO_USUARIO");
         Float recargo = (Float) request.getSession().getAttribute("RECARGO");
         Preference preference = null;
-
+        /*if()
         nuevo.setSandwich(sandwich_elegido);
-        nuevo.setImpTot(sandwich_elegido.obtenerMonto()+recargo);
+        nuevo.setImpTot(sandwich_elegido.obtenerMonto()+recargo);*/
 
         ModelMap modelo = new ModelMap();
-        modelo.put("IngredientesDelSandwich",sandwich_elegido.getIngrediente());
+        /*modelo.put("IngredientesDelSandwich",sandwich_elegido.getIngrediente());
         modelo.put("nombre",sandwich_elegido.getNombre());
-        modelo.put("montoFinal", sandwich_elegido.obtenerMonto()+recargo);
+        modelo.put("montoFinal", sandwich_elegido.obtenerMonto()+recargo);*/
+        modelo.put("IngredientesDelSandwich",nuevo.getListaCobrar().get(0).getSandwich().getIngrediente());
+        modelo.put("nombre",nuevo.getListaCobrar().get(0).getSandwich().getNombre());
+        modelo.put("montoFinal", nuevo.getListaCobrar().get(0).getSandwich().obtenerMonto()+recargo);
         preference = this.servicioMercadoPago.generarPago(nuevo);
         modelo.put("preference", preference);
         return new ModelAndView("pago", modelo);
@@ -82,16 +102,27 @@ public class ControladorPago {
             cliente.setDireccion(generateDomicilio(dir));
             nuevoEmail.setUser(cliente);
             nuevoEmail.setMetodoPago(paymentType);
-            nuevoEmail.setLista(this.convertirSetToList(nuevo.getSandwich().getIngrediente()));
+            nuevoEmail.setLista(this.convertirSetToList(nuevo.getListaCobrar().get(0).getSandwich().getIngrediente()));
             nuevoEmail.setRecargo((Float) request.getSession().getAttribute("RECARGO"));
-            this.servicioCompra.guardarCompra(generarCompra(cliente,nuevo.getSandwich()));
+            guardarCompra(cliente);
             this.servicioEmail.sendEmail(nuevoEmail,"Envio De Pedido");
             modelo.put("msg","Se ha enviado el email de confirmación");
         } catch (UsuarioInvalidoException e) {
             modelo.put("error", "a ocurrido un error en el proceso de envio");
         }
         /*return new ModelAndView("redirect:/home");*/
-        return new ModelAndView("alerta_exitosa");
+        return new ModelAndView("alerta_exitosa",modelo);
+    }
+
+    @RequestMapping(path = "/seguimiento", method = RequestMethod.GET)
+    public ModelAndView irASeguimiento(){
+        return new ModelAndView("seguimiento");
+    }
+
+    private void guardarCompra(Usuario cliente) {
+        nuevo.getListaCobrar().forEach(mpEntidad -> {
+            this.servicioCompra.guardarCompra(generarCompra(cliente,mpEntidad.getSandwich()));
+        });
     }
 
     private List<Ingrediente> convertirSetToList(Set<Ingrediente> ing){
@@ -114,5 +145,10 @@ public class ControladorPago {
     private String generateDomicilio(String dest){
         String aux[] = dest.split(",");
         return String.format("%s %s - %s - %s - %s",aux[1],aux[0],aux[2],aux[3],aux[4]);
+    }
+
+
+    public void setPago(Pago p){
+        this.nuevo = p;
     }
 }

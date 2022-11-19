@@ -5,6 +5,8 @@ import ar.edu.unlam.tallerweb1.delivery.ControladorPago;
 import ar.edu.unlam.tallerweb1.domain.Email.ServicioEmail;
 import ar.edu.unlam.tallerweb1.domain.Email.ServicioEmailImp;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioInvalidoException;
+import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioNoRegistradoExepcion;
+import ar.edu.unlam.tallerweb1.domain.MercadoPago.MpEntidad;
 import ar.edu.unlam.tallerweb1.domain.MercadoPago.Pago;
 import ar.edu.unlam.tallerweb1.domain.MercadoPago.ServicioMercadoPago;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
@@ -55,10 +57,42 @@ public class ControladorPagoTest extends SpringTest {
         Sandwich sandwich = dadoQueTengoUnSandwich();
         when(this.request.getSession().getAttribute("SANDWICH_ELEGIDO")).thenReturn(sandwich);
         when(this.request.getSession().getAttribute("RECARGO")).thenReturn(0F);
-        Pago pago = dadoQueTengoUnPago(sandwich);
+        this.controladorPago.setPago(dadoQueTengoUnPago(sandwich));
         ModelAndView model = this.controladorPago.pagarSandwich(this.request);
         assertThat(model.getModel().get("nombre")).isEqualTo(sandwich.getNombre());
     }
+
+    @Test
+    public void prueboQueAlPagarCorrectamenteMeMuestraUnMsgExito() throws UsuarioInvalidoException {
+        Usuario user = dadoQueTengoUnUsuario();
+        when(this.request.getSession().getAttribute("id")).thenReturn(user.getId());
+        when(this.request.getSession().getAttribute("DESTINO")).thenReturn("test,test,test,test,test");
+        when(this.servicioLogin.consultarPorID(user.getId())).thenReturn(user);
+        this.controladorPago.setPago(dadoQueTengoUnPago(dadoQueTengoUnSandwich()));
+        when(this.request.getSession().getAttribute("RECARGO")).thenReturn(2F);
+        ModelAndView model = this.controladorPago.pagoCorrecto("Tarjeta",this.request);
+        assertThat(model.getModel().get("msg")).isEqualTo("Se ha enviado el email de confirmación");
+    }
+
+    @Test
+    public void prueboQueAlPagarCorrectamentePeroNoHayaUsuarioMeMuestraUnMsgERROR() throws UsuarioInvalidoException {
+        Usuario user = dadoQueTengoUnUsuario();
+        when(this.request.getSession().getAttribute("id")).thenReturn(user.getId());
+        when(this.request.getSession().getAttribute("DESTINO")).thenReturn("test,test,test,test,test");
+        when(this.servicioLogin.consultarPorID(user.getId())).thenThrow(new UsuarioInvalidoException("No existe usuario"));
+        this.controladorPago.setPago(dadoQueTengoUnPago(dadoQueTengoUnSandwich()));
+        when(this.request.getSession().getAttribute("RECARGO")).thenReturn(2F);
+        ModelAndView model = this.controladorPago.pagoCorrecto("Tarjeta",this.request);
+        assertThat(model.getModel().get("error")).isEqualTo("a ocurrido un error en el proceso de envio");
+    }
+
+
+
+
+
+
+
+
 
     private Usuario dadoQueTengoUnUsuario() {
         Usuario user = new Usuario();
@@ -74,7 +108,10 @@ public class ControladorPagoTest extends SpringTest {
 
     private Pago dadoQueTengoUnPago(Sandwich sandwich) {
         Pago pago = new Pago();
-        pago.setSandwich(sandwich);
+        MpEntidad entidad = new MpEntidad();
+        entidad.setCant(1);
+        entidad.setSandwich(sandwich);
+        pago.getListaCobrar().add(entidad);
         pago.setImpTot(sandwich.obtenerMonto());
         return pago;
     }

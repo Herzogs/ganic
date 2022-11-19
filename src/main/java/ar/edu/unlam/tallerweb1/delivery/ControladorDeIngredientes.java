@@ -207,6 +207,7 @@ public class ControladorDeIngredientes {
     public ModelAndView salvarSandwich(HttpServletRequest request) {
         Sandwich sandwich = (Sandwich) request.getSession().getAttribute("SANDWICH_ELEGIDO");
         servicioSandwich.guardarSandwich(sandwich);
+        request.getSession().setAttribute("DONDE_VENGO","NORMAL");
         return new ModelAndView("redirect:/destino");
     }
 

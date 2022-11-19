@@ -28,7 +28,7 @@ public class ControladorHomeTest {
     @Test
     public void queAlIngresarEnLaUrlPorDefectoNosEnvieAHome() {
         String vistaEsperada = dadoQueEsperoLaVistaLlamada("redirect:/home");
-        ModelAndView model = cuandoEjecuteElMetodoIrAlInicio();
+        ModelAndView model = cuandoEjecuteElMetodoIrAlInicio(this.request);
         entoncesVerificoQueSeanIguales(vistaEsperada,model);
     }
 
@@ -62,8 +62,8 @@ public class ControladorHomeTest {
         assertThat(model.getViewName()).isEqualTo(vista);
     }
 
-    private ModelAndView cuandoEjecuteElMetodoIrAlInicio() {
-        return this.controladorDeHome.inicio();
+    private ModelAndView cuandoEjecuteElMetodoIrAlInicio(HttpServletRequest request) {
+        return this.controladorDeHome.inicio(request);
     }
 
     private ModelAndView cuandoEjecuteElMetodoIrANosotros() {
