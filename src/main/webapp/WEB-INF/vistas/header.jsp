@@ -34,7 +34,8 @@
 							</button>
 							<ul class="dropdown-menu">
 								<li><a class="dropdown-item text-dark py-2" href="misdatos">Mis datos</a></li>
-								<li><a class="dropdown-item text-dark py-2" href="historial">Mis pedidos</a></li>
+								<li><a class="dropdown-item text-dark py-2" href="enPreparacion">En Preparación</a></li>
+                                <li><a class="dropdown-item text-dark py-2" href="historial">Mis pedidos</a></li>
 								<li><a class="dropdown-item text-dark py-2" href="Salir">Salir</a></li>
 							</ul>
 						</span>
