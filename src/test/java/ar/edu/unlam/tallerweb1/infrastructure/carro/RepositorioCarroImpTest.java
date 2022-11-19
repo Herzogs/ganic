@@ -30,6 +30,7 @@ public class RepositorioCarroImpTest extends SpringTest {
         verificoQueElCarroSeaElMismo(carro, carroBuscado);
     }
 
+
     private void verificoQueElCarroSeaElMismo(Carro carro, Carro carroBuscado) {
         assertThat(carro).isNotNull();
         assertThat(carroBuscado).isNotNull();

@@ -2,7 +2,6 @@ package ar.edu.unlam.tallerweb1.infrastructure;
 
 import ar.edu.unlam.tallerweb1.domain.carro.Carro;
 import ar.edu.unlam.tallerweb1.domain.carro.RepositorioCarro;
-import ar.edu.unlam.tallerweb1.domain.compra.Compra;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.hibernate.FetchMode;
 import org.hibernate.Session;
@@ -14,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Repository
+@Repository("repositorioCarro")
 @Transactional
 public class RepositioCarroImp implements RepositorioCarro {
     private final SessionFactory sessionFactory;
@@ -31,12 +30,12 @@ public class RepositioCarroImp implements RepositorioCarro {
 
     @Override
     public void actualizarCarro(Carro carro) {
-
+    sessionFactory.getCurrentSession().update(carro);
     }
 
     @Override
     public void eliminarCarro(Carro carro) {
-
+        sessionFactory.getCurrentSession().delete(carro);
     }
 
     @Override
