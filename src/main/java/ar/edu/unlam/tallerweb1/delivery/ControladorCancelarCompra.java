@@ -44,8 +44,11 @@ public class ControladorCancelarCompra {
             user = this.servicioLogin.consultarPorID(idUsuario);
             compraList = this.servicioCompra.listarComprasDeUsuarioPorEstado(user, EstadoDeCompra.PREPARACION);
             modelo.put("listaDeCompras",compraList);
+            modelo.put("estado",true);
         }catch (UsuarioInvalidoException | CompraNoEncontradaExeption e){
             modelo.put("msg","No hay compras");
+            modelo.put("estado","false");
+
         }
         return new ModelAndView("enPreparacion",modelo);
     }
@@ -61,11 +64,14 @@ public class ControladorCancelarCompra {
             if(minutos >= 0 && minutos <= 2) {
                 this.servicioCompra.cancelarCompra(compra, EstadoDeCompra.CANCELADO);
                 modelMap.put("msg","Se a eliminado la compra seleccionada");
+
             }else {
                 modelMap.put("msg","Su pedido esta en preparacion, no se pudo eliminar su compra");
             }
         }catch (CompraNoEncontradaExeption e){
             modelMap.put("msg","No exite la compra selecciona");
+        }finally {
+            modelMap.put("estado","false");
         }
         return new ModelAndView("redirect:/enPreparacion",modelMap);
     }
