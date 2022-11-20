@@ -57,4 +57,5 @@ public class DetalleCarro {
     public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
     }
+
 }
