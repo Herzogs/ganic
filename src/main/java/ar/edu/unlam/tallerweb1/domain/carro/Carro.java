@@ -1,8 +1,12 @@
 package ar.edu.unlam.tallerweb1.domain.carro;
 
+import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
+import ar.edu.unlam.tallerweb1.domain.detalleCarro.DetalleCarro;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Carro {
@@ -11,6 +15,22 @@ public class Carro {
     private Long idCarro;
     @OneToOne
     private Usuario usuario;
+    @OneToMany
+    public List<DetalleCarro> detalleCarro;
+
+    public List<DetalleCarro> getDetalleCarro() {
+        return detalleCarro;
+    }
+
+    public void setDetalleCarro(List<DetalleCarro> detalleCarro) {
+        this.detalleCarro = detalleCarro;
+    }
+
+    public Carro(Long idCarro, Usuario usuario, List<DetalleCarro> detalleCarro) {
+        this.idCarro = idCarro;
+        this.usuario = usuario;
+        this.detalleCarro = detalleCarro;
+    }
 
     public Carro(Long idCarrito, Usuario usuario) {
         this.idCarro = idCarrito;
@@ -18,6 +38,7 @@ public class Carro {
     }
 
     public Carro() {
+        this.detalleCarro= new ArrayList<>();
     }
 
     public Long getIdCarro() {
@@ -35,4 +56,5 @@ public class Carro {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
+
 }

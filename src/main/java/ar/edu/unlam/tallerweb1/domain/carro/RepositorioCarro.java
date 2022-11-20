@@ -1,6 +1,9 @@
 package ar.edu.unlam.tallerweb1.domain.carro;
 
+import ar.edu.unlam.tallerweb1.domain.detalleCarro.DetalleCarro;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
+
+import java.util.List;
 
 public interface RepositorioCarro {
 
@@ -11,4 +14,6 @@ public interface RepositorioCarro {
 
 
     Carro obtenerCarroCliente(Usuario usuario);
+
+
 }

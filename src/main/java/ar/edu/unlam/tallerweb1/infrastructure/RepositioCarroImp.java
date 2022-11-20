@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.infrastructure;
 
 import ar.edu.unlam.tallerweb1.domain.carro.Carro;
 import ar.edu.unlam.tallerweb1.domain.carro.RepositorioCarro;
+import ar.edu.unlam.tallerweb1.domain.detalleCarro.DetalleCarro;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.hibernate.FetchMode;
 import org.hibernate.Session;
@@ -56,6 +57,5 @@ public class RepositioCarroImp implements RepositorioCarro {
                 .uniqueResult();
         return buscado;
     }
-
 
 }
