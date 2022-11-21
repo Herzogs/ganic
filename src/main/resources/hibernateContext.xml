@@ -10,8 +10,8 @@
 		  class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="url" value="jdbc:mysql://localhost:3306/ganic?serverTimezone=America/Buenos_Aires" />
-		<property name="username" value="root" />
-		<property name="password" value="root" />
+		<property name="username" value="cris" />
+		<property name="password" value="cris" />
 	</bean>
 
 	<!--Configuracion de la factory encargada de generar las sesiones con la base de datos, la misma -->

@@ -29,4 +29,12 @@ public class Pago {
     public void setImpTot(Float impTot) {
         this.impTot = impTot;
     }
+
+    @Override
+    public String toString() {
+        return "Pago{" +
+                "listaCobrar=" + listaCobrar +
+                ", impTot=" + impTot +
+                '}';
+    }
 }

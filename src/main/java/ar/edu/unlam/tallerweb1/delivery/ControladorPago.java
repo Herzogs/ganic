@@ -8,10 +8,10 @@ import ar.edu.unlam.tallerweb1.domain.MercadoPago.MpEntidad;
 import ar.edu.unlam.tallerweb1.domain.MercadoPago.Pago;
 import ar.edu.unlam.tallerweb1.domain.MercadoPago.ServicioMercadoPago;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
-import ar.edu.unlam.tallerweb1.domain.Sandwich.ServicioSandwich;
 import ar.edu.unlam.tallerweb1.domain.compra.Compra;
 import ar.edu.unlam.tallerweb1.domain.compra.EstadoDeCompra;
 import ar.edu.unlam.tallerweb1.domain.compra.ServicioCompra;
+import ar.edu.unlam.tallerweb1.domain.detalleCarro.DetalleCarro;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
@@ -30,6 +30,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Controller
@@ -56,13 +57,23 @@ public class ControladorPago {
     public ModelAndView generarPago(HttpServletRequest request){
         String rec= (String)request.getSession().getAttribute("DONDE_VENGO"); // NORMAL,CARRITO
         System.err.println(rec);
-        MpEntidad producto = new MpEntidad();
+
         if(rec.equals("NORMAL")){
+            MpEntidad producto = new MpEntidad();
             Sandwich sandwich_elegido = (Sandwich) request.getSession().getAttribute("SANDWICH_ELEGIDO");
             producto.setSandwich(sandwich_elegido);
             producto.setCant(1);
             nuevo.getListaCobrar().add(producto);
             nuevo.setImpTot(nuevo.getListaCobrar().get(0).getSandwich().obtenerMonto());
+        }else{
+            List<DetalleCarro> lista = (List<DetalleCarro>) request.getSession().getAttribute("LISTA_DETALLE");
+            lista.forEach(detalleCarro -> {
+                MpEntidad producto = new MpEntidad();
+                producto.setSandwich(detalleCarro.getSandwich());
+                producto.setCant(detalleCarro.getCantidad());
+                nuevo.getListaCobrar().add(producto);
+                System.err.println(nuevo);
+            });
         }
 
         return new ModelAndView("redirect:/pago");
@@ -70,18 +81,9 @@ public class ControladorPago {
 
     @RequestMapping(path = "/pago", method = RequestMethod.GET)
     public ModelAndView pagarSandwich (HttpServletRequest request) {
-        //Sandwich sandwich_elegido = (Sandwich) request.getSession().getAttribute("SANDWICH_ELEGIDO");
-        //Carrito carritoSalvado = (Carrito) request.getSession().getAttribute("CARRITO_USUARIO");
         Float recargo = (Float) request.getSession().getAttribute("RECARGO");
         Preference preference = null;
-        /*if()
-        nuevo.setSandwich(sandwich_elegido);
-        nuevo.setImpTot(sandwich_elegido.obtenerMonto()+recargo);*/
-
         ModelMap modelo = new ModelMap();
-        /*modelo.put("IngredientesDelSandwich",sandwich_elegido.getIngrediente());
-        modelo.put("nombre",sandwich_elegido.getNombre());
-        modelo.put("montoFinal", sandwich_elegido.obtenerMonto()+recargo);*/
         modelo.put("IngredientesDelSandwich",nuevo.getListaCobrar().get(0).getSandwich().getIngrediente());
         modelo.put("nombre",nuevo.getListaCobrar().get(0).getSandwich().getNombre());
         modelo.put("montoFinal", nuevo.getListaCobrar().get(0).getSandwich().obtenerMonto()+recargo);
@@ -121,7 +123,9 @@ public class ControladorPago {
 
     private void guardarCompra(Usuario cliente) {
         nuevo.getListaCobrar().forEach(mpEntidad -> {
-            this.servicioCompra.guardarCompra(generarCompra(cliente,mpEntidad.getSandwich()));
+            Compra nueva = generarCompra(cliente,mpEntidad.getSandwich());
+            System.err.println(nueva);
+            this.servicioCompra.guardarCompra(nueva);
         });
     }
 
@@ -145,6 +149,14 @@ public class ControladorPago {
     private String generateDomicilio(String dest){
         String aux[] = dest.split(",");
         return String.format("%s %s - %s - %s - %s",aux[1],aux[0],aux[2],aux[3],aux[4]);
+    }
+
+    private Float obtenerMonto(List<DetalleCarro> det){
+        AtomicReference<Float> tot = new AtomicReference<>((float) 0L);
+        det.forEach(detalleCarro -> {
+            tot.updateAndGet(v -> v + detalleCarro.getSandwich().obtenerMonto());
+        });
+        return tot.get();
     }
 
 

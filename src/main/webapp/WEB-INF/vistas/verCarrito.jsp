@@ -34,9 +34,9 @@
                             </div>
                     </div>
                 </c:forEach>
-                <p>${listaDetalle.size()} Cantidad en el carro</p>
 
                 <div class="py-3 text-end">
+                    <a href="salvarCarro" class="btn btn-secondary" type="button">Pagar</a>
                     <a href="vaciarCarro" class="btn btn-secondary" type="button">Vaciar carrito</a>
                 </div>
             </div>

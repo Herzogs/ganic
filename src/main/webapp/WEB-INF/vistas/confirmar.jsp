@@ -39,7 +39,7 @@
                 <div class="col-6">
                     <h4 class="pb-3">Confirmar pago</h4>
                     <a href="salvarSandwich" class="btn btn-success px-5 mb-5">Confirmar Destino</a>
-                    <a href="agregarAlCarrito" class="btn btn-success px-5 mb-5">Agregar al carrito</a>
+                    <a href="salvarSandwichCarrito" class="btn btn-success px-5 mb-5">Agregar al carrito</a>
                     <div><a href="restablecer" class="btn btn-primary px-5 my-5">Volver al Home</a></div>
                 </div>
             </div>

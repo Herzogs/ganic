@@ -1,4 +1,4 @@
-package ar.edu.unlam.tallerweb1.delivery.detalleCarro;
+package ar.edu.unlam.tallerweb1.delivery;
 
 import ar.edu.unlam.tallerweb1.domain.Excepciones.DetalleInexistenteExeption;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.SandwichNoExistenteException;
@@ -102,13 +102,21 @@ public class ControladorDetalleCarro {
 
     }
 
-    private void verificarSiEsta(List<DetalleCarro> listaDetalle, Sandwich sandwich) {
-        listaDetalle.forEach(detalleCarro -> {
-            if(detalleCarro.getSandwich().equals(sandwich)){
-                detalleCarro.setCantidad(detalleCarro.getCantidad());
-            }
-        });
-
+    @RequestMapping(path = "/salvarCarro")
+    public ModelAndView salvarCarroEnServlet(HttpServletRequest request){
+        Long idUsuario = 0L;
+        Usuario usuario = null;
+        List<DetalleCarro> detalleCarro = null;
+        try {
+            idUsuario = (Long)request.getSession().getAttribute("id");
+            usuario = this.servicioLogin.consultarPorID(idUsuario);
+            detalleCarro = this.servicioDetalleCarro.obtenerDetalleDeCarroDeUsuario(usuario);
+            request.getSession().setAttribute("LISTA_DETALLE",detalleCarro);
+            request.getSession().setAttribute("DONDE_VENGO","CARRO");
+        } catch (UsuarioInvalidoException | DetalleInexistenteExeption e) {
+            throw new RuntimeException(e);
+        }
+        return new ModelAndView("redirect:/destino");
     }
 
     private void guardarDetalle(Integer cantidad, Sandwich sandwich, Carro carro) {

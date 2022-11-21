@@ -20,16 +20,7 @@ public class ServicioDetalleCarroImp implements ServicioDetalleCarro{
 
     @Override
     public void guardarDetalle(DetalleCarro detalleCarro) {
-        try {
-            DetalleCarro detalleCarro1=obtenerDetalle(1L);
-
-            actualizarDetalle(detalleCarro1);
-        } catch (DetalleInexistenteExeption e) {
-            repo.guardarDetalleCarro(detalleCarro);
-        }
-
-
-
+      repo.guardarDetalleCarro(detalleCarro);
     }
 
     public Boolean incrementarCntidad( Integer cantidad, Usuario usuario, Sandwich sandwich){
