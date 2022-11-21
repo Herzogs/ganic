@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.domain.detalleCarro;
 
 import ar.edu.unlam.tallerweb1.domain.Excepciones.DetalleInexistenteExeption;
+import ar.edu.unlam.tallerweb1.domain.Excepciones.NoSePudoQuitarException;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
 import ar.edu.unlam.tallerweb1.domain.carro.Carro;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
@@ -17,7 +18,7 @@ public interface ServicioDetalleCarro {
     public void vaciarCarro(Usuario usuario);
     public Boolean incrementarCntidad( Integer cantidad, Usuario usuario, Sandwich sandwich);
 
-
+    public Boolean decrementarCantidad(Integer cantidad, Usuario usuario, Sandwich sandwich) throws NoSePudoQuitarException;
 
 
 }

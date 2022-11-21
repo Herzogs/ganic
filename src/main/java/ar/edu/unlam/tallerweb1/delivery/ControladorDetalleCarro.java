@@ -1,9 +1,6 @@
 package ar.edu.unlam.tallerweb1.delivery;
 
-import ar.edu.unlam.tallerweb1.domain.Excepciones.DetalleInexistenteExeption;
-import ar.edu.unlam.tallerweb1.domain.Excepciones.SandwichNoExistenteException;
-import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioInvalidoException;
-import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioNoRegistradoExepcion;
+import ar.edu.unlam.tallerweb1.domain.Excepciones.*;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.ServicioSandwich;
 import ar.edu.unlam.tallerweb1.domain.carro.Carro;
@@ -109,11 +106,36 @@ public class ControladorDetalleCarro {
 
     }
 
+    @RequestMapping(path = "/quitarDelCarrito")
+    public ModelAndView quitarDelCarrito(HttpServletRequest request,
+                                         @RequestParam(value = "idSandwich") Long idSandwich,
+                                         @RequestParam(value = "cantidad",required = false,defaultValue = "1") Integer cantidad){
+        ModelMap modelMap = new ModelMap();
+        try {
+            Long idUsuario = (Long) request.getSession().getAttribute("id");
+            Usuario usuario = servicioLogin.consultarPorID(idUsuario);
+            Sandwich sandwich = servicioSandwich.obtenerSandwichPorId(idSandwich);
+            /*Carro carro = servicioCarro.obtenerCarroDeCLiente(usuario);*/
+            servicioDetalleCarro.decrementarCantidad(cantidad,usuario,sandwich);
+
+
+        } catch (SandwichNoExistenteException e) {
+            modelMap.put("msg", "Sandwich agotado");
+
+        } catch (UsuarioInvalidoException e) {
+            modelMap.put("msg", "Usuario invalido");
+        } catch (NoSePudoQuitarException e) {
+            modelMap.put("msg", "No se puede quitar, debe eliminar el detalle");
+        }
+        return new ModelAndView("redirect:/verCarrito", modelMap);
+    }
+
     @RequestMapping(path = "/salvarCarro")
     public ModelAndView salvarCarroEnServlet(HttpServletRequest request){
         Long idUsuario = 0L;
         Usuario usuario = null;
         List<DetalleCarro> detalleCarro = null;
+        ModelMap modelMap = new ModelMap();
         try {
             idUsuario = (Long)request.getSession().getAttribute("id");
             usuario = this.servicioLogin.consultarPorID(idUsuario);
@@ -121,9 +143,9 @@ public class ControladorDetalleCarro {
             request.getSession().setAttribute("LISTA_DETALLE",detalleCarro);
             request.getSession().setAttribute("DONDE_VENGO","CARRO");
         } catch (UsuarioInvalidoException | DetalleInexistenteExeption e) {
-            throw new RuntimeException(e);
+            modelMap.put("msg", "Usuario invalido");
         }
-        return new ModelAndView("redirect:/destino");
+        return new ModelAndView("redirect:/destino",modelMap);
     }
 
     private void guardarDetalle(Integer cantidad, Sandwich sandwich, Carro carro) {
