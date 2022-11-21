@@ -6,6 +6,7 @@ import ar.edu.unlam.tallerweb1.domain.Sandwich.ServicioSandwich;
 import ar.edu.unlam.tallerweb1.domain.carro.ServicioCarro;
 import ar.edu.unlam.tallerweb1.domain.detalleCarro.ServicioDetalleCarro;
 import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
+import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,7 +39,11 @@ public void init(){
 
     }
     @Test
-    public void test(){
+    public void luegoDeTenerSandwichSeleccionadosMeMuestreLoQueTengoEnMiCarrito(){
+        Usuario usuario=dadoQueTengoUnUsuario();
 
+    }
+    private Usuario dadoQueTengoUnUsuario() {
+        return new Usuario("diego@gmail.com", "123");
     }
 }
