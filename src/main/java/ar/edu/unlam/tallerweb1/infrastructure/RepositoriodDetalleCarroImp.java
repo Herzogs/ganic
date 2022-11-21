@@ -7,6 +7,7 @@ import ar.edu.unlam.tallerweb1.domain.detalleCarro.RepositorioDetalleCarro;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -54,6 +55,7 @@ public class RepositoriodDetalleCarroImp implements RepositorioDetalleCarro {
         List<DetalleCarro>  detalleCarro= (List<DetalleCarro>) session.createCriteria(DetalleCarro.class)
                 .createAlias("carro", "carro")
                 .add(Restrictions.eq("carro.usuario",usuario))
+                .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY)
                 .list();
         return detalleCarro;
     }

@@ -1,6 +1,8 @@
 package ar.edu.unlam.tallerweb1.domain.detalleCarro;
 
 import ar.edu.unlam.tallerweb1.domain.Excepciones.DetalleInexistenteExeption;
+import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
+import ar.edu.unlam.tallerweb1.domain.carro.Carro;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +20,30 @@ public class ServicioDetalleCarroImp implements ServicioDetalleCarro{
 
     @Override
     public void guardarDetalle(DetalleCarro detalleCarro) {
-        repo.guardarDetalleCarro(detalleCarro);
+        try {
+            DetalleCarro detalleCarro1=obtenerDetalle(1L);
+
+            actualizarDetalle(detalleCarro1);
+        } catch (DetalleInexistenteExeption e) {
+            repo.guardarDetalleCarro(detalleCarro);
+        }
+
+
+
+    }
+
+    public Boolean incrementarCntidad( Integer cantidad, Usuario usuario, Sandwich sandwich){
+        List<DetalleCarro> detalleCarros= repo.obtenerDetalleDeCarrPorUsuario(usuario);
+        Boolean encontrado= false;
+        for (DetalleCarro detalleCarro1:detalleCarros){
+            if(detalleCarro1.getSandwich().equals(sandwich)){
+                encontrado=true;
+                detalleCarro1.setCantidad(detalleCarro1.getCantidad()+cantidad);
+                this.repo.actualizarDetalleCarro(detalleCarro1);
+            }
+
+        }
+        return encontrado;
     }
     @Override
     public DetalleCarro obtenerDetalle(Long idDetalle) throws DetalleInexistenteExeption {
@@ -46,6 +71,9 @@ public class ServicioDetalleCarroImp implements ServicioDetalleCarro{
     public void eliminarDetalle(DetalleCarro detalleCarro) {
         repo.borrarDetalleDeCarro(detalleCarro);
     }
-
+    public void vaciarCarro(Usuario usuario){
+        List<DetalleCarro>lista= repo.obtenerDetalleDeCarrPorUsuario(usuario);
+        lista.forEach(detalleCarro -> repo.borrarDetalleDeCarro(detalleCarro));
+    }
 
 }

@@ -13,4 +13,5 @@ public interface ServicioCarro {
 
 
     void agregarDetalleAlCarro(DetalleCarro detalleCarro1, Usuario usuario);
+
 }

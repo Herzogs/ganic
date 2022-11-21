@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity
 public class DetalleCarro {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idDetalleCarro;
     @ManyToOne(fetch = FetchType.EAGER)
     private Carro carro;
