@@ -27,6 +27,7 @@ public class Sandwich {
     private Set<Ingrediente> ingrediente = new LinkedHashSet<>();
 
     public Sandwich() {
+
     }
 
     public Sandwich(Long idSandwich, String nombre, String descripcion) {

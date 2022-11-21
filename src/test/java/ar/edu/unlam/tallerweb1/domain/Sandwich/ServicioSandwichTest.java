@@ -37,7 +37,6 @@ public class ServicioSandwichTest extends SpringTest {
 
     @Test (expected = SandwichNoExistenteException.class)
     public void prueboQueAlSolicitarUnSandwichPorIdInvalidoMeDevuelvaUnaExcepcion() throws SandwichNoExistenteException {
-
         cuandoAlRepositorioLePidaQueMeDevuelvaUnSandwichPorIdInvalidoMeDevuelvaExcepcion(100L);
         solicitoAlServicioUnSandwitchPorId(100L);
     }
