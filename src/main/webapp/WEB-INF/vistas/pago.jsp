@@ -34,20 +34,24 @@
 <main>
     <section>
         <div class="container py-5">
-            <h3 class="pt-5 pb-3">Datos de su Sandwich</h3>
+            <h3 class="pt-5 pb-3">Datos del Pedido</h3>
             <div class="row">
                 <div class="col-6">
                     <div class="card" style="max-width: 400px;">
                         <img src="img/pedido.png" class="card-img-top img-fluid" alt="...">
                         <div class="card-body">
-                            <p class="card-text text-center text-succes">${nombre}</p>
-                            <c:forEach var="ing" items="${IngredientesDelSandwich}">
-                                <p class="card-text fw-bold">${ing.nombre}</p>
-                                <p class="card-text">${ing.detalle}</p>
-                                <p class="card-text">Precio por unidad $${ing.precio}</p>
+                            <p class="card-text text-center text-succes">Dirección Envio: ${direccion}</p>
+                            <c:forEach var="lista" items="${listaDetalle}">
+                                <p class="card-text fw-bold">${lista.sandwich.nombre}</p>
+                                <p class="card-text">${lista.cantidad}</p>
+                                <p class="card-text">Precio por unidad $${lista.calcularMonto()}</p>
                             </c:forEach>
                             <p class="card-text fw-bold text-end">Monto a pagar <span
-                                    class="text-primary">$${montoFinal}</span></p>
+                                    class="text-primary">${montoFinal}</span></p>
+                            <p class="card-text fw-bold text-end">Envio <span
+                                    class="text-primary">${recargo}</span></p>
+                            <p class="card-text fw-bold text-end">Monto Total a Pagar <span
+                                    class="text-primary">${montoTotalPagar}</span></p>
                         </div>
                     </div>
                     <%--Bloque que es visible si el elemento error no esta vacio	--%>
@@ -62,7 +66,8 @@
                         <a class="cho-container w3-btn w3-blue"></a>
                         <img src="img/mercadoPago.png" alt="mpz" />
                     </div>
-                    <div><a href="restablecer" class="btn btn-primary px-5 my-5">Volver al Home</a></div>
+                    <div><a href="seguirComprando" class="btn btn-primary px-5 my-5">Seguir Compra</a></div>
+                    <div><a href="vaciarCarro" class="btn btn-primary px-5 my-5">Cancelar Compra</a></div>
                 </div>
             </div>
         </div>

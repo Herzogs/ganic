@@ -12,6 +12,7 @@ import ar.edu.unlam.tallerweb1.domain.compra.Compra;
 import ar.edu.unlam.tallerweb1.domain.compra.EstadoDeCompra;
 import ar.edu.unlam.tallerweb1.domain.compra.ServicioCompra;
 import ar.edu.unlam.tallerweb1.domain.detalleCarro.DetalleCarro;
+import ar.edu.unlam.tallerweb1.domain.detalleCarro.ServicioDetalleCarro;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
@@ -43,51 +44,50 @@ public class ControladorPago {
 
     private final ServicioCompra servicioCompra;
 
-    private Pago nuevo;
+    private final ServicioDetalleCarro servicioDetalleCarro;
+
+    private Pago pagoNuevo;
 
     @Autowired
-    public ControladorPago(ServicioLogin servicioLogin, ServicioMercadoPago servicioMercadoPago, ServicioCompra servicioCompra) {
+    public ControladorPago(ServicioLogin servicioLogin, ServicioMercadoPago servicioMercadoPago, ServicioCompra servicioCompra, ServicioDetalleCarro servicioDetalleCarro) {
         this.servicioLogin = servicioLogin;
         this.servicioMercadoPago = servicioMercadoPago;
         this.servicioEmail = new ServicioEmailImp();
         this.servicioCompra = servicioCompra;
-        nuevo = new Pago();
+        this.servicioDetalleCarro = servicioDetalleCarro;
+
     }
     @RequestMapping(path = "/prepago",  method = RequestMethod.GET)
     public ModelAndView generarPago(HttpServletRequest request){
-        String rec= (String)request.getSession().getAttribute("DONDE_VENGO"); // NORMAL,CARRITO
-        System.err.println(rec);
+        pagoNuevo = new Pago();
 
-        if(rec.equals("NORMAL")){
-            MpEntidad producto = new MpEntidad();
-            Sandwich sandwich_elegido = (Sandwich) request.getSession().getAttribute("SANDWICH_ELEGIDO");
-            producto.setSandwich(sandwich_elegido);
-            producto.setCant(1);
-            nuevo.getListaCobrar().add(producto);
-            nuevo.setImpTot(nuevo.getListaCobrar().get(0).getSandwich().obtenerMonto());
-        }else{
             List<DetalleCarro> lista = (List<DetalleCarro>) request.getSession().getAttribute("LISTA_DETALLE");
             lista.forEach(detalleCarro -> {
                 MpEntidad producto = new MpEntidad();
                 producto.setSandwich(detalleCarro.getSandwich());
-                producto.setCant(detalleCarro.getCantidad());
-                nuevo.getListaCobrar().add(producto);
-                System.err.println(nuevo);
+                producto.setCantidad(detalleCarro.getCantidad());
+                pagoNuevo.getListaCobrar().add(producto);
+                pagoNuevo.setImpTot(this.obtenerMonto(lista));
             });
-        }
-
+        System.err.println(pagoNuevo);
         return new ModelAndView("redirect:/pago");
     }
 
     @RequestMapping(path = "/pago", method = RequestMethod.GET)
     public ModelAndView pagarSandwich (HttpServletRequest request) {
-        Float recargo = (Float) request.getSession().getAttribute("RECARGO");
-        Preference preference = null;
         ModelMap modelo = new ModelMap();
-        modelo.put("IngredientesDelSandwich",nuevo.getListaCobrar().get(0).getSandwich().getIngrediente());
-        modelo.put("nombre",nuevo.getListaCobrar().get(0).getSandwich().getNombre());
-        modelo.put("montoFinal", nuevo.getListaCobrar().get(0).getSandwich().obtenerMonto()+recargo);
-        preference = this.servicioMercadoPago.generarPago(nuevo);
+        Float recargo = (Float) request.getSession().getAttribute("RECARGO");
+        String destino = (String) request.getSession().getAttribute("DESTINO");
+        modelo.put("listaDetalle", pagoNuevo.getListaCobrar());
+        Float importeTotal = pagoNuevo.getImpTot();
+        pagoNuevo.setImpTot(pagoNuevo.getImpTot()+recargo);
+        pagoNuevo.setRecargo(recargo);
+        modelo.put("direccion",this.generateDomicilio(destino));
+        modelo.put("montoFinal", importeTotal);
+        modelo.put("recargo", recargo);
+        modelo.put("montoTotalPagar", importeTotal+recargo);
+        Preference preference = null;
+        preference = this.servicioMercadoPago.generarPago(pagoNuevo);
         modelo.put("preference", preference);
         return new ModelAndView("pago", modelo);
     }
@@ -99,15 +99,19 @@ public class ControladorPago {
         Email nuevoEmail = new Email();
         Long idCliente = (Long) request.getSession().getAttribute("id");
         String dir = (String) request.getSession().getAttribute("DESTINO");
+        String dondeVengo = (String) request.getSession().getAttribute("DONDE_VENGO");
         try{
             cliente = this.servicioLogin.consultarPorID(idCliente);
             cliente.setDireccion(generateDomicilio(dir));
             nuevoEmail.setUser(cliente);
             nuevoEmail.setMetodoPago(paymentType);
-            nuevoEmail.setLista(this.convertirSetToList(nuevo.getListaCobrar().get(0).getSandwich().getIngrediente()));
+            nuevoEmail.setLista(this.convertirSetToList(pagoNuevo.getListaCobrar().get(0).getSandwich().getIngrediente()));
             nuevoEmail.setRecargo((Float) request.getSession().getAttribute("RECARGO"));
             guardarCompra(cliente);
             this.servicioEmail.sendEmail(nuevoEmail,"Envio De Pedido");
+            if(dondeVengo.equals("CARRO"))
+                vaciarListaDetalles(request);
+            request.getSession().setAttribute("DESTINO",null);
             modelo.put("msg","Se ha enviado el email de confirmación");
         } catch (UsuarioInvalidoException e) {
             modelo.put("error", "a ocurrido un error en el proceso de envio");
@@ -121,8 +125,15 @@ public class ControladorPago {
         return new ModelAndView("seguimiento");
     }
 
+
+    @RequestMapping(path="/seguirComprando")
+    public ModelAndView seguirComprando(HttpServletRequest request){
+        request.getSession().setAttribute("LISTA_DETALLE",null);
+        return new ModelAndView("redirect:/home");
+    }
+
     private void guardarCompra(Usuario cliente) {
-        nuevo.getListaCobrar().forEach(mpEntidad -> {
+        pagoNuevo.getListaCobrar().forEach(mpEntidad -> {
             Compra nueva = generarCompra(cliente,mpEntidad.getSandwich());
             System.err.println(nueva);
             this.servicioCompra.guardarCompra(nueva);
@@ -154,13 +165,20 @@ public class ControladorPago {
     private Float obtenerMonto(List<DetalleCarro> det){
         AtomicReference<Float> tot = new AtomicReference<>((float) 0L);
         det.forEach(detalleCarro -> {
-            tot.updateAndGet(v -> v + detalleCarro.getSandwich().obtenerMonto());
+            tot.updateAndGet(v -> v + detalleCarro.calcularMonto());
         });
         return tot.get();
     }
 
+    private void vaciarListaDetalles(HttpServletRequest request){
+        List<DetalleCarro> lista = (List<DetalleCarro>) request.getSession().getAttribute("LISTA_DETALLE");
+        lista.forEach(detalleCarro -> {
+            System.err.println(detalleCarro);
+            this.servicioDetalleCarro.eliminarDetalle(detalleCarro);
+        });
+    }
 
     public void setPago(Pago p){
-        this.nuevo = p;
+        this.pagoNuevo = p;
     }
 }

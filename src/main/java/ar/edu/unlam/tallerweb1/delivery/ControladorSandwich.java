@@ -77,7 +77,7 @@ public class ControladorSandwich {
             sandwichObtenido = this.servicioSandwich.obtenerSandwichPorId(idSandwich);
             request.getSession().setAttribute("SANDWICH_ELEGIDO",sandwichObtenido);
             request.getSession().setAttribute("DONDE_VENGO","NORMAL");
-            System.err.println(sandwichObtenido.getIngrediente());
+
             model.put("IngredientesDelSandwich",sandwichObtenido.getIngrediente());
             model.put("nombre",sandwichObtenido.getNombre());
             model.put("idSandwich",sandwichObtenido.getIdSandwich());

@@ -58,4 +58,8 @@ public class DetalleCarro {
         this.cantidad = cantidad;
     }
 
+    public Float calcularMonto(){
+        return this.sandwich.obtenerMonto()*this.cantidad;
+    }
+
 }
