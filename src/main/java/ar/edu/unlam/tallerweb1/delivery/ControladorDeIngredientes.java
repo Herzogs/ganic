@@ -198,7 +198,7 @@ public class ControladorDeIngredientes {
         Sandwich sandwich = (Sandwich) request.getSession().getAttribute("SANDWICH_ELEGIDO");
         servicioSandwich.guardarSandwich(sandwich);
         request.getSession().setAttribute("DONDE_VENGO","NORMAL");
-        return new ModelAndView("redirect:/destino");
+        return new ModelAndView(String.format("redirect:/agregarAlCarrito?idSandwich=%d",sandwich.getIdSandwich()));
     }
 
     @RequestMapping(path = "/salvarSandwichCarrito", method = RequestMethod.GET)

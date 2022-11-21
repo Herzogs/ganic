@@ -53,9 +53,12 @@ public class ControladorDestino {
     }
 
     @RequestMapping(path = "/destino", method = RequestMethod.GET)
-    public ModelAndView renderizadoPaginaDestino(){
+    public ModelAndView renderizadoPaginaDestino(HttpServletRequest request){
         ModelMap mod = new ModelMap();
         mod.put("formDestino", new FormularioDestino());
+        String destino = (String) request.getSession().getAttribute("DESTINO");
+        if(destino != null)
+            return new ModelAndView("redirect:/prepago", mod);
         return new ModelAndView("destino", mod);
     }
 }

@@ -67,8 +67,8 @@ public class ControladorDetalleCarro {
             idUsuario = (Long) request.getSession().getAttribute("id");
             Usuario usuario = servicioLogin.consultarPorID(idUsuario);
             detalle = servicioDetalleCarro.obtenerDetalleDeCarroDeUsuario(usuario);
-
             modelMap.put("listaDetalle", detalle);
+            modelMap.put("montoCarrito",this.calcularMontoDelCarrito(detalle));
         } catch (UsuarioInvalidoException e) {
             modelMap.put("msg", "Usuario invalido");
         } catch (DetalleInexistenteExeption e) {
@@ -79,7 +79,10 @@ public class ControladorDetalleCarro {
     }
 
     @RequestMapping(path = "/agregarAlCarrito")
-    public ModelAndView agregarAlCarrito(HttpServletRequest request, @RequestParam(value = "idSandwich") Long idSandwich, @RequestParam(value = "cantidad",required = false,defaultValue = "5") Integer cantidad) {
+    public ModelAndView agregarAlCarrito(HttpServletRequest request,
+                                         @RequestParam(value = "idSandwich") Long idSandwich,
+                                         @RequestParam(value = "cantidad",required = false,defaultValue = "1") Integer cantidad,
+                                         @RequestParam(value = "bandera",required = true,defaultValue = "1") Boolean bandera) {
         ModelMap modelMap = new ModelMap();
         try {
             Long idUsuario = (Long) request.getSession().getAttribute("id");
@@ -89,6 +92,10 @@ public class ControladorDetalleCarro {
             if(servicioDetalleCarro.incrementarCntidad(cantidad,usuario,sandwich).equals(false)){
                 guardarDetalle(cantidad, sandwich, carro);
             }
+
+            if(bandera.equals(true))
+                return new ModelAndView("redirect:/verCarrito", modelMap);
+
 
             return new ModelAndView("redirect:/home", modelMap);
 
@@ -137,6 +144,7 @@ public class ControladorDetalleCarro {
              idUsuario = (Long) request.getSession().getAttribute("id");
              usuario = servicioLogin.consultarPorID(idUsuario);
             servicioDetalleCarro.vaciarCarro(usuario);
+            request.getSession().setAttribute("DESTINO",null);
             modelMap.put("msg", "Carrito vacio");
         } catch (UsuarioInvalidoException e) {
             modelMap.put("msg", "Usuario inexistente");
@@ -156,6 +164,12 @@ public class ControladorDetalleCarro {
         return new ModelAndView("redirect:/verCarrito", modelMap);
     }
 
-
+    private Float calcularMontoDelCarrito(List<DetalleCarro> detalleCarroList){
+        Float montoFinal = 0F;
+        for (DetalleCarro det: detalleCarroList) {
+            montoFinal += det.calcularMonto();
+        }
+        return montoFinal;
+    }
 
 }

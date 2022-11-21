@@ -29,24 +29,24 @@
                                 <h4 class="mb-3">Nro detalle: ${detalle.idDetalleCarro }
                                     <a href="eliminarDetalle?idDetalle=${detalle.idDetalleCarro}" class="btn btn-secondary" type="button">Eliminar detalle</a> </h4>
                                 <span class="pe-5">Nombre del Sandwich: ${ detalle.sandwich.nombre}</span>
+                                <span class="pe-5">Monto Total: ${ detalle.calcularMonto()}</span>
                                 <span class="pe-5">cantidad: ${ detalle.cantidad }</span>
 
                             </div>
                     </div>
                 </c:forEach>
+                <c:if test="${not empty msg}">
+                    <div class="text-danger my-4">
+                        <span>${msg}</span>
+                    </div>
+                </c:if>
 
                 <div class="py-3 text-end">
+                    <span class="pe-5">Monto Carrito: ${montoCarrito}</span>
                     <a href="salvarCarro" class="btn btn-secondary" type="button">Pagar</a>
                     <a href="vaciarCarro" class="btn btn-secondary" type="button">Vaciar carrito</a>
                 </div>
             </div>
-
-            <c:if test="${not empty msg}">
-                <div class="text-danger my-4">
-                    <span>${msg}</span>
-                </div>
-            </c:if>
-
 
         </div>
     </section>
