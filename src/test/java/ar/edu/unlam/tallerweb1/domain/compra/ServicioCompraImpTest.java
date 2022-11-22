@@ -6,6 +6,8 @@ import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
 import static org.assertj.core.api.Java6Assertions.assertThat;
@@ -38,6 +40,8 @@ public class ServicioCompraImpTest extends SpringTest {
         Compra inexistente = buscoUnaCompraQueNOExiste(idCompraInexistente);
         verificoLoObtenido(inexistente.getIdCompra());
     }
+
+
 
 
     @Test

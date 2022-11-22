@@ -3,19 +3,19 @@ package ar.edu.unlam.tallerweb1.domain.MercadoPago;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
 
 public class MpEntidad {
-    private Integer cant;
+    private Integer cantidad;
     private Sandwich sandwich;
 
     public MpEntidad() {
-        this.cant = 0;
+        this.cantidad = 0;
     }
 
-    public Integer getCant() {
-        return cant;
+    public Integer getCantidad() {
+        return cantidad;
     }
 
-    public void setCant(Integer cant) {
-        this.cant = cant;
+    public void setCantidad(Integer cantidad) {
+        this.cantidad = cantidad;
     }
 
     public Sandwich getSandwich() {
@@ -24,5 +24,9 @@ public class MpEntidad {
 
     public void setSandwich(Sandwich sandwich) {
         this.sandwich = sandwich;
+    }
+
+    public Float calcularMonto(){
+        return this.sandwich.obtenerMonto()*this.cantidad;
     }
 }

@@ -1,5 +1,5 @@
 $(document).ready(()=>{
-    var unlam_home = L.latLng(-34.67061640008919,-58.5627730162868);
+    const unlam_home = L.latLng(-34.67061640008919,-58.5627730162868);
     var map = L.map('map').setView(unlam_home,15);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 16,

@@ -18,8 +18,11 @@
                                 <p class="card-text">${ing.detalle}</p>
                                 <p class="card-text">Precio por unidad $${ing.precio}</p>
                             </c:forEach>
+
                             <p class="card-text fw-bold text-end">Monto a pagar <span
                                     class="text-primary">$${montoFinal}</span></p>
+                            <p class="card-text fw-bold text-end">cantidad
+                                <input type="number"></input></p>
                         </div>
                     </div>
                     <%--Bloque que es visible si el elemento error no esta vacio	--%>
@@ -30,7 +33,8 @@
                 </div>
                 <div class="col-6">
                     <h4 class="pb-3">Confirmar pago</h4>
-                    <a href="destino" class="btn btn-success px-5 mb-5">Confirmar Destino</a>
+                    <a href="agregarAlCarrito?idSandwich=${idSandwich}&bandera=true" class="btn btn-success px-5 mb-5">Comprar</a>
+                    <a href="agregarAlCarrito?idSandwich=${idSandwich}&bandera=false" class="btn btn-success px-5 mb-5">Agregar al carrito</a>
                     <div><a href="restablecer" class="btn btn-primary px-5 my-5">Volver al Home</a></div>
                 </div>
             </div>

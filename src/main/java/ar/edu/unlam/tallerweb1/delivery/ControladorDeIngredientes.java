@@ -171,8 +171,6 @@ public class ControladorDeIngredientes {
             mod.put("paso",ingrediente.getPaso());
             mod.put("formPref",new FormularioPreferencia());
         }catch(IngredienteInvalidoException  | PasoInvalidoException e) {
-            /*mod.put("error", "Paso Incorrecto");
-            this.sandwich.borrarDatosDelSandwich();*/
             return new ModelAndView("redirect:/error404", mod);
         }
         return new ModelAndView("modificarIngrediente",mod);
@@ -195,20 +193,20 @@ public class ControladorDeIngredientes {
         return new ModelAndView("confirmar", model);
     }
 
-    @RequestMapping(path = "/actualizarPreferenciaMod", method = RequestMethod.POST)
-    public ModelAndView actualizarPreferenciaEnVistaModificar(@ModelAttribute("formPref") FormularioPreferencia du) {
-        ModelMap mod = new ModelMap();
-        mod.put("pref",du.getPreferencia());
-        mod.put("paso",du.getPaso());
-        return new ModelAndView("redirect:/modifcarIngrediente",mod);
-    }
-
     @RequestMapping(path = "/salvarSandwich", method = RequestMethod.GET)
     public ModelAndView salvarSandwich(HttpServletRequest request) {
         Sandwich sandwich = (Sandwich) request.getSession().getAttribute("SANDWICH_ELEGIDO");
         servicioSandwich.guardarSandwich(sandwich);
         request.getSession().setAttribute("DONDE_VENGO","NORMAL");
-        return new ModelAndView("redirect:/destino");
+        return new ModelAndView(String.format("redirect:/agregarAlCarrito?idSandwich=%d",sandwich.getIdSandwich()));
+    }
+
+    @RequestMapping(path = "/salvarSandwichCarrito", method = RequestMethod.GET)
+    public ModelAndView salvarSandwichCarrito(HttpServletRequest request) {
+        Sandwich sandwich = (Sandwich) request.getSession().getAttribute("SANDWICH_ELEGIDO");
+        this.sandwich.borrarDatosDelSandwich();
+        servicioSandwich.guardarSandwich(sandwich);
+        return new ModelAndView(String.format("redirect:/agregarAlCarrito?idSandwich=%d",sandwich.getIdSandwich()));
     }
 
     private Sandwich generarSandwich(List<Ingrediente> lista){

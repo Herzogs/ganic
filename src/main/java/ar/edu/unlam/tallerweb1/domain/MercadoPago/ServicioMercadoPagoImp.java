@@ -1,7 +1,6 @@
 package ar.edu.unlam.tallerweb1.domain.MercadoPago;
 
 import ar.edu.unlam.tallerweb1.domain.Sandwich.RepositorioSandwich;
-import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
 import com.mercadopago.client.preference.PreferenceClient;
@@ -17,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service("servicioMercadoPago")
 @Transactional
@@ -38,16 +36,49 @@ public class ServicioMercadoPagoImp implements ServicioMercadoPago {
 
         // Crea un �tem en la preferencia para el pago
         List<PreferenceItemRequest> items = new ArrayList<>();
-        sandPagar.getListaCobrar().forEach(pago -> {
+        /*sandPagar.getListaCobrar().forEach(pago -> {
             PreferenceItemRequest item =
                     PreferenceItemRequest.builder()
+                            .id(pago.getSandwich().getIdSandwich().toString())
                             .title(pago.getSandwich().getNombre())
                             .quantity(pago.getCant())
+                            .description(pago.getSandwich().getDescripcion())
                             .currencyId("ARS")
                             .unitPrice(new BigDecimal(pago.getSandwich().obtenerMonto()))
                             .build();
+
             items.add(item);
-        });
+        });*/
+
+        for (MpEntidad pago : sandPagar.getListaCobrar()){
+
+                PreferenceItemRequest item =
+                        PreferenceItemRequest.builder()
+                                .id(pago.getSandwich().getIdSandwich().toString())
+                                .title(pago.getSandwich().getNombre())
+                                .quantity(pago.getCantidad())
+                                .description(pago.getSandwich().getDescripcion())
+                                .currencyId("ARS")
+                                .unitPrice(BigDecimal.valueOf(pago.getSandwich().obtenerMonto()))
+                                .build();
+
+                items.add(item);
+
+        }
+
+        PreferenceItemRequest item =
+                PreferenceItemRequest.builder()
+                        .id("123")
+                        .title("Recargo")
+                        .quantity(1)
+                        .description("Recargo De Envio")
+                        .currencyId("ARS")
+                        .unitPrice(BigDecimal.valueOf(sandPagar.getRecargo()))
+                        .build();
+
+        items.add(item);
+
+        mostrarDatos(items);
 
 		/* Urls propias de mi app en spring a las que va a
 		redireccionar despues del pago si es exitoso o no */
@@ -74,10 +105,17 @@ public class ServicioMercadoPagoImp implements ServicioMercadoPago {
 			 pago para que pague con su tarjeta el item solicitado */
 
             preference = client.create(request);
+            items.clear();
 
         } catch (MPException | MPApiException e) {
             e.printStackTrace();
         }
         return preference;
+    }
+
+    private void mostrarDatos(List<PreferenceItemRequest> items) {
+        items.forEach(preferenceItemRequest -> {
+            System.err.println(preferenceItemRequest.getTitle());
+        });
     }
 }

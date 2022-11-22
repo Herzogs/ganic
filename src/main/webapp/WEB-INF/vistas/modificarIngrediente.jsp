@@ -15,20 +15,6 @@
             <div class="row g-4">
                 <h3>Seleccone ingrediente</h3>
 
-                    <form:form action="actualizarPreferenciaMod" method="POST" modelAttribute="formPref">
-                        <h4>Filtro por preferencia: </h4>
-                        <form:input path="paso" value="${paso}" type="hidden"/>
-                        <form:select  path="preferencia" id="preferencia" class="form-select">
-                            <form:option value="SinRestriccion">SinRestriccion</form:option>
-                            <form:option value="Vegano">Vegano</form:option>
-                            <form:option value="sin_TACC">sin_TACC</form:option>
-                            <c:set var="formPref.paso" value="${paso}"/>
-                        </form:select>
-                        <div class="d-grid gap-2">
-                            <button class="btn btn-success mt-1 mb-4" Type="Submit">Filtrar</button>
-                        </div>
-                    </form:form>
-
                 <c:forEach var="pan" items="${ListaDeIngredientes}" >
                     <div class="col-6">
                         <div class="card">
