@@ -2,15 +2,15 @@ package ar.edu.unlam.tallerweb1.domain.detalleCarro;
 
 import ar.edu.unlam.tallerweb1.SpringTest;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.DetalleInexistenteExeption;
+import ar.edu.unlam.tallerweb1.domain.Excepciones.NoSePudoQuitarException;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
 import ar.edu.unlam.tallerweb1.domain.carro.Carro;
+import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -42,7 +42,7 @@ public class ServicioDetalleCarroImpTest extends SpringTest {
     public void queSiBuscoUnDetalleDeCArroQueNoExistaMeLanceDetalleInexistenteExeption() throws DetalleInexistenteExeption {
         Long idInexistente = 558L;
         lanzoExeptionConMoquito(idInexistente);
-        DetalleCarro detalleBuscado = buscoElDetalleDeCarro(idInexistente);
+        buscoElDetalleDeCarro(idInexistente);
 
     }
 
@@ -90,6 +90,120 @@ public class ServicioDetalleCarroImpTest extends SpringTest {
         verificoQueLaCantidadSeaLaSeleccionada(detalleCarroModificado,cantidad);
     }
 
+    @Test
+    public void SiYaTengoUnSandwcihSeleccionadoYElijoElMismoSeAumenteLACantidadSeleccionada(){
+        Usuario usuario = dadoQueTengoUnUsuario(1L, "diego@ganic.com", "123");
+       /* Sandwich sandwich2 = dadoQueTengoUnSandwich(2L, "sandwichDePrube", "miPedido");
+        Sandwich sandwich3 = dadoQueTengoUnSandwich(3L, "sandwichDePrube", "miPedido");*/
+        Sandwich sandwich = dadoQueTengoUnSandwich();
+        Carro carro = dadoQueTengoUnCarro(usuario, 2L);
+        DetalleCarro detalleCarro1 = dadoQueTengoUnDetalleDeCarro(1L, carro, sandwich, 8);
+        //DetalleCarro detalleCarro2 = dadoQueTengoUnDetalleDeCarro(2L, carro, sandwich3, 1);
+        buscoConMoquito2(detalleCarro1, usuario);
+        Boolean respuesta = cuandoLePasoElMismoSandwich(1,usuario,sandwich);
+        entoncesVerificoQueSeInvocoElMetodoActualizarDetalle();
+        entoncesVerificoQueLaRespuestaSeaVerdadera(respuesta);
+    }
+
+    @Test
+    public void SiYaTengoUnSandwcihSeleccionadoYNoElijoElMismoMeDevuelvaFalsa(){
+        Usuario usuario = dadoQueTengoUnUsuario(1L, "diego@ganic.com", "123");
+        Sandwich sandwich = dadoQueTengoUnSandwich();
+        Sandwich sandwichPrimeraVez = dadoQueUnSandwichPorPrimeraVez();
+        Carro carro = dadoQueTengoUnCarro(usuario, 2L);
+        DetalleCarro detalleCarro1 = dadoQueTengoUnDetalleDeCarro(1L, carro, sandwich, 8);
+        buscoConMoquito2(detalleCarro1, usuario);
+        Boolean respuesta = cuandoLePasoElMismoSandwich(1,usuario,sandwichPrimeraVez);
+        entoncesVerificoQueLaRespuestaSeaFalsa(respuesta);
+    }
+
+    @Test
+    public void SiYaTengoUnSandwichSeleccionadoDosVecesPuedaBajarCantidad() throws NoSePudoQuitarException {
+        Usuario usuario = dadoQueTengoUnUsuario(1L, "diego@ganic.com", "123");
+        Sandwich sandwich = dadoQueTengoUnSandwich();
+        Carro carro = dadoQueTengoUnCarro(usuario, 2L);
+        DetalleCarro detalleCarro1 = dadoQueTengoUnDetalleDeCarro(1L, carro, sandwich, 2);
+        buscoConMoquito2(detalleCarro1, usuario);
+        Boolean respuesta = cuandoLePasoElMismoSandwichYDecremento(1,usuario,sandwich);
+        entoncesVerificoQueSeInvocoElMetodoActualizarDetalle();
+        entoncesVerificoQueLaRespuestaSeaVerdadera(respuesta);
+    }
+
+    @Test (expected = NoSePudoQuitarException.class)
+    public void siYaTengoUnSandwichSeleccionadoUnaVezMeLanzeExcepcion() throws NoSePudoQuitarException {
+        Usuario usuario = dadoQueTengoUnUsuario(1L, "diego@ganic.com", "123");
+        Sandwich sandwich = dadoQueTengoUnSandwich();
+        Carro carro = dadoQueTengoUnCarro(usuario, 2L);
+        DetalleCarro detalleCarro1 = dadoQueTengoUnDetalleDeCarro(1L, carro, sandwich, 1);
+        buscoConMoquito2(detalleCarro1, usuario);
+        cuandoLePasoElMismoSandwichYDecremento(1,usuario,sandwich);
+    }
+
+    @Test
+    public void queSePuedaVaciarUnCarro(){
+        Usuario usuario = dadoQueTengoUnUsuario(1L, "diego@ganic.com", "123");
+        Sandwich sandwich = dadoQueTengoUnSandwich();
+        Carro carro = dadoQueTengoUnCarro(usuario, 2L);
+        DetalleCarro detalleCarro1 = dadoQueTengoUnDetalleDeCarro(1L, carro, sandwich, 1);
+        buscoConMoquito2(detalleCarro1,usuario);
+        cuandoVacioElCarro(usuario);
+        entoncesVerificoQueSeInvoqueALMetodoBorrarDetalleDeCarro();
+    }
+
+    private void entoncesVerificoQueSeInvoqueALMetodoBorrarDetalleDeCarro() {
+        verify(this.repo,times(1)).borrarDetalleDeCarro(any(DetalleCarro.class));
+    }
+
+    private void cuandoVacioElCarro(Usuario usuario) {
+        this.servicio.vaciarCarro(usuario);
+    }
+
+    private Boolean cuandoLePasoElMismoSandwichYDecremento(int i, Usuario usuario, Sandwich sandwich) throws NoSePudoQuitarException {
+        return this.servicio.decrementarCantidad(i,usuario,sandwich);
+    }
+
+    private void entoncesVerificoQueLaRespuestaSeaFalsa(Boolean respuesta) {
+        assertThat(respuesta).isFalse();
+    }
+
+    private void buscoConMoquito2(DetalleCarro detalleCarro1, Usuario usuario) {
+        List<DetalleCarro> buscado = new ArrayList<>();
+        buscado.add(detalleCarro1);
+        when(repo.obtenerDetalleDeCarrPorUsuario(usuario)).thenReturn(buscado);
+    }
+
+    private Sandwich dadoQueUnSandwichPorPrimeraVez(){
+        Ingrediente ing1 = new Ingrediente(1l, "test", 1F, 1, "test", "SinRestriccion");
+        Ingrediente ing2 = new Ingrediente(2l, "test", 1F, 1, "test", "SinRestriccion");
+        Set<Ingrediente> listaIngredientes = new LinkedHashSet<>();
+        listaIngredientes.add(ing1);
+        listaIngredientes.add(ing2);
+        Sandwich sandwich = new Sandwich(1l, "sand1", "sand1", false, "SinRestriccion", listaIngredientes);
+        return sandwich;
+    }
+
+    private Sandwich dadoQueTengoUnSandwich() {
+        Ingrediente ing1 = new Ingrediente(1l, "test", 1F, 1, "test", "Vegano");
+        Ingrediente ing2 = new Ingrediente(2l, "test", 1F, 1, "test", "Vegano");
+        Set<Ingrediente> listaIngredientes = new LinkedHashSet<>();
+        listaIngredientes.add(ing1);
+        listaIngredientes.add(ing2);
+        Sandwich sandwich = new Sandwich(1l, "sand1", "sand1", true, "Vegano", listaIngredientes);
+        return sandwich;
+    }
+
+    private void entoncesVerificoQueLaRespuestaSeaVerdadera(Boolean respuesta) {
+        assertThat(respuesta).isTrue();
+    }
+
+    private void entoncesVerificoQueSeInvocoElMetodoActualizarDetalle() {
+        verify(this.repo).actualizarDetalleCarro(any());
+    }
+
+    private Boolean cuandoLePasoElMismoSandwich(int i, Usuario usuario, Sandwich sandwich2) {
+        return this.servicio.incrementarCntidad(i,usuario,sandwich2);
+    }
+
     private void obtengoElDetalleModificadoConMockito(DetalleCarro detalleCarroModificado) {
         when(repo.obtnerDetalleCarro(detalleCarroModificado.getIdDetalleCarro())).thenReturn(detalleCarroModificado);
     }
@@ -103,14 +217,14 @@ public class ServicioDetalleCarroImpTest extends SpringTest {
     }
 
     private DetalleCarro actualizarCantidad(DetalleCarro detalleCarro1, Integer cantidad) {
-   detalleCarro1.setCantidad(cantidad);
-   servicio.actualizarDetalle(detalleCarro1);
+        detalleCarro1.setCantidad(cantidad);
+        servicio.actualizarDetalle(detalleCarro1);
         return detalleCarro1;
     }
 
 
     private void verificarQueSeLLamoAlMEtodoEliminarDelRepo(DetalleCarro detalleCarro1) {
-    verify(repo).borrarDetalleDeCarro(any(DetalleCarro.class));
+        verify(repo).borrarDetalleDeCarro(any(DetalleCarro.class));
     }
 
     private void eliminamosUnDetalleDeCarro(DetalleCarro detalleCarro1) {
