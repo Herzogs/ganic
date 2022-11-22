@@ -154,7 +154,60 @@ public class ControladorDetalleCarroTest extends SpringTest {
         entoncesVerificoQueMeRedirijaALaVistaDestino(mav,vista);
     }
 
+    @Test
+    public void LuegoDeTenerUnosSandwichesSeleccionadosBorrarElCarrito() throws UsuarioInvalidoException {
+        String mensaje = "Carrito vacio";
+        Usuario user = dadoQueTengoUnUsuario();
+        cuandoLePidaAlServletPorID(user);
+        cuandoLePidaAlServicioLoginPorUnID(user);
+        ModelAndView mav = cuandoLLamoAlControladorPAraVaciarELCarro(this.request);
+        entoncesVerificoQueSeInvoqueElMEtodoDeVaciarCarro();
+        entoncesVerificoQueMeDevuelvaMensajeDeError(mav, mensaje);
+    }
 
+    @Test
+    public void LuegoDeTenerUnaCantidadDeUnSandwichLoPuedaEliminar() throws DetalleInexistenteExeption {
+        Usuario user = dadoQueTengoUnUsuario();
+        Carro carro = dadoQueTengoUnCarro(1L, user);
+        Sandwich sand1 = dadoQueTengoUnSandwich();
+        DetalleCarro detalleCarro = dadoQueTengoUnDetalleCarro(carro, sand1);
+        cuandoLLamoAlMEtodoObtenerDetalle(detalleCarro);
+        ModelAndView mav = cuandoLLamoAlControladorParaEliminarUnDetalle(detalleCarro.getIdDetalleCarro());
+        entoncesVerificoQueSeInvoqueElMetodoEliminarDetalle();
+    }
+
+    @Test
+    public void siQuieroEliminarUnDetalleQueNoExistaMeTireUnError() throws DetalleInexistenteExeption {
+        String mensaje = "Detalle inexistente, no se pudo borrar";
+        cuandoLLamoAlMEtodoObtenerDetalleInexisteLAnzeExcepcion();
+        ModelAndView mav = cuandoLLamoAlControladorParaEliminarUnDetalle(1L);
+        entoncesVerificoQueMeDevuelvaMensajeDeError(mav, mensaje);
+    }
+
+    private void cuandoLLamoAlMEtodoObtenerDetalleInexisteLAnzeExcepcion() throws DetalleInexistenteExeption {
+        when(this.servicioDetalle.obtenerDetalle(anyLong())).thenThrow(new DetalleInexistenteExeption("Detalle Inexistente"));
+    }
+
+
+    private void entoncesVerificoQueSeInvoqueElMetodoEliminarDetalle() {
+        verify(this.servicioDetalle).eliminarDetalle(any(DetalleCarro.class));
+    }
+
+    private ModelAndView cuandoLLamoAlControladorParaEliminarUnDetalle(Long idDetalle) {
+        return this.controlador.eliminarDetalle(idDetalle);
+    }
+
+    private void cuandoLLamoAlMEtodoObtenerDetalle(DetalleCarro detalleCarro) throws DetalleInexistenteExeption {
+        ;when(this.servicioDetalle.obtenerDetalle(detalleCarro.getIdDetalleCarro())).thenReturn(detalleCarro);
+    }
+
+    private void entoncesVerificoQueSeInvoqueElMEtodoDeVaciarCarro() {
+        verify(this.servicioDetalle).vaciarCarro(any(Usuario.class));
+    }
+
+    private ModelAndView cuandoLLamoAlControladorPAraVaciarELCarro(HttpServletRequest request) {
+        return this.controlador.vaciarCarro(request);
+    }
 
     private void entoncesVerificoQueMeRedirijaALaVistaDestino(ModelAndView mav, String vista) {
         assertThat(mav.getViewName()).isEqualTo(vista);
