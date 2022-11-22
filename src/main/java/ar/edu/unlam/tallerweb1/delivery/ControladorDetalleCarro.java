@@ -93,7 +93,6 @@ public class ControladorDetalleCarro {
             if(bandera.equals(true))
                 return new ModelAndView("redirect:/verCarrito", modelMap);
 
-
             return new ModelAndView("redirect:/home", modelMap);
 
         } catch (SandwichNoExistenteException e) {
@@ -131,6 +130,7 @@ public class ControladorDetalleCarro {
     }
 
     @RequestMapping(path = "/salvarCarro")
+
     public ModelAndView salvarCarroEnServlet(HttpServletRequest request){
         Long idUsuario = 0L;
         Usuario usuario = null;
