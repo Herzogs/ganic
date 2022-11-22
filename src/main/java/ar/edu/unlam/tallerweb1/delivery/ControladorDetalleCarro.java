@@ -35,26 +35,6 @@ public class ControladorDetalleCarro {
         this.servicioCarro=servicioCarro;
     }
 
-    @RequestMapping(path = "cargarCarrito", method = RequestMethod.GET)
-    public ModelAndView verCarrito(HttpServletRequest request) {
-        ModelMap modelMap = new ModelMap();
-        List<DetalleCarro> detalle = null;
-        Long idUsuario = 0L;
-        try {
-            idUsuario = (Long) request.getSession().getAttribute("id");
-            Usuario usuario = servicioLogin.consultarPorID(idUsuario);
-            detalle = servicioDetalleCarro.obtenerDetalleDeCarroDeUsuario(usuario);
-            Integer cantidad = 1;
-            modelMap.put("cantidadDetalle", detalle.size());
-        } catch (UsuarioInvalidoException e) {
-            modelMap.put("msg", "Usuario invalido");
-        } catch (DetalleInexistenteExeption e) {
-            modelMap.put("msg", "Carrito vacio");
-        }
-        return new ModelAndView("home", modelMap);
-
-    }
-
     @RequestMapping(path = "/verCarrito", method = RequestMethod.GET)
     public ModelAndView listarCarrito(HttpServletRequest request) {
         ModelMap modelMap = new ModelMap();
@@ -148,13 +128,7 @@ public class ControladorDetalleCarro {
         return new ModelAndView("redirect:/destino",modelMap);
     }
 
-    private void guardarDetalle(Integer cantidad, Sandwich sandwich, Carro carro) {
-        DetalleCarro detalleCarro = new DetalleCarro();
-        detalleCarro.setCarro(carro);
-        detalleCarro.setSandwich(sandwich);
-        detalleCarro.setCantidad(cantidad);
-        servicioDetalleCarro.guardarDetalle(detalleCarro);
-    }
+
 
     @RequestMapping(path = "/vaciarCarro")
     public ModelAndView vaciarCarro(HttpServletRequest request) {
@@ -186,12 +160,39 @@ public class ControladorDetalleCarro {
         return new ModelAndView("redirect:/verCarrito", modelMap);
     }
 
+    @RequestMapping(path = "cargarCarrito", method = RequestMethod.GET)
+    public ModelAndView verCarrito(HttpServletRequest request) {
+        ModelMap modelMap = new ModelMap();
+        List<DetalleCarro> detalle = null;
+        Long idUsuario = 0L;
+        try {
+            idUsuario = (Long) request.getSession().getAttribute("id");
+            Usuario usuario = this.servicioLogin.consultarPorID(idUsuario);
+            detalle = servicioDetalleCarro.obtenerDetalleDeCarroDeUsuario(usuario);
+            modelMap.put("cantidadDetalle", detalle.size());
+        } catch (UsuarioInvalidoException e) {
+            modelMap.put("msg", "Usuario invalido");
+        } catch (DetalleInexistenteExeption e) {
+            modelMap.put("msg", "Carrito vacio");
+        }
+        return new ModelAndView("home", modelMap);
+
+    }
+
     private Float calcularMontoDelCarrito(List<DetalleCarro> detalleCarroList){
         Float montoFinal = 0F;
         for (DetalleCarro det: detalleCarroList) {
             montoFinal += det.calcularMonto();
         }
         return montoFinal;
+    }
+
+    private void guardarDetalle(Integer cantidad, Sandwich sandwich, Carro carro) {
+        DetalleCarro detalleCarro = new DetalleCarro();
+        detalleCarro.setCarro(carro);
+        detalleCarro.setSandwich(sandwich);
+        detalleCarro.setCantidad(cantidad);
+        servicioDetalleCarro.guardarDetalle(detalleCarro);
     }
 
 }
