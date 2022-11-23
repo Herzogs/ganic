@@ -14,13 +14,13 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
           integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14="
           crossorigin=""/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/leaflet.legend.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css"/>
     <script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js"
             integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg="
             crossorigin=""></script>
-
-
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script src="${pageContext.request.contextPath}/js/leaflet.legend.js"></script>
     <script src="${pageContext.request.contextPath}/js/jquery-1.11.3.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/confirmacion.js" type="text/javascript"></script>
     <title>Destino</title>
@@ -81,7 +81,7 @@
                 <h1>Elija su destino</h1>
                 <div id="map" class="map"></div>
                 <c:if test="${not empty msg}">
-                    <h4 class="text-center text-danger">${msg}</h4>
+                    <h4 id="error" class="text-center text-danger">${msg}</h4>
                 </c:if>
             </div>
 

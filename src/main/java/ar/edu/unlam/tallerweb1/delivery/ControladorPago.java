@@ -48,6 +48,8 @@ public class ControladorPago {
 
     private Pago pagoNuevo;
 
+    private Long payment;
+
     @Autowired
     public ControladorPago(ServicioLogin servicioLogin, ServicioMercadoPago servicioMercadoPago, ServicioCompra servicioCompra, ServicioDetalleCarro servicioDetalleCarro) {
         this.servicioLogin = servicioLogin;
@@ -93,13 +95,14 @@ public class ControladorPago {
     }
 
     @RequestMapping(path = "/alerta_exitosa", method = RequestMethod.GET)
-    public ModelAndView pagoCorrecto(@RequestParam("payment_type") String paymentType, HttpServletRequest request){
+    public ModelAndView pagoCorrecto(@RequestParam("payment_type") String paymentType, @RequestParam(value = "payment_id", required = false,defaultValue = "1") Long payment, HttpServletRequest request){
         Usuario cliente = null;
         ModelMap modelo = new ModelMap();
         Email nuevoEmail = new Email();
         Long idCliente = (Long) request.getSession().getAttribute("id");
         String dir = (String) request.getSession().getAttribute("DESTINO");
         String dondeVengo = (String) request.getSession().getAttribute("DONDE_VENGO");
+        this.payment = payment;
         try{
             cliente = this.servicioLogin.consultarPorID(idCliente);
             cliente.setDireccion(generateDomicilio(dir));
@@ -134,7 +137,7 @@ public class ControladorPago {
 
     private void guardarCompra(Usuario cliente) {
         pagoNuevo.getListaCobrar().forEach(mpEntidad -> {
-            Compra nueva = generarCompra(cliente,mpEntidad.getSandwich());
+            Compra nueva = generarCompra(cliente,mpEntidad.getSandwich(),mpEntidad.getCantidad());
             System.err.println(nueva);
             this.servicioCompra.guardarCompra(nueva);
         });
@@ -144,7 +147,7 @@ public class ControladorPago {
         return ing.stream().collect(Collectors.toCollection(ArrayList::new));
     }
 
-    private Compra generarCompra(Usuario user, Sandwich sandwich){
+    private Compra generarCompra(Usuario user, Sandwich sandwich, Integer cantidad){
         Compra nueva = new Compra();
         nueva.setCliente(user);
         List<Sandwich> list = new ArrayList<>();
@@ -153,6 +156,8 @@ public class ControladorPago {
         nueva.setEstado(EstadoDeCompra.PREPARACION);
         nueva.setFecha(LocalDateTime.now(ZoneId.of("America/Buenos_Aires")));
         nueva.setFechaEntrega(LocalDateTime.now(ZoneId.of("America/Buenos_Aires")).plusMinutes(5));
+        nueva.setCant(cantidad);
+        nueva.setPayment(this.payment);
         return nueva;
     }
 

@@ -4,6 +4,7 @@ import ar.edu.unlam.tallerweb1.SpringTest;
 import ar.edu.unlam.tallerweb1.delivery.ControladorCancelarCompra;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.CompraNoEncontradaExeption;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioInvalidoException;
+import ar.edu.unlam.tallerweb1.domain.MercadoPago.ServicioMercadoPago;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
 import ar.edu.unlam.tallerweb1.domain.compra.Compra;
 import ar.edu.unlam.tallerweb1.domain.compra.EstadoDeCompra;
@@ -34,6 +35,7 @@ public class ControladorCancelacionCompraTest extends SpringTest {
     private ServicioLogin servicioLogin;
     
     private ControladorCancelarCompra controlador;
+    private ServicioMercadoPago mercadoPago;
     private HttpSession session;
     private HttpServletRequest request;
     
@@ -42,9 +44,10 @@ public class ControladorCancelacionCompraTest extends SpringTest {
         this.servicioLogin = mock(ServicioLogin.class);
         this.servicioCompra = mock(ServicioCompra.class);
         this.session = mock(HttpSession.class);
+        this.mercadoPago = mock(ServicioMercadoPago.class);
         this.request = mock(HttpServletRequest.class);
         when(this.request.getSession()).thenReturn(this.session);
-        this.controlador = new ControladorCancelarCompra(this.servicioCompra,this.servicioLogin);
+        this.controlador = new ControladorCancelarCompra(this.servicioCompra,this.servicioLogin,this.mercadoPago);
     }
 
     @Test

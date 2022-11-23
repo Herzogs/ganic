@@ -73,7 +73,7 @@ public class ControladorPagoTest extends SpringTest {
         this.controladorPago.setPago(dadoQueTengoUnPago(dadoQueTengoUnSandwich()));
         when(this.request.getSession().getAttribute("DONDE_VENGO")).thenReturn("NORMAL");
         when(this.request.getSession().getAttribute("RECARGO")).thenReturn(2F);
-        ModelAndView model = this.controladorPago.pagoCorrecto("Tarjeta",this.request);
+        ModelAndView model = this.controladorPago.pagoCorrecto("Tarjeta",1L,this.request);
         assertThat(model.getModel().get("msg")).isEqualTo("Se ha enviado el email de confirmación");
     }
 
@@ -85,16 +85,9 @@ public class ControladorPagoTest extends SpringTest {
         when(this.servicioLogin.consultarPorID(user.getId())).thenThrow(new UsuarioInvalidoException("No existe usuario"));
         this.controladorPago.setPago(dadoQueTengoUnPago(dadoQueTengoUnSandwich()));
         when(this.request.getSession().getAttribute("RECARGO")).thenReturn(2F);
-        ModelAndView model = this.controladorPago.pagoCorrecto("Tarjeta",this.request);
+        ModelAndView model = this.controladorPago.pagoCorrecto("Tarjeta",1L,this.request);
         assertThat(model.getModel().get("error")).isEqualTo("a ocurrido un error en el proceso de envio");
     }
-
-
-
-
-
-
-
 
 
     private Usuario dadoQueTengoUnUsuario() {
