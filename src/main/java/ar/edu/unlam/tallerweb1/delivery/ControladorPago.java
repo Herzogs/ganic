@@ -119,7 +119,6 @@ public class ControladorPago {
         } catch (UsuarioInvalidoException e) {
             modelo.put("error", "a ocurrido un error en el proceso de envio");
         }
-        /*return new ModelAndView("redirect:/home");*/
         return new ModelAndView("alerta_exitosa",modelo);
     }
 
@@ -134,6 +133,12 @@ public class ControladorPago {
         request.getSession().setAttribute("LISTA_DETALLE",null);
         return new ModelAndView("redirect:/home");
     }
+
+    @RequestMapping(path = "/alerta_fallo", method = RequestMethod.GET)
+    public ModelAndView compraFalla(){
+        return new ModelAndView("alerta_fallo");
+    }
+
 
     private void guardarCompra(Usuario cliente) {
         pagoNuevo.getListaCobrar().forEach(mpEntidad -> {

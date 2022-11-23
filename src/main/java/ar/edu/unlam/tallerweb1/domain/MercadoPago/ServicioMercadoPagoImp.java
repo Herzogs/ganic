@@ -4,6 +4,7 @@ import ar.edu.unlam.tallerweb1.domain.Sandwich.RepositorioSandwich;
 import ar.edu.unlam.tallerweb1.domain.compra.Compra;
 import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.client.payment.PaymentRefundClient;
+import com.mercadopago.client.payment.PaymentRefundCreateRequest;
 import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
 import com.mercadopago.client.preference.PreferenceClient;
 import com.mercadopago.client.preference.PreferenceItemRequest;
@@ -19,21 +20,22 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 @Service("servicioMercadoPago")
 @Transactional
 public class ServicioMercadoPagoImp implements ServicioMercadoPago {
 
-    private RepositorioSandwich sandwich;
-
     @Autowired
     public ServicioMercadoPagoImp(RepositorioSandwich sandwich) {
-        this.sandwich = sandwich;
         MercadoPagoConfig.setAccessToken("APP_USR-5684748532955528-110615-806d19bf45980658f2a6db8c0cd17bae-1229699166");
+        MercadoPagoConfig.setConnectionRequestTimeout(2000);
+        MercadoPagoConfig.setSocketTimeout(2000);
+        MercadoPagoConfig.setLoggingLevel(Level.FINEST);
     }
+
     @Override
     public Preference generarPago(Pago sandPagar) {
-        // Ac� va la clave privada(Access Token) que se genera en la cuenta de MercadoPago del vendedor
 
         // Crea datos del cliente
         PreferenceClient client = new PreferenceClient();
@@ -50,7 +52,6 @@ public class ServicioMercadoPagoImp implements ServicioMercadoPago {
                             .currencyId("ARS")
                             .unitPrice(BigDecimal.valueOf(pago.getSandwich().obtenerMonto()))
                             .build();
-
             items.add(item);
         });
 
@@ -82,14 +83,12 @@ public class ServicioMercadoPagoImp implements ServicioMercadoPago {
 
         items.add(item);
 
-        mostrarDatos(items);
-
 		/* Urls propias de mi app en spring a las que va a
 		redireccionar despues del pago si es exitoso o no */
         PreferenceBackUrlsRequest backUrls =
                 PreferenceBackUrlsRequest.builder()
                         .success("http://localhost:8080/proyecto_limpio_spring_war_exploded/alerta_exitosa")
-                        .failure("redirect:/falla")
+                        .failure("http://localhost:8080/proyecto_limpio_spring_war_exploded/alerta_exitosa")
                         .build();
 
         // Genera la peticion para la preferencia
@@ -125,16 +124,18 @@ public class ServicioMercadoPagoImp implements ServicioMercadoPago {
 
     @Override
     public String reembolso(Compra compraAReembolsar){
-        MercadoPagoConfig.setAccessToken("APP_USR-5684748532955528-110615-806d19bf45980658f2a6db8c0cd17bae-1229699166");
         PaymentRefundClient client = new PaymentRefundClient();
         PaymentRefund paymentRefund = null;
+
         try {
             paymentRefund = client.refund(compraAReembolsar.getPayment(),BigDecimal.valueOf(compraAReembolsar.getDetalle().get(0).obtenerMonto()));
+
         } catch (MPException e) {
             System.err.println(e.getMessage());
         } catch (MPApiException e){
             System.err.println(e.getApiResponse().getContent() + " " + e.getApiResponse().getStatusCode()  );
         }
-         return paymentRefund.getStatus();
+        assert paymentRefund != null;
+        return paymentRefund.getStatus();
     }
 }
