@@ -27,6 +27,7 @@ public class Sandwich {
     private Set<Ingrediente> ingrediente = new LinkedHashSet<>();
 
     public Sandwich() {
+
     }
 
     public Sandwich(Long idSandwich, String nombre, String descripcion) {
@@ -101,7 +102,7 @@ public class Sandwich {
         if (this == o) return true;
         if (!(o instanceof Sandwich)) return false;
         Sandwich sandwich = (Sandwich) o;
-        return getIdSandwich().equals(sandwich.getIdSandwich()) && getNombre().equals(sandwich.getNombre()) && getDescripcion().equals(sandwich.getDescripcion()) && Objects.equals(getIngrediente(), sandwich.getIngrediente());
+        return getEnPromocion().equals(sandwich.getEnPromocion()) && getIngrediente().equals(sandwich.getIngrediente());
     }
 
     public Float obtenerMonto(){

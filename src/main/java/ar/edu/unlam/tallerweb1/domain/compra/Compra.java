@@ -16,6 +16,8 @@ public class Compra {
     @ManyToOne(fetch = FetchType.EAGER)
     private Usuario usuario;
 
+    private Long payment;
+    private Integer cant;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "detalle",
@@ -112,5 +114,21 @@ public class Compra {
 
     public void setFechaEntrega(LocalDateTime fechaEntrega) {
         this.fechaEntrega = fechaEntrega;
+    }
+
+    public Long getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Long payment) {
+        this.payment = payment;
+    }
+
+    public Integer getCant() {
+        return cant;
+    }
+
+    public void setCant(Integer cant) {
+        this.cant = cant;
     }
 }

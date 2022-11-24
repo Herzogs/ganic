@@ -14,15 +14,15 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
           integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14="
           crossorigin=""/>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/leaflet.legend.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
     <script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js"
             integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg="
             crossorigin=""></script>
-    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-    <script src="${pageContext.request.contextPath}/js/leaflet.legend.js"></script>
+
+
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
     <script src="${pageContext.request.contextPath}/js/jquery-1.11.3.min.js"></script>
-    <script src="${pageContext.request.contextPath}/js/confirmacion.js" type="text/javascript"></script>
+    <script src="${pageContext.request.contextPath}/js/seguimiento.js" type="text/javascript"></script>
     <title>Destino</title>
     <style type="text/css">
         .map {
@@ -78,22 +78,10 @@
         <div class="row">
 
             <div class="col">
-                <h1>Elija su destino</h1>
+                <h1>Seguimiento del Destino</h1>
                 <div id="map" class="map"></div>
-                <c:if test="${not empty msg}">
-                    <h4 id="error" class="text-center text-danger">${msg}</h4>
-                </c:if>
             </div>
-
-            <div class="w3-col s9 w3-padding-top-64 w3-center w3-">
-                <f:form method="post" action="seleccionarDestino" modelAttribute="formDestino">
-                    <f:input path="destino" id="dest" type="hidden"/>
-                    <f:input path="distance" id="dist" type="hidden"/>
-                    <button class="btn btn-success px-5 mb-5" type="submit">Confirmar Destino</button>
-                    <div><a href="restablecer" class="btn btn-primary px-5 my-5">Volver al Home</a></div>
-                </f:form>
-            </div>
-
+            <a href="home" class="btn btn-primary px-5 my-5" id="home">Volver al Home</a>
         </div>
     </section>
 </main>

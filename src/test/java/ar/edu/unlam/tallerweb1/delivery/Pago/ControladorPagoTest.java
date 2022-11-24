@@ -5,11 +5,12 @@ import ar.edu.unlam.tallerweb1.delivery.ControladorPago;
 import ar.edu.unlam.tallerweb1.domain.Email.ServicioEmail;
 import ar.edu.unlam.tallerweb1.domain.Email.ServicioEmailImp;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioInvalidoException;
-import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioNoRegistradoExepcion;
+import ar.edu.unlam.tallerweb1.domain.MercadoPago.MpEntidad;
 import ar.edu.unlam.tallerweb1.domain.MercadoPago.Pago;
 import ar.edu.unlam.tallerweb1.domain.MercadoPago.ServicioMercadoPago;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
 import ar.edu.unlam.tallerweb1.domain.compra.ServicioCompra;
+import ar.edu.unlam.tallerweb1.domain.detalleCarro.ServicioDetalleCarro;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
@@ -34,9 +35,9 @@ public class ControladorPagoTest extends SpringTest {
     private ServicioCompra servicioCompra;
     private ServicioLogin servicioLogin;
     private ServicioMercadoPago servicioMercadoPago;
+    private ServicioDetalleCarro servicioDetalleCarro;
 
     private ControladorPago controladorPago;
-    private HttpSession session;
     private HttpServletRequest request;
 
     @Before
@@ -45,20 +46,22 @@ public class ControladorPagoTest extends SpringTest {
         this.servicioCompra = mock(ServicioCompra.class);
         this.servicioLogin = mock(ServicioLogin.class);
         this.servicioMercadoPago = mock(ServicioMercadoPago.class);
+        this.servicioDetalleCarro = mock(ServicioDetalleCarro.class);
         this.request = mock(HttpServletRequest.class);
-        this.session = mock(HttpSession.class);
-        this.controladorPago = new ControladorPago(servicioLogin,servicioMercadoPago,servicioCompra);
-        when(this.request.getSession()).thenReturn(this.session);
+        HttpSession session = mock(HttpSession.class);
+        this.controladorPago = new ControladorPago(servicioLogin,servicioMercadoPago,servicioCompra,servicioDetalleCarro);
+        when(this.request.getSession()).thenReturn(session);
     }
 
     @Test
     public void prueboQueAlQuererPagarUnSandwichEsteMeEnvieALaPaginadePago(){
         Sandwich sandwich = dadoQueTengoUnSandwich();
         when(this.request.getSession().getAttribute("SANDWICH_ELEGIDO")).thenReturn(sandwich);
+        when(this.request.getSession().getAttribute("DESTINO")).thenReturn("test,test,test,test,test");
         when(this.request.getSession().getAttribute("RECARGO")).thenReturn(0F);
-        Pago pago = dadoQueTengoUnPago(sandwich);
+        this.controladorPago.setPago(dadoQueTengoUnPago(sandwich));
         ModelAndView model = this.controladorPago.pagarSandwich(this.request);
-        assertThat(model.getModel().get("nombre")).isEqualTo(sandwich.getNombre());
+        assertThat(model.getModel().get("montoFinal")).isEqualTo(sandwich.obtenerMonto());
     }
 
     @Test
@@ -68,8 +71,9 @@ public class ControladorPagoTest extends SpringTest {
         when(this.request.getSession().getAttribute("DESTINO")).thenReturn("test,test,test,test,test");
         when(this.servicioLogin.consultarPorID(user.getId())).thenReturn(user);
         this.controladorPago.setPago(dadoQueTengoUnPago(dadoQueTengoUnSandwich()));
+        when(this.request.getSession().getAttribute("DONDE_VENGO")).thenReturn("NORMAL");
         when(this.request.getSession().getAttribute("RECARGO")).thenReturn(2F);
-        ModelAndView model = this.controladorPago.pagoCorrecto("Tarjeta",this.request);
+        ModelAndView model = this.controladorPago.pagoCorrecto("Tarjeta",1L,this.request);
         assertThat(model.getModel().get("msg")).isEqualTo("Se ha enviado el email de confirmación");
     }
 
@@ -81,16 +85,9 @@ public class ControladorPagoTest extends SpringTest {
         when(this.servicioLogin.consultarPorID(user.getId())).thenThrow(new UsuarioInvalidoException("No existe usuario"));
         this.controladorPago.setPago(dadoQueTengoUnPago(dadoQueTengoUnSandwich()));
         when(this.request.getSession().getAttribute("RECARGO")).thenReturn(2F);
-        ModelAndView model = this.controladorPago.pagoCorrecto("Tarjeta",this.request);
+        ModelAndView model = this.controladorPago.pagoCorrecto("Tarjeta",1L,this.request);
         assertThat(model.getModel().get("error")).isEqualTo("a ocurrido un error en el proceso de envio");
     }
-
-
-
-
-
-
-
 
 
     private Usuario dadoQueTengoUnUsuario() {
@@ -107,7 +104,10 @@ public class ControladorPagoTest extends SpringTest {
 
     private Pago dadoQueTengoUnPago(Sandwich sandwich) {
         Pago pago = new Pago();
-        pago.setSandwich(sandwich);
+        MpEntidad entidad = new MpEntidad();
+        entidad.setCantidad(1);
+        entidad.setSandwich(sandwich);
+        pago.getListaCobrar().add(entidad);
         pago.setImpTot(sandwich.obtenerMonto());
         return pago;
     }
