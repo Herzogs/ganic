@@ -1,36 +1,8 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: h3rz
-  Date: 1/11/22
-  Time: 17:34
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <!-- CSS only -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-    <link href="css/styles.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
-</head>
-<body>
-<header>
-    <nav class="nav_style d-flex align-items-center">
-        <div class="container">
-            <div class="text-center">
-                <a href="home">Home</a>
-                <a href="ingredientes">Menu</a>
-                <a href="home"><img src="img/ganiclogo.png" class="img-fluid logo_style" alt="Logo"></a>
-                <a href="contacto">Contacto</a>
-                <a href="nosotros">Nosotros</a>
-            </div>
-        </div>
-    </nav>
-</header>
+<%@ include file="../vistas/header.jsp" %>
 <main>
     <section>
         <div class="container py-5">
@@ -40,17 +12,18 @@
                     <div class="card" style="max-width: 400px;">
                         <img src="img/pedido.png" class="card-img-top img-fluid" alt="...">
                         <div class="card-body">
-                            <p class="card-text text-center text-succes">Dirección Envio: ${direccion}</p>
                             <c:forEach var="lista" items="${listaDetalle}">
                                 <p class="card-text fw-bold">${lista.sandwich.nombre}</p>
-                                <p class="card-text">${lista.cantidad}</p>
-                                <p class="card-text">Precio por unidad $${lista.calcularMonto()}</p>
+                                <p class="card-text">Cantidad: <span class="fw-bold ps-5">${lista.cantidad}</span></p>
+                                <p class="card-text">Precio: <span class="fw-bold ps-5">$${lista.calcularMonto()}</span></p>
+                           <hr class="my-3"/>
                             </c:forEach>
-                            <p class="card-text fw-bold text-end">Monto a pagar <span
+                            <p class="card-text"><span class="fw-bold">Dirección Envio:</span> ${direccion}</p>
+                            <p class="card-text fw-bold text-end">Monto de su pedido: <span
                                     class="text-primary">${montoFinal}</span></p>
-                            <p class="card-text fw-bold text-end">Envio <span
+                            <p class="card-text fw-bold text-end">Costo de envio: <span
                                     class="text-primary">${recargo}</span></p>
-                            <p class="card-text fw-bold text-end">Monto Total a Pagar <span
+                            <p class="card-text fw-bold text-end">Total a Pagar: <span
                                     class="text-primary">${montoTotalPagar}</span></p>
                         </div>
                     </div>
@@ -61,13 +34,13 @@
                     </c:if>
                 </div>
                 <div class="col-6">
-                    <h4 class="pb-3">Confirmar pago</h4>
+                    <h3 class="p-0 m-0">Confirmar pago</h3>
                     <div class="w3-col s9 w3-padding-top-64 w3-center w3-">
                         <a class="cho-container w3-btn w3-blue"></a>
-                        <img src="img/mercadoPago.png" alt="mpz" />
+                        <img src="img/mercadoPago.png" alt="mpz" style="width: 250px" />
                     </div>
-                    <div><a href="seguirComprando" class="btn btn-primary px-5 my-5">Seguir Compra</a></div>
-                    <div><a href="vaciarCarro" class="btn btn-primary px-5 my-5">Cancelar Compra</a></div>
+                    <div><a href="seguirComprando" class="btn btn-success px-5 my-5">Seguir Comprando</a></div>
+                    <div><a href="vaciarCarro" class="btn btn-secondary px-5 my-3">Cancelar Compra</a></div>
                 </div>
             </div>
         </div>

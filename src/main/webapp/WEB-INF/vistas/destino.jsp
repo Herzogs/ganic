@@ -44,8 +44,7 @@
                 <c:choose>
                     <c:when test="${sessionScope.id == null}">
 						<span class="dropdown ps-5">
-							<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
+							<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
 								Mi perfil
 							</button>
 							<ul class="dropdown-menu">
@@ -56,15 +55,19 @@
                     </c:when>
                     <c:otherwise>
 						<span class="dropdown ps-5">
-							<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
+							<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
 								Mi perfil
 							</button>
 							<ul class="dropdown-menu">
-								<li><a class="dropdown-item text-dark py-2" href="misdatos">Mis datos</a></li>
-								<li><a class="dropdown-item text-dark py-2" href="historial">Mis pedidos</a></li>
+                                <li><a class="dropdown-item text-dark py-2" href="misdatos">Mis datos</a></li>
+								<li><a class="dropdown-item text-dark py-2" href="enPreparacion">En preparación</a></li>
+                                <li><a class="dropdown-item text-dark py-2" href="historial">Historial</a></li>
 								<li><a class="dropdown-item text-dark py-2" href="Salir">Salir</a></li>
 							</ul>
+
+                            <a href="verCarrito" class="btn btn-warning ms-4" type="button" style="padding-top: 2px; padding-bottom: 2px">
+								<i class="bi bi-cart4 text-white fs-5"></i>
+							</a>
 						</span>
                     </c:otherwise>
                 </c:choose>
@@ -75,21 +78,24 @@
 <main>
 
     <section class="container">
+        <h1 class="my-5">Elija su destino</h1>
+        <c:if test="${not empty msg}">
+            <h4 id="error" class="my-3 text-danger">${msg}</h4>
+        </c:if>
+        <h5 class="text-end fw-bold me-5"><i class="bi bi-arrow-bar-down text-primary fs-4 pe-3"></i> Ingresá tu dirección </h5>
         <div class="row">
-
-            <div class="col">
-                <h1>Elija su destino</h1>
+            <div class="col-12">
                 <div id="map" class="map"></div>
-                <c:if test="${not empty msg}">
-                    <h4 id="error" class="text-center text-danger">${msg}</h4>
-                </c:if>
+            </div>
+            <div class="col-md-4 my-4">
+                <img src="img/envios.jpg" class="img-fluid" alt="Logo envios" style="max-width: 200px">
             </div>
 
-            <div class="w3-col s9 w3-padding-top-64 w3-center w3-">
+            <div class="col-md-8 d-flex align-items-center my-4">
                 <f:form method="post" action="seleccionarDestino" modelAttribute="formDestino">
                     <f:input path="destino" id="dest" type="hidden"/>
                     <f:input path="distance" id="dist" type="hidden"/>
-                    <button class="btn btn-success px-5 mb-5" type="submit">Confirmar Destino</button>
+                    <button class="btn btn-success px-5" type="submit">Confirmar Destino</button>
                     <div><a href="restablecer" class="btn btn-primary px-5 my-5">Volver al Home</a></div>
                 </f:form>
             </div>

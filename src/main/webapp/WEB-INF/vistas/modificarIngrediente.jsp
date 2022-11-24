@@ -39,7 +39,6 @@
                 </div>
             </div>
             <a href="home" class="btn btn-primary px-5 my-5">Volver al Home</a>
-            <a href="confirmar?paso=${paso}" class="btn btn-success px-5 my-5">Finalizar</a>
         </div>
     </section>
 </main>
