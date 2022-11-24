@@ -11,7 +11,7 @@ $(document).ready(()=>{
         position: "bottomleft",
         title: "Delivery",
         legends: [{
-            label: "Rango de Envio",
+            label: " Rango de Envio",
             type: "circle",
             radius: 6,
             color: "blue"

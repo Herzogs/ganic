@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <head>
     <meta charset="utf-8">
     <!-- CSS only -->
@@ -33,12 +34,15 @@
 								Mi perfil
 							</button>
 							<ul class="dropdown-menu">
-								<li><a class="dropdown-item text-dark py-2" href="verCarrito">Ver Carrito</a></li>
                                 <li><a class="dropdown-item text-dark py-2" href="misdatos">Mis datos</a></li>
-								<li><a class="dropdown-item text-dark py-2" href="enPreparacion">En Preparación</a></li>
-                                <li><a class="dropdown-item text-dark py-2" href="historial">Mis pedidos</a></li>
+								<li><a class="dropdown-item text-dark py-2" href="enPreparacion">En preparación</a></li>
+                                <li><a class="dropdown-item text-dark py-2" href="historial">Historial</a></li>
 								<li><a class="dropdown-item text-dark py-2" href="Salir">Salir</a></li>
 							</ul>
+
+                            <a href="verCarrito" class="btn btn-warning ms-4" type="button" style="padding-top: 3px; padding-bottom: 3px; text-shadow: 2px 2px 6px black">
+								<i class="bi bi-cart4 text-white fs-5"></i>
+							</a>
 						</span>
                     </c:otherwise>
                 </c:choose>

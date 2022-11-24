@@ -45,13 +45,13 @@
 					<h2 class="text-center text-white"> Aprovechá nuestras promociones</h2>
 					<c:forEach var="sandwich" items="${listaEnPromocion}" >
 						<div class="col-4 g-5">
-							<div class="card">
+							<div class="card" style="height: 280px">
 								<div class="card-header bg-success text-white">
-										${sandwich.nombre}
+										<h5>${sandwich.nombre}</h5>
 								</div>
 								<ul class="list-group list-group-flush">
 									<li class="list-group-item">${sandwich.descripcion}</li>
-									<li class="list-group-item"><span class="text-primary">Es apto:</span> ${sandwich.esApto}</li>
+									<li class="list-group-item">Es apto: <span class="text-primary">${sandwich.esApto}</span></li>
 									<li class="list-group-item"><a href="confirmarSandwich?idSandwich=${sandwich.idSandwich}" class="btn btn-success px-3 my-3">Comprar</a></li>
 								</ul>
 							</div>
