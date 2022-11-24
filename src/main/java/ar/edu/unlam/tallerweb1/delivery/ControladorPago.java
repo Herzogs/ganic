@@ -160,7 +160,7 @@ public class ControladorPago {
         nueva.setDetalle(list);
         nueva.setEstado(EstadoDeCompra.PREPARACION);
         nueva.setFecha(LocalDateTime.now(ZoneId.of("America/Buenos_Aires")));
-        nueva.setFechaEntrega(LocalDateTime.now(ZoneId.of("America/Buenos_Aires")).plusMinutes(5));
+        nueva.setFechaEntrega(LocalDateTime.now(ZoneId.of("America/Buenos_Aires")).plusMinutes(8));
         nueva.setCant(cantidad);
         nueva.setPayment(this.payment);
         return nueva;
