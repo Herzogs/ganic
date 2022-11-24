@@ -43,7 +43,7 @@ public class SchedulerTask {
                 Long minutes = actual.until(venc, ChronoUnit.MINUTES);
                 log.info("FECHA DE AVISO: " + venc + " , DEL PEDIDO: " + compra.getIdCompra() + " , FECHA ACTUAL: " + actual + " CANTIDAD DE MINUTOS FALTANTES: " + minutes );
                 if (minutes >= 0 && minutes <= 5) {
-                    servicioEmail.sendEmail(compra.getUsuario().getEmail(), "Envio de Pedido", "Ya se le enviara el pedido");
+                    servicioEmail.sendEmail(compra.getUsuario().getEmail(), "Su pedido esta en camino", "En breve estará llegando nuestro repartidor, por favor presta atención y disfruta de tu compra!");
                     log.info(String.format("Enviando email a %s", compra.getUsuario().getEmail()));
                 }
             }
