@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.delivery;
 
 import ar.edu.unlam.tallerweb1.domain.Excepciones.CompraNoEncontradaExeption;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioInvalidoException;
+import ar.edu.unlam.tallerweb1.domain.MercadoPago.ServicioMercadoPago;
 import ar.edu.unlam.tallerweb1.domain.compra.Compra;
 import ar.edu.unlam.tallerweb1.domain.compra.EstadoDeCompra;
 import ar.edu.unlam.tallerweb1.domain.compra.ServicioCompra;
@@ -27,10 +28,13 @@ public class ControladorCancelarCompra {
     private final ServicioCompra servicioCompra;
     private final ServicioLogin servicioLogin;
 
+    private final ServicioMercadoPago mercadoPago;
+
     @Autowired
-    public ControladorCancelarCompra(ServicioCompra servicioCompra, ServicioLogin servicioLogin) {
+    public ControladorCancelarCompra(ServicioCompra servicioCompra, ServicioLogin servicioLogin, ServicioMercadoPago servicioMercadoPago) {
         this.servicioCompra = servicioCompra;
         this.servicioLogin = servicioLogin;
+        this.mercadoPago = servicioMercadoPago;
     }
 
     @RequestMapping(path = "enPreparacion", method = RequestMethod.GET)
@@ -53,6 +57,7 @@ public class ControladorCancelarCompra {
         return new ModelAndView("enPreparacion",modelo);
     }
 
+    // TODO: Arreglar refund de MP
     @RequestMapping(path = "cancelarCompra", method = RequestMethod.GET)
     public ModelAndView cancelarCompra(@RequestParam(value = "idCompra") Long idCompra, HttpServletRequest request){
         Compra compra = null;
@@ -61,8 +66,9 @@ public class ControladorCancelarCompra {
             compra = this.servicioCompra.buscarCompra(idCompra);
             LocalDateTime actual = LocalDateTime.now(ZoneId.of("America/Buenos_Aires")).withSecond(0).withNano(0);
             long minutos = actual.until(compra.getFecha().withSecond(0).withNano(0), ChronoUnit.MINUTES);
-            if(minutos >= 0 && minutos <= 2) {
+            if(minutos >= 0 && minutos <= 5) {
                 this.servicioCompra.cancelarCompra(compra, EstadoDeCompra.CANCELADO);
+                /*System.err.println(this.mercadoPago.reembolso(compra));*/
                 modelMap.put("msg","Se a eliminado la compra seleccionada");
 
             }else {

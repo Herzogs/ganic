@@ -13,7 +13,7 @@ $(document).ready(()=>{
             unlam_home,
             secondLatLng
         ],
-        routeWhileDragging: true,
+        routeWhileDragging: false,
     }).on('routesfound',function (e) {
 
         e.routes[0].coordinates.forEach(function (coord,index) {
