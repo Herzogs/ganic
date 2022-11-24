@@ -39,7 +39,7 @@ public class SchedulerTask {
             compraList = this.servicioCompra.listarComprasPorEstado(EstadoDeCompra.PREPARACION);
             LocalDateTime actual = LocalDateTime.now(ZoneId.of("America/Buenos_Aires")).withNano(0);
             for (Compra compra: compraList)  {
-                LocalDateTime venc = compra.getFechaEntrega().minusMinutes(5);
+                LocalDateTime venc = compra.getFechaEntrega().minusMinutes(8);
                 Long minutes = actual.until(venc, ChronoUnit.MINUTES);
                 log.info("FECHA DE AVISO: " + venc + " , DEL PEDIDO: " + compra.getIdCompra() + " , FECHA ACTUAL: " + actual + " CANTIDAD DE MINUTOS FALTANTES: " + minutes );
                 if (minutes >= 0 && minutes <= 5) {
