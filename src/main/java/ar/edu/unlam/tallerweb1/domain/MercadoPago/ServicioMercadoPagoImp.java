@@ -135,7 +135,6 @@ public class ServicioMercadoPagoImp implements ServicioMercadoPago {
         } catch (MPApiException e){
             System.err.println(e.getApiResponse().getContent() + " " + e.getApiResponse().getStatusCode()  );
         }
-        assert paymentRefund != null;
         return paymentRefund.getStatus();
     }
 }

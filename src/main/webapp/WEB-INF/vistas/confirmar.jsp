@@ -37,11 +37,13 @@
                     </c:if>
                 </div>
                 <div class="col-6">
-                    <h4 class="pb-3">Confirmar pago</h4>
-                    <a href="salvarSandwich" class="btn btn-success px-5 mb-5">Comprar</a>
-                    <a href="salvarSandwichCarrito" class="btn btn-success px-5 mb-5">Agregar al carrito</a>
+                    <h4 class="pb-3">Continuar comprando</h4>
+                    <a href="salvarSandwichCarrito" class="btn btn-success px-5 mb-5"><i class="bi bi-cart-plus pe-2"></i> Agregar al carrito</a>
+                    <h4 class="pb-3">Envio y Metodos de pago</h4>
+                    <a href="salvarSandwich" class="btn btn-success px-5 mb-5">Continuar</a>
                     <div><a href="restablecer" class="btn btn-primary px-5 my-5">Volver al Home</a></div>
                 </div>
+
             </div>
         </div>
     </section>

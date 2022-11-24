@@ -21,16 +21,16 @@
         <div class="container">
 
             <div class="row mb-5">
-                <h2 class="mt-5 mb-3"><i class="bi bi-bag-heart text-primary ms-2"></i> Mis pedidos:</h2>
+                <h2 class="mt-5 mb-3"><i class="bi bi-bag-heart text-primary ms-2"></i> Mis pedidos en preparación:</h2>
                 <c:forEach var="compra" items="${listaDeCompras}" >
-                    <div class="col-12 g-5">
-                            <div class="p-3 bg-dark text-white rounded-top">
-                                <h4 class="mb-3">Nro de compra: ${ compra.idCompra } <span class="ms-5 text-primary">${ compra.estado }</span> </h4>
-                                <span class="pe-5">Nombre del Sandwich: ${ compra.detalle.get(0).nombre }</span>
-                                <span class="pe-5">Preferencia: ${ compra.detalle.get(0).esApto }</span>
-                                <span class="pe-5">Fecha: ${ compra.fecha.withSecond(0).withNano(0) }</span>
-                                <span class="pe-5">Precio: $${ compra.detalle.get(0).obtenerMonto()}</span>
-                                <a href="cancelarCompra?idCompra=${compra.idCompra}" class="btn btn-secondary" type="button">Cancelar Compra</a>
+                    <div class="col-6 g-5 h-100">
+                            <div class="p-3 bg-dark text-white rounded-top h-100 shadow-sm">
+                                <h4 class="mb-3">Nro de sandwich: ${ compra.idCompra } <span class="ms-5 text-primary">${ compra.estado }</span> </h4>
+                                <p class="fw-bold">${ compra.detalle.get(0).nombre }</p>
+                                <p class="pe-5">Preferencia: <span class="text-primary">${ compra.detalle.get(0).esApto }</span></p>
+                                <p class="pe-5">Fecha: ${ compra.fecha.withSecond(0).withNano(0) }</p>
+                                <p class="pe-5">Precio: $${ compra.detalle.get(0).obtenerMonto()}</p>
+                                <p class="text-end"><a href="cancelarCompra?idCompra=${compra.idCompra}" class="btn btn-danger" type="button">Cancelar Sandwich</a></p>
                             </div>
                     </div>
                 </c:forEach>

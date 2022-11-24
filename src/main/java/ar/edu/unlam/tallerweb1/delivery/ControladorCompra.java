@@ -42,7 +42,7 @@ public class ControladorCompra {
             model.put("listaDeCompras", listaComprado);
 
         } catch (CompraNoEncontradaExeption e) {
-            model.put("msg", "Todavía no realizó ninguna compra");
+            model.put("msg", "Todavía no realizo ninguna compra");
             return new ModelAndView("historial", model);
         }
 

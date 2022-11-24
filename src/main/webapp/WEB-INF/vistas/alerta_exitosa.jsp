@@ -20,12 +20,12 @@
         <div class="container">
             <div class="alert alert-success mt-5" role="alert">
                 <h4 class="alert-heading">Gracias por realizar su pedido!</h4>
-                <p>Nuestro equipo ya esta trabajando en su Sandwich</p>
+                <p>Nuestro equipo ya esta trabajando en su compra</p>
                 <hr>
                 <p class="mb-0">Recibira un email con la información del estado de su pedido.</p>
             </div>
             <a href="home" class="btn btn-primary px-5 my-5">Volver al Home</a>
-            <a href="seguimiento" class="btn btn-primary px-5 my-5">Seguir Compra</a>
+            <a href="seguimiento" class="btn btn-success px-5 my-5">Seguimiento del envio</a>
         </div>
     </section>
 </main>
