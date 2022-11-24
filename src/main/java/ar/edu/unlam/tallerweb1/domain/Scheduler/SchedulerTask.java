@@ -60,7 +60,9 @@ public class SchedulerTask {
             compraList = this.servicioCompra.listarComprasPorEstado(EstadoDeCompra.PREPARACION);
             LocalDateTime actual = LocalDateTime.now(ZoneId.of("America/Buenos_Aires"));
             for (Compra comp : compraList) {
-                if (actual.withNano(0).withSecond(0).isAfter(comp.getFechaEntrega().withNano(0).withSecond(0))) {
+                LocalDateTime fech1=actual.withNano(0).withSecond(0);
+                LocalDateTime fech2=comp.getFechaEntrega().withNano(0).withSecond(0);
+                if (fech1.isAfter(fech2)) {
                     this.servicioCompra.entregarCompra(comp.getIdCompra());
                     log.info("ENTREGANDO EL PEDIDO: " + comp.getIdCompra());
                 }

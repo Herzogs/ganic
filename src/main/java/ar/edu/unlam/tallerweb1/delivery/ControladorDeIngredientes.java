@@ -33,7 +33,7 @@ public class ControladorDeIngredientes {
     private final ServicioDeIngrediente servicioDeIngrediente;
     private final DatosDelSandwich sandwich;
 
-    private ServicioSandwich servicioSandwich;
+    private final ServicioSandwich servicioSandwich;
 
 
     private static final Integer MAX_PASOS_PERMITIDOS = 3;
@@ -153,6 +153,7 @@ public class ControladorDeIngredientes {
         return this.sandwich.getIngredientesSandwich().get(i).equals(ing);
     }
 
+    // TODO: sacar el getingredienteSandw
     @RequestMapping(path = "modificarIngrediente", method = RequestMethod.GET)
     public ModelAndView generarPaginaDeIngredienteParaCambiar(@RequestParam(value = "ing", defaultValue = "1", required = false) Long id) {
         ModelMap mod = new ModelMap();
