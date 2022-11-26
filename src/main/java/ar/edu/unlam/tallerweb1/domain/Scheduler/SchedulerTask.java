@@ -7,6 +7,7 @@ import ar.edu.unlam.tallerweb1.domain.Excepciones.CompraNoEncontradaExeption;
 import ar.edu.unlam.tallerweb1.domain.compra.Compra;
 import ar.edu.unlam.tallerweb1.domain.compra.EstadoDeCompra;
 import ar.edu.unlam.tallerweb1.domain.compra.ServicioCompra;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -29,6 +30,8 @@ public class SchedulerTask {
     private ServicioCompra servicioCompra;
     private static final Logger log = Logger.getLogger(SchedulerTask.class);
 
+    private static final Dotenv dotenv = Dotenv.load();
+
     private static final ServicioEmail servicioEmail = new ServicioEmailImp();
 
     @Async
@@ -38,11 +41,12 @@ public class SchedulerTask {
         try {
             compraList = this.servicioCompra.listarComprasPorEstado(EstadoDeCompra.PREPARACION);
             LocalDateTime actual = LocalDateTime.now(ZoneId.of("America/Buenos_Aires")).withNano(0);
+            Long max_minutes = Long.valueOf(dotenv.get("SCHEDULER_MAX_MINUTES"));
             for (Compra compra: compraList)  {
                 LocalDateTime venc = compra.getFechaEntrega().minusMinutes(5);
                 Long minutes = actual.until(venc, ChronoUnit.MINUTES);
                 log.info("FECHA DE AVISO: " + venc + " , DEL PEDIDO: " + compra.getIdCompra() + " , FECHA ACTUAL: " + actual + " CANTIDAD DE MINUTOS FALTANTES: " + minutes );
-                if (minutes >= 0 && minutes <= 5) {
+                if (minutes >= 0 && minutes <= max_minutes) {
                     servicioEmail.sendEmail(compra.getUsuario().getEmail(), "Su pedido esta en camino", "En breve estará llegando nuestro repartidor, por favor presta atención y disfruta de tu compra!");
                     log.info(String.format("Enviando email a %s", compra.getUsuario().getEmail()));
                 }

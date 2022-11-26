@@ -1,5 +1,8 @@
 package ar.edu.unlam.tallerweb1.domain.Email;
 
+import io.github.cdimascio.dotenv.Dotenv;
+import org.springframework.stereotype.Service;
+
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -7,14 +10,19 @@ import java.util.Properties;
 
 public class ServicioEmailImp implements ServicioEmail {
     private final Properties props = new Properties();
+
+    private final Dotenv dotenv = Dotenv.load();
+
     private String username;
+
     private String password;
+
     private Session session;
 
     private void init() {
 
-        this.username="sandwich.ganic@gmail.com";
-        this.password="xvosdojilrlxegco";
+        this.username = dotenv.get("USERNAME");
+        this.password = dotenv.get("PASSWORD");
 
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.host", "smtp.gmail.com");

@@ -3,6 +3,7 @@ package ar.edu.unlam.tallerweb1.delivery;
 import ar.edu.unlam.tallerweb1.domain.Email.Email;
 import ar.edu.unlam.tallerweb1.domain.Email.ServicioEmail;
 import ar.edu.unlam.tallerweb1.domain.Email.ServicioEmailImp;
+import ar.edu.unlam.tallerweb1.domain.Excepciones.ErrorAlRealizarCompraException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.MercadoPago.MpEntidad;
 import ar.edu.unlam.tallerweb1.domain.MercadoPago.Pago;
@@ -17,6 +18,7 @@ import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
 import com.mercadopago.resources.preference.Preference;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -45,6 +47,8 @@ public class ControladorPago {
     private final ServicioCompra servicioCompra;
 
     private final ServicioDetalleCarro servicioDetalleCarro;
+
+    private final Dotenv dotenv = Dotenv.load();
 
     private Pago pagoNuevo;
 
@@ -89,8 +93,19 @@ public class ControladorPago {
         modelo.put("recargo", recargo);
         modelo.put("montoTotalPagar", importeTotal+recargo);
         Preference preference = null;
-        preference = this.servicioMercadoPago.generarPago(pagoNuevo);
-        modelo.put("preference", preference);
+        System.err.println("BUENASSSSSSS " + dotenv.get("ERROR_AL_COMPRAR"));
+        if(Boolean.parseBoolean(dotenv.get("ERROR_AL_COMPRAR")) == false){
+            try {
+                preference = this.servicioMercadoPago.generarPago(pagoNuevo);
+            } catch (ErrorAlRealizarCompraException e) {
+
+                return new ModelAndView("pago", modelo);
+            }
+            modelo.put("preference", preference);
+        }else{
+            modelo.put("msg","No se pudo completar la compra, por favor intente mas tarde");
+            modelo.put("est", "disabled");
+        }
         return new ModelAndView("pago", modelo);
     }
 

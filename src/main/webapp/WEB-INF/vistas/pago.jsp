@@ -28,15 +28,15 @@
                         </div>
                     </div>
                     <%--Bloque que es visible si el elemento error no esta vacio	--%>
-                    <c:if test="${not empty error}">
-                        <h4><span>${error}</span></h4>
+                    <c:if test="${not empty msg}">
+                        <h4><span>${msg}</span></h4>
                         <br>
                     </c:if>
                 </div>
                 <div class="col-6">
                     <h3 class="p-0 m-0">Confirmar pago</h3>
-                    <div class="w3-col s9 w3-padding-top-64 w3-center w3-">
-                        <a class="cho-container w3-btn w3-blue"></a>
+                    <div class="w3-col s9 w3-padding-top-64 w3-center">
+                        <a class="cho-container w3-btn w3-blue ${est}"></a>
                         <img src="img/mercadoPago.png" alt="mpz" style="width: 250px" />
                     </div>
                     <div><a href="seguirComprando" class="btn btn-success px-5 my-5">Seguir Comprando</a></div>
