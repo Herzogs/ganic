@@ -4,10 +4,15 @@ import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import java.io.File;
+import java.io.IOException;
 import java.util.Properties;
 
 public class ServicioEmailImp implements ServicioEmail {
@@ -40,7 +45,7 @@ public class ServicioEmailImp implements ServicioEmail {
     }
 
     @Override
-    public Boolean sendEmail(String recptor, String subject, String cuerpo){
+    public Boolean sendEmail(String recptor, String subject, String cuerpo) {
         init();
 
         try {
@@ -53,68 +58,39 @@ public class ServicioEmailImp implements ServicioEmail {
             t.connect(username, password);
             t.sendMessage(message, message.getAllRecipients());
             t.close();
-        } catch (MessagingException e){
+        } catch (MessagingException e) {
             return false;
         }
         return true;
     }
+
     @Override
-    public Boolean sendEmail(Email email, String subject, String name){
+    public Boolean sendEmail(Email email, String subject, String name) {
         init();
 
-        /*try {
-            MimeMessage message = new MimeMessage(session);
-            message.setFrom(username);
+        try {
+            FileDataSource fileDataSource = new FileDataSource(name);
+            Message message = new MimeMessage(session);
+            message.setFrom();
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(email.getUser().getEmail()));
             message.setSubject(subject);
-            message.setContent(email.generateEmailBody(),"text/html");
-            Transport t = session.getTransport("smtp");
-            t.connect(username, password);
-            t.sendMessage(message, message.getAllRecipients());
-            t.close();
-        } catch (MessagingException e){
+            Multipart multipart = new MimeMultipart();
+            BodyPart attachmentBodyPart = new MimeBodyPart();
+            attachmentBodyPart.setDataHandler(new DataHandler(fileDataSource));
+            attachmentBodyPart.setFileName(name);
+            multipart.addBodyPart(attachmentBodyPart);
+            BodyPart htmlBodyPart = new MimeBodyPart();
+            htmlBodyPart.setContent(email.generateEmailBody(), "text/html");
+            multipart.addBodyPart(htmlBodyPart);
+            message.setContent(multipart);
+            Transport.send(message);
+
+
+        } catch (MessagingException e) {
             return false;
         }
-        return true;*/
+        return true;
 
-        MimeMessage mimeMessage = new MimeMessage(session);
-        MimeMessageHelper mimeMessageHelper;
-
-        try {
-
-            // Setting multipart as true for attachments to
-            // be send
-            mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-            mimeMessageHelper.setFrom(this.username);
-            mimeMessageHelper.setTo(email.getUser().getEmail());
-            mimeMessageHelper.setText(email.generateEmailBody());
-            mimeMessageHelper.setSubject(subject);
-
-
-            // Adding the attachment
-            FileSystemResource file
-                    = new FileSystemResource(
-                    new File(name));
-
-            mimeMessageHelper.addAttachment(
-                    file.getFilename(), file);
-
-
-
-            // Sending the mail
-            Transport t = session.getTransport("smtp");
-            t.connect(username, password);
-            t.sendMessage(mimeMessageHelper.getMimeMessage(), mimeMessageHelper.getMimeMessage().getAllRecipients());
-            t.close();
-            return true;
-        }
-
-        // Catch block to handle MessagingException
-        catch (MessagingException e) {
-
-            // Display message when exception occurred
-            return false;
-        }
     }
 
     @Override
@@ -125,12 +101,12 @@ public class ServicioEmailImp implements ServicioEmail {
             message.setFrom(username);
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(email.getUser().getEmail()));
             message.setSubject(subject);
-            message.setContent(email.generateEmailBody(),"text/html");
+            message.setContent(email.generateEmailBody(), "text/html");
             Transport t = session.getTransport("smtp");
             t.connect(username, password);
             t.sendMessage(message, message.getAllRecipients());
             t.close();
-        } catch (MessagingException e){
+        } catch (MessagingException e) {
             return false;
         }
         return true;

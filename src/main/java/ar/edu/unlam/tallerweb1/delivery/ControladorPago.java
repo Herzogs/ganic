@@ -132,17 +132,13 @@ public class ControladorPago {
             nuevoEmail.setLista(this.convertirSetToList(pagoNuevo.getListaCobrar().get(0).getSandwich().getIngrediente()));
             nuevoEmail.setRecargo((Float) request.getSession().getAttribute("RECARGO"));*/
             guardarCompra(cliente);
-            this.servicioEmail.sendEmail(nuevoEmail,"Notificación de Envio",this.servicioFactura.generarFactura(pagoNuevo));
+            this.servicioEmail.sendEmail(nuevoEmail,"Notificación de Envio",this.servicioFactura.generarFactura(pagoNuevo,request));
             if(dondeVengo.equals("CARRO"))
                 vaciarListaDetalles(request);
             request.getSession().setAttribute("DESTINO",null);
             modelo.put("msg","Se ha enviado el email de confirmación");
         } catch (UsuarioInvalidoException e) {
             modelo.put("error", "a ocurrido un error en el proceso de envio");
-        } catch (DocumentException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
         return new ModelAndView("alerta_exitosa",modelo);
     }

@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -77,6 +78,7 @@ public class ControladorPagoTest extends SpringTest {
         this.controladorPago.setPago(dadoQueTengoUnPago(dadoQueTengoUnSandwich()));
         when(this.request.getSession().getAttribute("DONDE_VENGO")).thenReturn("NORMAL");
         when(this.request.getSession().getAttribute("RECARGO")).thenReturn(2F);
+        when(this.servicioFactura.generarFactura(any(Pago.class),any())).thenReturn("test");
         ModelAndView model = this.controladorPago.pagoCorrecto("Tarjeta",1L,this.request);
         assertThat(model.getModel().get("msg")).isEqualTo("Se ha enviado el email de confirmación");
     }
