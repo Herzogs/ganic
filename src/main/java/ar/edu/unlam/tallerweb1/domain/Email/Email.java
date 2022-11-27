@@ -57,7 +57,7 @@ public class Email {
         return tot + this.recargo ;
     }
 
-    public String generateEmailBody(){
+    /*public String generateEmailBody(){
         String msg = "<h1>Resumen del Pedido</h1><br/>";
         msg+= "<h2>Listado De Ingredientes</h2><br/>";
         msg += "<ul>";
@@ -68,6 +68,13 @@ public class Email {
         msg += String.format("<p>Dirección de Envio: %s</p><br/>",this.user.getDireccion());
         msg += String.format("<p>Metodo De Pago: %s</p><br/>",this.metodoPago);
         msg += String.format("<p>Precio Total: %.2f</p><br/>",this.getMonto());
+        return msg;
+    }*/
+
+    public String generateEmailBody(){
+        String msg = "<h>Ganic Sandwich</h1><br/>";
+        msg+= "<h2>Gracias por utilizar nuestro servicio</h2><br/>";
+        msg+="<p>Ya estamos preparando su servicio y además le enviamos la factura</p>";
         return msg;
     }
 }

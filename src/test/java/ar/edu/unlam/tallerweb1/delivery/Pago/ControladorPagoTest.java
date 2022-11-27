@@ -11,6 +11,7 @@ import ar.edu.unlam.tallerweb1.domain.MercadoPago.ServicioMercadoPago;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
 import ar.edu.unlam.tallerweb1.domain.compra.ServicioCompra;
 import ar.edu.unlam.tallerweb1.domain.detalleCarro.ServicioDetalleCarro;
+import ar.edu.unlam.tallerweb1.domain.factura.ServicioFactura;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
@@ -37,19 +38,22 @@ public class ControladorPagoTest extends SpringTest {
     private ServicioMercadoPago servicioMercadoPago;
     private ServicioDetalleCarro servicioDetalleCarro;
 
+    private ServicioFactura servicioFactura;
+
     private ControladorPago controladorPago;
     private HttpServletRequest request;
 
     @Before
     public void init(){
         this.servicioEmail = new ServicioEmailImp();
+        this.servicioFactura = mock(ServicioFactura.class);
         this.servicioCompra = mock(ServicioCompra.class);
         this.servicioLogin = mock(ServicioLogin.class);
         this.servicioMercadoPago = mock(ServicioMercadoPago.class);
         this.servicioDetalleCarro = mock(ServicioDetalleCarro.class);
         this.request = mock(HttpServletRequest.class);
         HttpSession session = mock(HttpSession.class);
-        this.controladorPago = new ControladorPago(servicioLogin,servicioMercadoPago,servicioCompra,servicioDetalleCarro);
+        this.controladorPago = new ControladorPago(servicioLogin,servicioMercadoPago,servicioCompra,servicioDetalleCarro,this.servicioFactura);
         when(this.request.getSession()).thenReturn(session);
     }
 

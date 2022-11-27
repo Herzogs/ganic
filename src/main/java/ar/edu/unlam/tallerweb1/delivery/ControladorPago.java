@@ -14,9 +14,11 @@ import ar.edu.unlam.tallerweb1.domain.compra.EstadoDeCompra;
 import ar.edu.unlam.tallerweb1.domain.compra.ServicioCompra;
 import ar.edu.unlam.tallerweb1.domain.detalleCarro.DetalleCarro;
 import ar.edu.unlam.tallerweb1.domain.detalleCarro.ServicioDetalleCarro;
+import ar.edu.unlam.tallerweb1.domain.factura.ServicioFactura;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
+import com.itextpdf.text.DocumentException;
 import com.mercadopago.resources.preference.Preference;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -50,12 +53,15 @@ public class ControladorPago {
 
     private final Dotenv dotenv = Dotenv.load();
 
+    private final ServicioFactura servicioFactura;
+
     private Pago pagoNuevo;
 
     private Long payment;
 
     @Autowired
-    public ControladorPago(ServicioLogin servicioLogin, ServicioMercadoPago servicioMercadoPago, ServicioCompra servicioCompra, ServicioDetalleCarro servicioDetalleCarro) {
+    public ControladorPago(ServicioLogin servicioLogin, ServicioMercadoPago servicioMercadoPago, ServicioCompra servicioCompra, ServicioDetalleCarro servicioDetalleCarro, ServicioFactura servicioFactura) {
+        this.servicioFactura = servicioFactura;
         this.servicioLogin = servicioLogin;
         this.servicioMercadoPago = servicioMercadoPago;
         this.servicioEmail = new ServicioEmailImp();
@@ -122,17 +128,21 @@ public class ControladorPago {
             cliente = this.servicioLogin.consultarPorID(idCliente);
             cliente.setDireccion(generateDomicilio(dir));
             nuevoEmail.setUser(cliente);
-            nuevoEmail.setMetodoPago(paymentType);
+            /*nuevoEmail.setMetodoPago(paymentType);
             nuevoEmail.setLista(this.convertirSetToList(pagoNuevo.getListaCobrar().get(0).getSandwich().getIngrediente()));
-            nuevoEmail.setRecargo((Float) request.getSession().getAttribute("RECARGO"));
+            nuevoEmail.setRecargo((Float) request.getSession().getAttribute("RECARGO"));*/
             guardarCompra(cliente);
-            this.servicioEmail.sendEmail(nuevoEmail,"Envio De Pedido");
+            this.servicioEmail.sendEmail(nuevoEmail,"Notificación de Envio",this.servicioFactura.generarFactura(pagoNuevo));
             if(dondeVengo.equals("CARRO"))
                 vaciarListaDetalles(request);
             request.getSession().setAttribute("DESTINO",null);
             modelo.put("msg","Se ha enviado el email de confirmación");
         } catch (UsuarioInvalidoException e) {
             modelo.put("error", "a ocurrido un error en el proceso de envio");
+        } catch (DocumentException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         return new ModelAndView("alerta_exitosa",modelo);
     }

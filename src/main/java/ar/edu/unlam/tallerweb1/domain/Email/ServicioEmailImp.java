@@ -1,11 +1,13 @@
 package ar.edu.unlam.tallerweb1.domain.Email;
 
 import io.github.cdimascio.dotenv.Dotenv;
-import org.springframework.stereotype.Service;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.mail.javamail.MimeMessageHelper;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.io.File;
 import java.util.Properties;
 
 public class ServicioEmailImp implements ServicioEmail {
@@ -57,9 +59,67 @@ public class ServicioEmailImp implements ServicioEmail {
         return true;
     }
     @Override
-    public Boolean sendEmail(Email email, String subject){
+    public Boolean sendEmail(Email email, String subject, String name){
         init();
 
+        /*try {
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(username);
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(email.getUser().getEmail()));
+            message.setSubject(subject);
+            message.setContent(email.generateEmailBody(),"text/html");
+            Transport t = session.getTransport("smtp");
+            t.connect(username, password);
+            t.sendMessage(message, message.getAllRecipients());
+            t.close();
+        } catch (MessagingException e){
+            return false;
+        }
+        return true;*/
+
+        MimeMessage mimeMessage = new MimeMessage(session);
+        MimeMessageHelper mimeMessageHelper;
+
+        try {
+
+            // Setting multipart as true for attachments to
+            // be send
+            mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+            mimeMessageHelper.setFrom(this.username);
+            mimeMessageHelper.setTo(email.getUser().getEmail());
+            mimeMessageHelper.setText(email.generateEmailBody());
+            mimeMessageHelper.setSubject(subject);
+
+
+            // Adding the attachment
+            FileSystemResource file
+                    = new FileSystemResource(
+                    new File(name));
+
+            mimeMessageHelper.addAttachment(
+                    file.getFilename(), file);
+
+
+
+            // Sending the mail
+            Transport t = session.getTransport("smtp");
+            t.connect(username, password);
+            t.sendMessage(mimeMessageHelper.getMimeMessage(), mimeMessageHelper.getMimeMessage().getAllRecipients());
+            t.close();
+            return true;
+        }
+
+        // Catch block to handle MessagingException
+        catch (MessagingException e) {
+
+            // Display message when exception occurred
+            return false;
+        }
+    }
+
+    @Override
+    public Boolean sendEmail(Email email, String subject) {
+        init();
         try {
             MimeMessage message = new MimeMessage(session);
             message.setFrom(username);
