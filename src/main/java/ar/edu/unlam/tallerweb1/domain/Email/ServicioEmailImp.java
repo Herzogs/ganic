@@ -1,9 +1,6 @@
 package ar.edu.unlam.tallerweb1.domain.Email;
 
 import io.github.cdimascio.dotenv.Dotenv;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.mail.javamail.MimeMessageHelper;
-
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 import javax.mail.*;
@@ -11,14 +8,12 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import java.io.File;
-import java.io.IOException;
 import java.util.Properties;
 
 public class ServicioEmailImp implements ServicioEmail {
     private final Properties props = new Properties();
 
-    private final Dotenv dotenv = Dotenv.load();
+    private final Dotenv dotenv = Dotenv.configure().directory(".//src//main//resources").filename(".env").load();
 
     private String username;
 

@@ -99,8 +99,7 @@ public class ControladorPago {
         modelo.put("recargo", recargo);
         modelo.put("montoTotalPagar", importeTotal+recargo);
         Preference preference = null;
-        System.err.println("BUENASSSSSSS " + dotenv.get("ERROR_AL_COMPRAR"));
-        if(Boolean.parseBoolean(dotenv.get("ERROR_AL_COMPRAR")) == false){
+        if(!Boolean.parseBoolean(dotenv.get("ERROR_AL_COMPRAR"))){
             try {
                 preference = this.servicioMercadoPago.generarPago(pagoNuevo);
             } catch (ErrorAlRealizarCompraException e) {
@@ -128,9 +127,6 @@ public class ControladorPago {
             cliente = this.servicioLogin.consultarPorID(idCliente);
             cliente.setDireccion(generateDomicilio(dir));
             nuevoEmail.setUser(cliente);
-            /*nuevoEmail.setMetodoPago(paymentType);
-            nuevoEmail.setLista(this.convertirSetToList(pagoNuevo.getListaCobrar().get(0).getSandwich().getIngrediente()));
-            nuevoEmail.setRecargo((Float) request.getSession().getAttribute("RECARGO"));*/
             guardarCompra(cliente);
             this.servicioEmail.sendEmail(nuevoEmail,"Notificación de Envio",this.servicioFactura.generarFactura(pagoNuevo,request));
             if(dondeVengo.equals("CARRO"))
@@ -169,10 +165,6 @@ public class ControladorPago {
         });
     }
 
-    private List<Ingrediente> convertirSetToList(Set<Ingrediente> ing){
-        return ing.stream().collect(Collectors.toCollection(ArrayList::new));
-    }
-
     private Compra generarCompra(Usuario user, Sandwich sandwich, Integer cantidad){
         Compra nueva = new Compra();
         nueva.setCliente(user);
@@ -181,7 +173,7 @@ public class ControladorPago {
         nueva.setDetalle(list);
         nueva.setEstado(EstadoDeCompra.PREPARACION);
         nueva.setFecha(LocalDateTime.now(ZoneId.of("America/Buenos_Aires")));
-        nueva.setFechaEntrega(LocalDateTime.now(ZoneId.of("America/Buenos_Aires")).plusMinutes(8));
+        nueva.setFechaEntrega(LocalDateTime.now(ZoneId.of("America/Buenos_Aires")).plusMinutes(15));
         nueva.setCant(cantidad);
         nueva.setPayment(this.payment);
         return nueva;

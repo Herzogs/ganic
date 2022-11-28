@@ -18,4 +18,6 @@ public interface ServicioCompra {
     public Boolean entregarCompra(Long idCompra) throws CompraNoEncontradaExeption;
 
     List<Compra> listarTodasLasCompras(Long idUsuario) throws CompraNoEncontradaExeption;
+
+    public Boolean compraEnCurso(Long idCompra,EstadoDeCompra estadoDeCompra) throws CompraNoEncontradaExeption;
 }

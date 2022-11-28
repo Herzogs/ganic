@@ -97,4 +97,14 @@ public class ServicioCompraImp implements ServicioCompra {
            throw  new CompraNoEncontradaExeption("No existe compra");
        return lista;
     }
+
+    @Override
+    public Boolean compraEnCurso(Long idCompra,EstadoDeCompra estadoDeCompra) throws CompraNoEncontradaExeption {
+        Compra compra = this.repo.buscarCompra(idCompra);
+        if (compra == null)
+            throw new CompraNoEncontradaExeption("No existe la compra");
+        compra.setEstado(estadoDeCompra);
+        this.repo.actualizarCompra(compra);
+        return true;
+    }
 }
