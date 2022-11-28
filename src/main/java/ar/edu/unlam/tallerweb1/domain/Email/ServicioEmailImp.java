@@ -20,7 +20,7 @@ public class ServicioEmailImp implements ServicioEmail {
 
 
 
-    private final Dotenv dotenv = Dotenv.configure().directory(".//src//main//resources").filename(".env").load();
+    private final Dotenv dotenv = Dotenv.load();
     private String username;
 
     private String password;
