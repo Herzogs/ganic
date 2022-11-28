@@ -18,8 +18,9 @@ import java.util.Properties;
 public class ServicioEmailImp implements ServicioEmail {
     private final Properties props = new Properties();
 
-    private final Dotenv dotenv = Dotenv.load();
 
+
+    private final Dotenv dotenv = Dotenv.configure().directory(".//src//main//resources").filename(".env").load();
     private String username;
 
     private String password;
@@ -28,8 +29,8 @@ public class ServicioEmailImp implements ServicioEmail {
 
     private void init() {
 
-        this.username = dotenv.get("USERNAME");
-        this.password = dotenv.get("PASSWORD");
+        this.username = dotenv.get("USUARIO_GANIC");
+        this.password = dotenv.get("PASSWORD_GANIC");
 
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.host", "smtp.gmail.com");
