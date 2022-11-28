@@ -18,8 +18,6 @@
     <script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js"
             integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg="
             crossorigin=""></script>
-
-
     <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
     <script src="${pageContext.request.contextPath}/js/jquery-1.11.3.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/seguimiento.js" type="text/javascript"></script>
