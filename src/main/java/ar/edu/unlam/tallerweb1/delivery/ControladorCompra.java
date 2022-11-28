@@ -39,6 +39,7 @@ public class ControladorCompra {
         try {
             idUsuario = (Long) request.getSession().getAttribute("id");
             listaComprado = servicio.listarTodasLasCompras(idUsuario);
+            System.err.println(listaComprado);
             model.put("listaDeCompras", listaComprado);
 
         } catch (CompraNoEncontradaExeption e) {

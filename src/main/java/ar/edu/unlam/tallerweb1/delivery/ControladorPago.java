@@ -15,10 +15,8 @@ import ar.edu.unlam.tallerweb1.domain.compra.ServicioCompra;
 import ar.edu.unlam.tallerweb1.domain.detalleCarro.DetalleCarro;
 import ar.edu.unlam.tallerweb1.domain.detalleCarro.ServicioDetalleCarro;
 import ar.edu.unlam.tallerweb1.domain.factura.ServicioFactura;
-import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
-import com.itextpdf.text.DocumentException;
 import com.mercadopago.resources.preference.Preference;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,14 +28,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 @Controller
 public class ControladorPago {
@@ -158,27 +153,26 @@ public class ControladorPago {
 
 
     private void guardarCompra(Usuario cliente) {
-        pagoNuevo.getListaCobrar().forEach(mpEntidad -> {
-            Compra nueva = generarCompra(cliente,mpEntidad.getSandwich(),mpEntidad.getCantidad());
-            System.err.println(nueva);
-            this.servicioCompra.guardarCompra(nueva);
-        });
-    }
-
-    private Compra generarCompra(Usuario user, Sandwich sandwich, Integer cantidad){
         Compra nueva = new Compra();
-        nueva.setCliente(user);
+        nueva.setComentario("");
+        nueva.setCliente(cliente);
         List<Sandwich> list = new ArrayList<>();
-        list.add(sandwich);
-        nueva.setDetalle(list);
         nueva.setEstado(EstadoDeCompra.PREPARACION);
         nueva.setFecha(LocalDateTime.now(ZoneId.of("America/Buenos_Aires")));
         nueva.setFechaEntrega(LocalDateTime.now(ZoneId.of("America/Buenos_Aires")).plusMinutes(15));
-        nueva.setCant(cantidad);
         nueva.setPayment(this.payment);
-        return nueva;
+        AtomicReference<Float> tot= new AtomicReference<>(0F);
+        AtomicReference<Integer> tam = new AtomicReference<>(0);
+        pagoNuevo.getListaCobrar().forEach(mpEntidad -> {
+            list.add(mpEntidad.getSandwich());
+            tot.updateAndGet(v -> v + mpEntidad.calcularMonto());
+            tam.updateAndGet(v -> v + mpEntidad.getCantidad());
+        });
+        nueva.setMontoTotal(tot.get()+pagoNuevo.getRecargo());
+        nueva.setCant(tam.get());
+        nueva.setDetalle(list);
+        this.servicioCompra.guardarCompra(nueva);
     }
-
 
     private String generateDomicilio(String dest){
         String aux[] = dest.split(",");

@@ -73,12 +73,14 @@ public class ControladorPagoTest extends SpringTest {
     @Test
     public void prueboQueAlPagarCorrectamenteMeMuestraUnMsgExito() throws UsuarioInvalidoException {
         Usuario user = dadoQueTengoUnUsuario();
+        Sandwich sandwich = dadoQueTengoUnSandwich();
         cuandoLePidaAlSerLetQueMeDevuelvaElIdGuardado(user);
         cuandoLePidaAlServLetQueMeDevuelvaDe("DESTINO", "test,test,test,test,test");
         cuandoLeSoliciteAlServicioLoginPorElUsuario(user);
         cargoLaClasePagoPAraQuePuedaOperarConMP();
         cuandoLePidaAlServLetQueMeDevuelvaDe("DONDE_VENGO", "NORMAL");
         cuandoLePidaAlServLetQueMeDevuelvaElRecargo("RECARGO", 2F);
+        cuandoLLamoAlControladorParaQueMePrepareElPagoDel(sandwich);
         cuandoLePidaAlServicioDeFacturaQueMeGenereLaFacturaDelPedido();
         ModelAndView model = cuandoElControladorDePAgoVerificoMiPago();
         entoncesVerificoQueElMensajeDevueltoSeaElEsperado(model, "msg", "Se ha enviado el email de confirmación");
@@ -165,6 +167,7 @@ public class ControladorPagoTest extends SpringTest {
         entidad.setSandwich(sandwich);
         pago.getListaCobrar().add(entidad);
         pago.setImpTot(sandwich.obtenerMonto());
+        pago.setRecargo(30F);
         return pago;
     }
 

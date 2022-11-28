@@ -34,6 +34,16 @@ public class Compra {
     @Enumerated( value = EnumType.STRING)
     private EstadoDeCompra estado;
 
+    private Float montoTotal;
+
+    public Float getMontoTotal() {
+        return montoTotal;
+    }
+
+    public void setMontoTotal(Float montoTotal) {
+        this.montoTotal = montoTotal;
+    }
+
     public String getComentario() {
         return comentario;
     }
