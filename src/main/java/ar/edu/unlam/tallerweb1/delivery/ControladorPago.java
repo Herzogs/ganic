@@ -3,6 +3,7 @@ package ar.edu.unlam.tallerweb1.delivery;
 import ar.edu.unlam.tallerweb1.domain.Email.Email;
 import ar.edu.unlam.tallerweb1.domain.Email.ServicioEmail;
 import ar.edu.unlam.tallerweb1.domain.Email.ServicioEmailImp;
+import ar.edu.unlam.tallerweb1.domain.Excepciones.ErrorAlRealizarCompraException;
 import ar.edu.unlam.tallerweb1.domain.Excepciones.UsuarioInvalidoException;
 import ar.edu.unlam.tallerweb1.domain.MercadoPago.MpEntidad;
 import ar.edu.unlam.tallerweb1.domain.MercadoPago.Pago;
@@ -13,10 +14,13 @@ import ar.edu.unlam.tallerweb1.domain.compra.EstadoDeCompra;
 import ar.edu.unlam.tallerweb1.domain.compra.ServicioCompra;
 import ar.edu.unlam.tallerweb1.domain.detalleCarro.DetalleCarro;
 import ar.edu.unlam.tallerweb1.domain.detalleCarro.ServicioDetalleCarro;
+import ar.edu.unlam.tallerweb1.domain.factura.ServicioFactura;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
+import com.itextpdf.text.DocumentException;
 import com.mercadopago.resources.preference.Preference;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -26,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -46,12 +51,17 @@ public class ControladorPago {
 
     private final ServicioDetalleCarro servicioDetalleCarro;
 
+    private final Dotenv dotenv = Dotenv.load();
+
+    private final ServicioFactura servicioFactura;
+
     private Pago pagoNuevo;
 
     private Long payment;
 
     @Autowired
-    public ControladorPago(ServicioLogin servicioLogin, ServicioMercadoPago servicioMercadoPago, ServicioCompra servicioCompra, ServicioDetalleCarro servicioDetalleCarro) {
+    public ControladorPago(ServicioLogin servicioLogin, ServicioMercadoPago servicioMercadoPago, ServicioCompra servicioCompra, ServicioDetalleCarro servicioDetalleCarro, ServicioFactura servicioFactura) {
+        this.servicioFactura = servicioFactura;
         this.servicioLogin = servicioLogin;
         this.servicioMercadoPago = servicioMercadoPago;
         this.servicioEmail = new ServicioEmailImp();
@@ -89,8 +99,19 @@ public class ControladorPago {
         modelo.put("recargo", recargo);
         modelo.put("montoTotalPagar", importeTotal+recargo);
         Preference preference = null;
-        preference = this.servicioMercadoPago.generarPago(pagoNuevo);
-        modelo.put("preference", preference);
+        System.err.println("BUENASSSSSSS " + dotenv.get("ERROR_AL_COMPRAR"));
+        if(Boolean.parseBoolean(dotenv.get("ERROR_AL_COMPRAR")) == false){
+            try {
+                preference = this.servicioMercadoPago.generarPago(pagoNuevo);
+            } catch (ErrorAlRealizarCompraException e) {
+
+                return new ModelAndView("pago", modelo);
+            }
+            modelo.put("preference", preference);
+        }else{
+            modelo.put("msg","No se pudo completar la compra, por favor intente mas tarde");
+            modelo.put("est", "disabled");
+        }
         return new ModelAndView("pago", modelo);
     }
 
@@ -107,11 +128,11 @@ public class ControladorPago {
             cliente = this.servicioLogin.consultarPorID(idCliente);
             cliente.setDireccion(generateDomicilio(dir));
             nuevoEmail.setUser(cliente);
-            nuevoEmail.setMetodoPago(paymentType);
+            /*nuevoEmail.setMetodoPago(paymentType);
             nuevoEmail.setLista(this.convertirSetToList(pagoNuevo.getListaCobrar().get(0).getSandwich().getIngrediente()));
-            nuevoEmail.setRecargo((Float) request.getSession().getAttribute("RECARGO"));
+            nuevoEmail.setRecargo((Float) request.getSession().getAttribute("RECARGO"));*/
             guardarCompra(cliente);
-            this.servicioEmail.sendEmail(nuevoEmail,"Envio De Pedido");
+            this.servicioEmail.sendEmail(nuevoEmail,"Notificación de Envio",this.servicioFactura.generarFactura(pagoNuevo,request));
             if(dondeVengo.equals("CARRO"))
                 vaciarListaDetalles(request);
             request.getSession().setAttribute("DESTINO",null);

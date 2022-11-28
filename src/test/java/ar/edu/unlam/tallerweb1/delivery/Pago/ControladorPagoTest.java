@@ -11,6 +11,7 @@ import ar.edu.unlam.tallerweb1.domain.MercadoPago.ServicioMercadoPago;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.Sandwich;
 import ar.edu.unlam.tallerweb1.domain.compra.ServicioCompra;
 import ar.edu.unlam.tallerweb1.domain.detalleCarro.ServicioDetalleCarro;
+import ar.edu.unlam.tallerweb1.domain.factura.ServicioFactura;
 import ar.edu.unlam.tallerweb1.domain.ingredientes.Ingrediente;
 import ar.edu.unlam.tallerweb1.domain.usuarios.ServicioLogin;
 import ar.edu.unlam.tallerweb1.domain.usuarios.Usuario;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -37,58 +39,112 @@ public class ControladorPagoTest extends SpringTest {
     private ServicioMercadoPago servicioMercadoPago;
     private ServicioDetalleCarro servicioDetalleCarro;
 
+    private ServicioFactura servicioFactura;
+
     private ControladorPago controladorPago;
     private HttpServletRequest request;
 
     @Before
     public void init(){
         this.servicioEmail = new ServicioEmailImp();
+        this.servicioFactura = mock(ServicioFactura.class);
         this.servicioCompra = mock(ServicioCompra.class);
         this.servicioLogin = mock(ServicioLogin.class);
         this.servicioMercadoPago = mock(ServicioMercadoPago.class);
         this.servicioDetalleCarro = mock(ServicioDetalleCarro.class);
         this.request = mock(HttpServletRequest.class);
         HttpSession session = mock(HttpSession.class);
-        this.controladorPago = new ControladorPago(servicioLogin,servicioMercadoPago,servicioCompra,servicioDetalleCarro);
+        this.controladorPago = new ControladorPago(servicioLogin,servicioMercadoPago,servicioCompra,servicioDetalleCarro,this.servicioFactura);
         when(this.request.getSession()).thenReturn(session);
     }
 
     @Test
     public void prueboQueAlQuererPagarUnSandwichEsteMeEnvieALaPaginadePago(){
         Sandwich sandwich = dadoQueTengoUnSandwich();
-        when(this.request.getSession().getAttribute("SANDWICH_ELEGIDO")).thenReturn(sandwich);
-        when(this.request.getSession().getAttribute("DESTINO")).thenReturn("test,test,test,test,test");
-        when(this.request.getSession().getAttribute("RECARGO")).thenReturn(0F);
-        this.controladorPago.setPago(dadoQueTengoUnPago(sandwich));
-        ModelAndView model = this.controladorPago.pagarSandwich(this.request);
-        assertThat(model.getModel().get("montoFinal")).isEqualTo(sandwich.obtenerMonto());
+        cuandoLePidoAlServletQueMeDevuelvaElSandwichElegido(sandwich);
+        cuandoLePidaAlServLetQueMeDevuelvaDe("DESTINO","test,test,test,test,test");
+        cuandoLePidaAlServLetQueMeDevuelvaElRecargo("RECARGO", 0F);
+        cuandoLLamoAlControladorParaQueMePrepareElPagoDel(sandwich);
+        ModelAndView model = cuandoLLamoAlControladorDePagoParaPagasElSandwich();
+        entoncesVerificoQueElMontoFinalSeaElMismoDelQueSeleccione(sandwich, model);
     }
+
 
     @Test
     public void prueboQueAlPagarCorrectamenteMeMuestraUnMsgExito() throws UsuarioInvalidoException {
         Usuario user = dadoQueTengoUnUsuario();
-        when(this.request.getSession().getAttribute("id")).thenReturn(user.getId());
-        when(this.request.getSession().getAttribute("DESTINO")).thenReturn("test,test,test,test,test");
-        when(this.servicioLogin.consultarPorID(user.getId())).thenReturn(user);
-        this.controladorPago.setPago(dadoQueTengoUnPago(dadoQueTengoUnSandwich()));
-        when(this.request.getSession().getAttribute("DONDE_VENGO")).thenReturn("NORMAL");
-        when(this.request.getSession().getAttribute("RECARGO")).thenReturn(2F);
-        ModelAndView model = this.controladorPago.pagoCorrecto("Tarjeta",1L,this.request);
-        assertThat(model.getModel().get("msg")).isEqualTo("Se ha enviado el email de confirmación");
+        cuandoLePidaAlSerLetQueMeDevuelvaElIdGuardado(user);
+        cuandoLePidaAlServLetQueMeDevuelvaDe("DESTINO", "test,test,test,test,test");
+        cuandoLeSoliciteAlServicioLoginPorElUsuario(user);
+        cargoLaClasePagoPAraQuePuedaOperarConMP();
+        cuandoLePidaAlServLetQueMeDevuelvaDe("DONDE_VENGO", "NORMAL");
+        cuandoLePidaAlServLetQueMeDevuelvaElRecargo("RECARGO", 2F);
+        cuandoLePidaAlServicioDeFacturaQueMeGenereLaFacturaDelPedido();
+        ModelAndView model = cuandoElControladorDePAgoVerificoMiPago();
+        entoncesVerificoQueElMensajeDevueltoSeaElEsperado(model, "msg", "Se ha enviado el email de confirmación");
     }
 
     @Test
     public void prueboQueAlPagarCorrectamentePeroNoHayaUsuarioMeMuestraUnMsgERROR() throws UsuarioInvalidoException {
         Usuario user = dadoQueTengoUnUsuario();
-        when(this.request.getSession().getAttribute("id")).thenReturn(user.getId());
-        when(this.request.getSession().getAttribute("DESTINO")).thenReturn("test,test,test,test,test");
+        cuandoLePidaAlSerLetQueMeDevuelvaElIdGuardado(user);
+        cuandoLePidaAlServLetQueMeDevuelvaDe("DESTINO", "test,test,test,test,test");
         when(this.servicioLogin.consultarPorID(user.getId())).thenThrow(new UsuarioInvalidoException("No existe usuario"));
-        this.controladorPago.setPago(dadoQueTengoUnPago(dadoQueTengoUnSandwich()));
-        when(this.request.getSession().getAttribute("RECARGO")).thenReturn(2F);
-        ModelAndView model = this.controladorPago.pagoCorrecto("Tarjeta",1L,this.request);
-        assertThat(model.getModel().get("error")).isEqualTo("a ocurrido un error en el proceso de envio");
+        cargoLaClasePagoPAraQuePuedaOperarConMP();
+        cuandoLePidaAlServLetQueMeDevuelvaElRecargo("RECARGO", 2F);
+        ModelAndView model = cuandoElControladorDePAgoVerificoMiPago();
+        entoncesVerificoQueElMensajeDevueltoSeaElEsperado(model, "error", "a ocurrido un error en el proceso de envio");
     }
 
+
+    private void cuandoLePidaAlServLetQueMeDevuelvaDe(String opcionGuardado, String opcionADevolver) {
+        when(this.request.getSession().getAttribute(opcionGuardado)).thenReturn(opcionADevolver);
+    }
+
+    private void cuandoLePidoAlServletQueMeDevuelvaElSandwichElegido(Sandwich sandwich) {
+        when(this.request.getSession().getAttribute("SANDWICH_ELEGIDO")).thenReturn(sandwich);
+    }
+
+    private void cuandoLePidaAlServLetQueMeDevuelvaElRecargo(String RECARGO, float t) {
+        when(this.request.getSession().getAttribute(RECARGO)).thenReturn(t);
+    }
+
+    private static void entoncesVerificoQueElMontoFinalSeaElMismoDelQueSeleccione(Sandwich sandwich, ModelAndView model) {
+        assertThat(model.getModel().get("montoFinal")).isEqualTo(sandwich.obtenerMonto());
+    }
+
+    private ModelAndView cuandoLLamoAlControladorDePagoParaPagasElSandwich() {
+        ModelAndView model = this.controladorPago.pagarSandwich(this.request);
+        return model;
+    }
+
+    private void cuandoLLamoAlControladorParaQueMePrepareElPagoDel(Sandwich sandwich) {
+        this.controladorPago.setPago(dadoQueTengoUnPago(sandwich));
+    }
+
+    private ModelAndView cuandoElControladorDePAgoVerificoMiPago() {
+        return this.controladorPago.pagoCorrecto("Tarjeta",1L,this.request);
+    }
+
+    private void cuandoLePidaAlServicioDeFacturaQueMeGenereLaFacturaDelPedido() {
+        when(this.servicioFactura.generarFactura(any(Pago.class),any())).thenReturn("test");
+    }
+
+    private void cargoLaClasePagoPAraQuePuedaOperarConMP() {
+        this.controladorPago.setPago(dadoQueTengoUnPago(dadoQueTengoUnSandwich()));
+    }
+
+    private void cuandoLeSoliciteAlServicioLoginPorElUsuario(Usuario user) throws UsuarioInvalidoException {
+        when(this.servicioLogin.consultarPorID(user.getId())).thenReturn(user);
+    }
+
+    private void cuandoLePidaAlSerLetQueMeDevuelvaElIdGuardado(Usuario user) {
+        when(this.request.getSession().getAttribute("id")).thenReturn(user.getId());
+    }
+
+    private static void entoncesVerificoQueElMensajeDevueltoSeaElEsperado(ModelAndView model, String msg, String expected) {
+        assertThat(model.getModel().get(msg)).isEqualTo(expected);
+    }
 
     private Usuario dadoQueTengoUnUsuario() {
         Usuario user = new Usuario();

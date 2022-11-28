@@ -43,3 +43,5 @@ Son las cuentas de para prueba de Mercado Pago
 |-------------+--------------------------------------------------------+---------------------------|
 
 Para *probar diferentes resultado de pago* poner en el nombre del titular de la tarjeta el estado deseado de pago
+
+EL número de documento del usuario de prueba es *0111111*

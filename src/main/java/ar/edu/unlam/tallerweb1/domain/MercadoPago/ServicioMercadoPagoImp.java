@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.domain.MercadoPago;
 
+import ar.edu.unlam.tallerweb1.domain.Excepciones.ErrorAlRealizarCompraException;
 import ar.edu.unlam.tallerweb1.domain.Sandwich.RepositorioSandwich;
 import ar.edu.unlam.tallerweb1.domain.compra.Compra;
 import com.mercadopago.MercadoPagoConfig;
@@ -13,6 +14,7 @@ import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.payment.PaymentRefund;
 import com.mercadopago.resources.preference.Preference;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,69 +28,50 @@ import java.util.logging.Level;
 @Transactional
 public class ServicioMercadoPagoImp implements ServicioMercadoPago {
 
+    private final Dotenv dotEnv = Dotenv.load();
+
     @Autowired
-    public ServicioMercadoPagoImp(RepositorioSandwich sandwich) {
-        MercadoPagoConfig.setAccessToken("APP_USR-5684748532955528-110615-806d19bf45980658f2a6db8c0cd17bae-1229699166");
+    public ServicioMercadoPagoImp(RepositorioSandwich repo) {
+
+    MercadoPagoConfig.setAccessToken(dotEnv.get("MPACCESSTOKEN"));
         MercadoPagoConfig.setConnectionRequestTimeout(2000);
         MercadoPagoConfig.setSocketTimeout(2000);
         MercadoPagoConfig.setLoggingLevel(Level.FINEST);
     }
 
     @Override
-    public Preference generarPago(Pago sandPagar) {
-
+    public Preference generarPago(Pago sandPagar) throws ErrorAlRealizarCompraException {
         // Crea datos del cliente
         PreferenceClient client = new PreferenceClient();
 
         // Crea un �tem en la preferencia para el pago
         List<PreferenceItemRequest> items = new ArrayList<>();
         sandPagar.getListaCobrar().forEach(pago -> {
-            PreferenceItemRequest item =
-                    PreferenceItemRequest.builder()
+            items.add(PreferenceItemRequest.builder()
                             .id(pago.getSandwich().getIdSandwich().toString())
                             .title(pago.getSandwich().getNombre())
                             .quantity(pago.getCantidad())
                             .description(pago.getSandwich().getDescripcion())
                             .currencyId("ARS")
                             .unitPrice(BigDecimal.valueOf(pago.getSandwich().obtenerMonto()))
-                            .build();
-            items.add(item);
+                            .build());
         });
 
-        /*for (MpEntidad pago : sandPagar.getListaCobrar()){
-
-                PreferenceItemRequest item =
-                        PreferenceItemRequest.builder()
-                                .id(pago.getSandwich().getIdSandwich().toString())
-                                .title(pago.getSandwich().getNombre())
-                                .quantity(pago.getCantidad())
-                                .description(pago.getSandwich().getDescripcion())
-                                .currencyId("ARS")
-                                .unitPrice(BigDecimal.valueOf(pago.getSandwich().obtenerMonto()))
-                                .build();
-
-                items.add(item);
-
-        }*/
-
-        PreferenceItemRequest item =
-                PreferenceItemRequest.builder()
+        items.add(PreferenceItemRequest.builder()
                         .id("123")
                         .title("Recargo")
                         .quantity(1)
                         .description("Recargo De Envio")
                         .currencyId("ARS")
                         .unitPrice(BigDecimal.valueOf(sandPagar.getRecargo()))
-                        .build();
-
-        items.add(item);
+                        .build());
 
 		/* Urls propias de mi app en spring a las que va a
 		redireccionar despues del pago si es exitoso o no */
         PreferenceBackUrlsRequest backUrls =
                 PreferenceBackUrlsRequest.builder()
                         .success("http://localhost:8080/proyecto_limpio_spring_war_exploded/alerta_exitosa")
-                        .failure("http://localhost:8080/proyecto_limpio_spring_war_exploded/alerta_exitosa")
+                        .failure("http://localhost:8080/proyecto_limpio_spring_war_exploded/alerta_fallo")
                         .build();
 
         // Genera la peticion para la preferencia
@@ -107,19 +90,14 @@ public class ServicioMercadoPagoImp implements ServicioMercadoPago {
 			 con ese id de preferencia. Con eso redirigo al usuario a un sitio de mercado
 			 pago para que pague con su tarjeta el item solicitado */
 
+
             preference = client.create(request);
             items.clear();
 
         } catch (MPException | MPApiException e) {
-            e.printStackTrace();
+            throw new ErrorAlRealizarCompraException("No se pudo realizar la compra");
         }
         return preference;
-    }
-
-    private void mostrarDatos(List<PreferenceItemRequest> items) {
-        items.forEach(preferenceItemRequest -> {
-            System.err.println(preferenceItemRequest.getTitle());
-        });
     }
 
     @Override
