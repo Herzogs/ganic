@@ -68,7 +68,8 @@ public class SchedulerTask {
                 LocalDateTime fech1=actual.withNano(0).withSecond(0);
                 LocalDateTime fech2=comp.getFechaEntrega().withNano(0).withSecond(0);
                 LocalDateTime fechaCompra = comp.getFecha().withNano(0).withSecond(0);
-                if(fech1.until(fechaCompra,ChronoUnit.MINUTES) == MINUTO_PARA_PASAR_A_ENCURSO) {
+                log.warn(fech1 + " - " + fechaCompra + " - " + "minutos: "+ fechaCompra.until(fech1,ChronoUnit.MINUTES));
+                if(fechaCompra.until(fech1,ChronoUnit.MINUTES) == MINUTO_PARA_PASAR_A_ENCURSO) {
                     log.info("ENTRANDO EN LA COPRA");
                     this.servicioCompra.compraEnCurso(comp.getIdCompra(), EstadoDeCompra.ENCURSO);
                 }
