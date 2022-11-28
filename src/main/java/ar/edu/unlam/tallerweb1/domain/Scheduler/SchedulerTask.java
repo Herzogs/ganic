@@ -35,20 +35,22 @@ public class SchedulerTask {
     private static final ServicioEmail servicioEmail = new ServicioEmailImp();
 
     @Async
-    @Scheduled(cron = "0 */5 * ? * *", zone = "America/Buenos_Aires")
+    @Scheduled(cron = "0 * * ? * *", zone = "America/Buenos_Aires")
     public void EnvioDeEmailCuandoFalten5Minutos() {
         List<Compra> compraList = null;
+        Boolean envioCorrecto = false;
         try {
-            compraList = this.servicioCompra.listarComprasPorEstado(EstadoDeCompra.PREPARACION);
+            compraList = this.servicioCompra.listarComprasPorEstado(EstadoDeCompra.ENCURSO);
             LocalDateTime actual = LocalDateTime.now(ZoneId.of("America/Buenos_Aires")).withNano(0);
-            Long max_minutes = Long.valueOf(dotenv.get("SCHEDULER_MAX_MINUTES"));
+            Long max_minutes = Long.valueOf(dotenv.get("SCHEDULER_MAX_MINUTES")); //5
             for (Compra compra: compraList)  {
-                LocalDateTime venc = compra.getFechaEntrega().minusMinutes(8);
-                Long minutes = actual.until(venc, ChronoUnit.MINUTES);
-                log.info("FECHA DE AVISO: " + venc + " , DEL PEDIDO: " + compra.getIdCompra() + " , FECHA ACTUAL: " + actual + " CANTIDAD DE MINUTOS FALTANTES: " + minutes );
-                if (minutes >= 0 && minutes <= max_minutes) {
+                LocalDateTime fechaEntrega = compra.getFechaEntrega();
+                Long minutes = actual.until(fechaEntrega, ChronoUnit.MINUTES);
+                log.info("FECHA DE AVISO: " + fechaEntrega + " , DEL PEDIDO: " + compra.getIdCompra() + " , FECHA ACTUAL: " + actual + " CANTIDAD DE MINUTOS FALTANTES: " + minutes );
+                if ((minutes == max_minutes) || (minutes <= 0) && !envioCorrecto) {
                     servicioEmail.sendEmail(compra.getUsuario().getEmail(), "Su pedido esta en camino", "En breve estará llegando nuestro repartidor, por favor presta atención y disfruta de tu compra!");
                     log.info(String.format("Enviando email a %s, sobre la compra %d", compra.getUsuario().getEmail(),compra.getIdCompra()));
+                    envioCorrecto = true;
                 }
             }
         } catch (CompraNoEncontradaExeption e) {
@@ -62,7 +64,7 @@ public class SchedulerTask {
         List<Compra> compraList = null;
         final Integer MINUTO_PARA_PASAR_A_ENCURSO = Integer.valueOf(dotenv.get("MINUTO_PARA_PASAR_A_ENCURSO"));
         try {
-            compraList = this.servicioCompra.listarComprasPorEstado(EstadoDeCompra.PREPARACION);
+            compraList = this.servicioCompra.listarComprasPorEstado(EstadoDeCompra.ENCURSO);
             LocalDateTime actual = LocalDateTime.now(ZoneId.of("America/Buenos_Aires"));
             for (Compra comp : compraList) {
                 LocalDateTime fech1=actual.withNano(0).withSecond(0);

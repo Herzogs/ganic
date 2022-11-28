@@ -159,7 +159,7 @@ public class ControladorPago {
         List<Sandwich> list = new ArrayList<>();
         nueva.setEstado(EstadoDeCompra.PREPARACION);
         nueva.setFecha(LocalDateTime.now(ZoneId.of("America/Buenos_Aires")));
-        nueva.setFechaEntrega(LocalDateTime.now(ZoneId.of("America/Buenos_Aires")).plusMinutes(15));
+        nueva.setFechaEntrega(LocalDateTime.now(ZoneId.of("America/Buenos_Aires")).plusMinutes(Long.parseLong(dotenv.get("MINUTOS_ENVIO"))));
         nueva.setPayment(this.payment);
         AtomicReference<Float> tot= new AtomicReference<>(0F);
         AtomicReference<Integer> tam = new AtomicReference<>(0);
