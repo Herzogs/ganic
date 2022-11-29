@@ -72,7 +72,7 @@ public class SchedulerTask {
                 LocalDateTime fechaEntrega = compra.getFechaEntrega();
                 Long minutes = actual.until(fechaEntrega, ChronoUnit.MINUTES);
                 log.info("FECHA DE AVISO: " + fechaEntrega + " , DEL PEDIDO: " + compra.getIdCompra() + " , FECHA ACTUAL: " + actual + " CANTIDAD DE MINUTOS FALTANTES: " + minutes );
-                if ((minutes == max_minutes) || (minutes <= 0) && !envioCorrecto) {
+                if ((minutes == max_minutes) || (minutes <= 0) && envioCorrecto == false) {
                     servicioEmail.sendEmail(compra.getUsuario().getEmail(), "Su pedido esta en camino", "En breve estará llegando nuestro repartidor, por favor presta atención y disfruta de tu compra!");
                     log.info(String.format("Enviando email a %s, sobre la compra %d", compra.getUsuario().getEmail(),compra.getIdCompra()));
                     envioCorrecto = true;
@@ -91,10 +91,12 @@ public class SchedulerTask {
             compraList = this.servicioCompra.listarComprasPorEstado(EstadoDeCompra.ENCURSO);
             LocalDateTime actual = LocalDateTime.now(ZoneId.of("America/Buenos_Aires"));
             for (Compra comp : compraList) {
-                LocalDateTime fech1=actual.withNano(0).withSecond(0);
-                LocalDateTime fech2=comp.getFechaEntrega().withNano(0).withSecond(0);
+                LocalDateTime fech1=actual.withNano(0).withSecond(0); //Sistema
+                LocalDateTime fech2=comp.getFechaEntrega().withNano(0).withSecond(0); // Entrega
                 log.warn(fech1 + " - " + fech2 + " - " + "minutos: "+ fech2.until(fech1,ChronoUnit.MINUTES));
-                if (fech1.until(fech2,ChronoUnit.MINUTES) <= 0) {
+                Long diferenciaEntreFechas=fech1.until(fech2,ChronoUnit.MINUTES);
+                log.info("Diferencia: " + diferenciaEntreFechas);
+                if (diferenciaEntreFechas <= 0) {
                     this.servicioCompra.entregarCompra(comp.getIdCompra());
                     log.info("ENTREGANDO EL PEDIDO: " + comp.getIdCompra());
                 }

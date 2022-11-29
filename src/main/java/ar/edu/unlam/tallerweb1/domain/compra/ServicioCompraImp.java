@@ -68,7 +68,7 @@ public class ServicioCompraImp implements ServicioCompra {
 
     @Override
     public List<Compra> listarComprasPorEstado(EstadoDeCompra estadoDeCompra) throws CompraNoEncontradaExeption {
-        List<Compra> list = this.repo.obtenerCompraPorEstado(EstadoDeCompra.PREPARACION);
+        List<Compra> list = this.repo.obtenerCompraPorEstado(estadoDeCompra);
         if (list.isEmpty())
             throw new CompraNoEncontradaExeption("No hay compra en marcha");
         return list;
