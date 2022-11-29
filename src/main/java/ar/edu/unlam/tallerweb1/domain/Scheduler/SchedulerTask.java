@@ -60,7 +60,30 @@ public class SchedulerTask {
 
     @Async
     @Scheduled(cron = "0 * * ? * *", zone = "America/Buenos_Aires")
-    public void actualizarEstadoDeEntrega() {
+    public void actualizarEstadoDeEntregaDePreparacionAEnCurso() {
+        List<Compra> compraList = null;
+        final Integer MINUTO_PARA_PASAR_A_ENCURSO = Integer.valueOf(dotenv.get("MINUTO_PARA_PASAR_A_ENCURSO"));
+        try {
+            compraList = this.servicioCompra.listarComprasPorEstado(EstadoDeCompra.PREPARACION);
+            LocalDateTime actual = LocalDateTime.now(ZoneId.of("America/Buenos_Aires"));
+            for (Compra comp : compraList) {
+                LocalDateTime fechaSistema=actual.withNano(0).withSecond(0);
+                LocalDateTime fechaCompra = comp.getFecha().withNano(0).withSecond(0);
+                log.warn(fechaSistema + " - " + fechaCompra + " - " + "minutos: "+ fechaCompra.until(fechaSistema,ChronoUnit.MINUTES));
+                if(fechaCompra.until(fechaSistema,ChronoUnit.MINUTES) == MINUTO_PARA_PASAR_A_ENCURSO) {
+                    log.info("ENTRANDO EN LA COPRA");
+                    this.servicioCompra.compraEnCurso(comp.getIdCompra(), EstadoDeCompra.ENCURSO);
+                }
+            }
+
+        } catch (CompraNoEncontradaExeption e) {
+            log.info("No hay pedidos en espera en la cola");
+        }
+    }
+
+    @Async
+    @Scheduled(cron = "0 * * ? * *", zone = "America/Buenos_Aires")
+    public void actualizarEstadoDeEntregaEnCursoAEntregado() {
         List<Compra> compraList = null;
         final Integer MINUTO_PARA_PASAR_A_ENCURSO = Integer.valueOf(dotenv.get("MINUTO_PARA_PASAR_A_ENCURSO"));
         try {
@@ -69,12 +92,7 @@ public class SchedulerTask {
             for (Compra comp : compraList) {
                 LocalDateTime fech1=actual.withNano(0).withSecond(0);
                 LocalDateTime fech2=comp.getFechaEntrega().withNano(0).withSecond(0);
-                LocalDateTime fechaCompra = comp.getFecha().withNano(0).withSecond(0);
-                log.warn(fech1 + " - " + fechaCompra + " - " + "minutos: "+ fechaCompra.until(fech1,ChronoUnit.MINUTES));
-                if(fechaCompra.until(fech1,ChronoUnit.MINUTES) == MINUTO_PARA_PASAR_A_ENCURSO) {
-                    log.info("ENTRANDO EN LA COPRA");
-                    this.servicioCompra.compraEnCurso(comp.getIdCompra(), EstadoDeCompra.ENCURSO);
-                }
+                log.warn(fech1 + " - " + fech2 + " - " + "minutos: "+ fech2.until(fech1,ChronoUnit.MINUTES));
                 if (fech1.isAfter(fech2)) {
                     this.servicioCompra.entregarCompra(comp.getIdCompra());
                     log.info("ENTREGANDO EL PEDIDO: " + comp.getIdCompra());
@@ -85,4 +103,6 @@ public class SchedulerTask {
             log.info("No hay pedidos en espera en la cola");
         }
     }
+
+
 }

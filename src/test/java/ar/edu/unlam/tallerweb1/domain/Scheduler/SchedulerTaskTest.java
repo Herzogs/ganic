@@ -73,7 +73,7 @@ public class SchedulerTaskTest extends SpringTest {
     }
 
     private void cuandoLlamaAlSchedulerParaQueverifiqueSiAlgunaCompraSePuedaEntregar() {
-        this.schedulerTask.actualizarEstadoDeEntrega();
+        this.schedulerTask.actualizarEstadoDeEntregaDePreparacionAEnCurso();
     }
 
     private void cuandoLlamoAlServicioDeCompraParaQueActualizeElEstadoDeUnaCompraAEntregado() throws CompraNoEncontradaExeption {
