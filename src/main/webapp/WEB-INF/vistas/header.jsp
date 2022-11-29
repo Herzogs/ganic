@@ -11,8 +11,8 @@
     <nav class="nav_style d-flex align-items-center">
         <div class="container">
             <div class="text-center">
-                <a href="home"><img src="img/ganiclogo.png" class="img-fluid logo_style" alt="Logo"></a>
-                <a href="home">Home</a>
+                <a href="restablecer"><img src="img/ganiclogo.png" class="img-fluid logo_style" alt="Logo"></a>
+                <a href="restablecer">Home</a>
                 <a href="ingredientes">Menu</a>
                 <a href="contacto">Contacto</a>
                 <a href="nosotros">Nosotros</a>

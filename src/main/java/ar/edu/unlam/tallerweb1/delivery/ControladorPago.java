@@ -154,7 +154,7 @@ public class ControladorPago {
 
     private void guardarCompra(Usuario cliente) {
         Compra nueva = new Compra();
-        nueva.setComentario("");
+        nueva.setComentario(null);
         nueva.setCliente(cliente);
         List<Sandwich> list = new ArrayList<>();
         nueva.setEstado(EstadoDeCompra.PREPARACION);
