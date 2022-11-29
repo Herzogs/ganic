@@ -64,10 +64,7 @@ public class ControladorCancelarCompra {
         ModelMap modelMap = new ModelMap();
         try{
             compra = this.servicioCompra.buscarCompra(idCompra);
-            LocalDateTime actual = LocalDateTime.now(ZoneId.of("America/Buenos_Aires")).withSecond(0).withNano(0);
-            long minutos = actual.until(compra.getFecha().withSecond(0).withNano(0), ChronoUnit.MINUTES);
             if(compra.getEstado().equals(EstadoDeCompra.PREPARACION)){
-            /*if(minutos >= 0 && minutos <= 5) {*/
                 this.servicioCompra.cancelarCompra(compra, EstadoDeCompra.CANCELADO);
                 /*System.err.println(this.mercadoPago.reembolso(compra));*/
                 modelMap.put("msg","Se a eliminado la compra seleccionada");
