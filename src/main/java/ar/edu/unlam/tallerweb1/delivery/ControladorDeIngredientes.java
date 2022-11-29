@@ -207,7 +207,7 @@ public class ControladorDeIngredientes {
         Sandwich sandwich = (Sandwich) request.getSession().getAttribute("SANDWICH_ELEGIDO");
         this.sandwich.borrarDatosDelSandwich();
         servicioSandwich.guardarSandwich(sandwich);
-        return new ModelAndView(String.format("redirect:/agregarAlCarrito?idSandwich=%d",sandwich.getIdSandwich()));
+        return new ModelAndView(String.format("redirect:/agregarAlCarrito?idSandwich=%d&bandera=false",sandwich.getIdSandwich()));
     }
 
     private Sandwich generarSandwich(List<Ingrediente> lista){

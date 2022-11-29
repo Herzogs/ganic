@@ -26,7 +26,6 @@
                     <div class="col-12 g-5">
                             <div class="p-3 bg-dark text-white rounded-top">
                                 <h4 class="mb-3">Nro de compra: ${ compra.idCompra } <span class="ms-5 text-primary">${ compra.estado }</span> </h4>
-
                                 <span class="pe-5">Fecha: ${ compra.fecha.withSecond(0).withNano(0) }</span>
                                 <span class="pe-5">Sandwichs comprados: ${ compra.cant }</span>
                                 <span class="pe-5">Total abonado: $${ compra.montoTotal}</span>
