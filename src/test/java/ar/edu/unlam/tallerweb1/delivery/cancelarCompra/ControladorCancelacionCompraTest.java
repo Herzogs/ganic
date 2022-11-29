@@ -78,11 +78,11 @@ public class ControladorCancelacionCompraTest extends SpringTest {
     }
 
     @Test
-    public void queAlCancelarUnaCompraDespuesDeLos5MinLaMismaNOSePuedaCancelar() throws CompraNoEncontradaExeption {
+    public void queAlCancelarUnaCompraEnEstadoEnCursoLaMismaNOSePuedaCancelar() throws CompraNoEncontradaExeption {
         Usuario user = dadoQueTengoUnUsuario();
         List<Sandwich> l = new ArrayList<>();
         l.add(dadoQueTengoUnSandwichConIngredientes());
-        Compra cmp = dadoQueUnaCompraFueraDeLos5Min(1L,user,l,EstadoDeCompra.PREPARACION);
+        Compra cmp = dadoQueUnaCompraFueraDeLos5Min(1L,user,l,EstadoDeCompra.ENCURSO);
         when(this.servicioCompra.buscarCompra(cmp.getIdCompra())).thenReturn(cmp);
         ModelAndView mav = cuandoLLamoAlControladorParaCancelarUnaCOmpra(cmp,this.request);
         assertThat(mav.getModel().get("msg")).isEqualTo("Su pedido esta en preparacion, no se pudo eliminar su compra");

@@ -5,7 +5,6 @@ import ar.edu.unlam.tallerweb1.domain.Sandwich.RepositorioSandwich;
 import ar.edu.unlam.tallerweb1.domain.compra.Compra;
 import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.client.payment.PaymentRefundClient;
-import com.mercadopago.client.payment.PaymentRefundCreateRequest;
 import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
 import com.mercadopago.client.preference.PreferenceClient;
 import com.mercadopago.client.preference.PreferenceItemRequest;
@@ -77,8 +76,9 @@ public class ServicioMercadoPagoImp implements ServicioMercadoPago {
         // Genera la peticion para la preferencia
         PreferenceRequest request = PreferenceRequest.builder()
                 .items(items)
+                .binaryMode(true)
                 .backUrls(backUrls)
-                .externalReference("1L")
+                .externalReference("default")
                 .build();
 
         Preference preference = null;
@@ -104,15 +104,14 @@ public class ServicioMercadoPagoImp implements ServicioMercadoPago {
     public String reembolso(Compra compraAReembolsar){
         PaymentRefundClient client = new PaymentRefundClient();
         PaymentRefund paymentRefund = null;
-
         try {
-            paymentRefund = client.refund(compraAReembolsar.getPayment(),BigDecimal.valueOf(compraAReembolsar.getDetalle().get(0).obtenerMonto()));
-
+            paymentRefund = client.refund(compraAReembolsar.getPayment());
         } catch (MPException e) {
             System.err.println(e.getMessage());
         } catch (MPApiException e){
             System.err.println(e.getApiResponse().getContent() + " " + e.getApiResponse().getStatusCode()  );
         }
+
         return paymentRefund.getStatus();
     }
 }
