@@ -23,9 +23,11 @@
             <div class="row mb-5">
                 <h2 class="mt-5 mb-3"><i class="bi bi-bag-heart text-primary mx-2"></i> Mis productos:</h2>
                 <c:if test="${not empty msg}">
-                    <div class="text-danger my-4">
-                        <span>${msg}</span>
-                    </div>
+                    <c:if test="${msg.equals('Carrito vacio')}">
+                        <div class="text-danger my-4">
+                            <span>${msg}</span>
+                        </div>
+                    </c:if>
                     <input type="hidden" name="msg" id="msg" value="${msg}"/>
                     <input type="hidden" name="estado" id="estado" value="${error}"/>
 

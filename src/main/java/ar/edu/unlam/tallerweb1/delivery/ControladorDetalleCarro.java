@@ -148,6 +148,7 @@ public class ControladorDetalleCarro {
             servicioDetalleCarro.vaciarCarro(usuario);
             request.getSession().setAttribute("DESTINO",null);
             modelMap.put("msg", "Carrito vacio");
+            modelMap.put("hideButton","ocultar");
         } catch (UsuarioInvalidoException e) {
             modelMap.put("msg", "Usuario inexistente");
         }
