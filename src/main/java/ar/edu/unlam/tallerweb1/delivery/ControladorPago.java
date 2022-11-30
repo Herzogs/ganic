@@ -104,7 +104,7 @@ public class ControladorPago {
             modelo.put("preference", preference);
         }else{
             modelo.put("msg","No se pudo completar la compra, por favor intente mas tarde");
-            modelo.put("est", "disabled");
+            System.err.println("ENTRO POR ACA");
         }
         return new ModelAndView("pago", modelo);
     }

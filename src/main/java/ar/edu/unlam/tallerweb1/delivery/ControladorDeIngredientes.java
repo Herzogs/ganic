@@ -177,6 +177,7 @@ public class ControladorDeIngredientes {
         return new ModelAndView("modificarIngrediente",mod);
     }
 
+
     @RequestMapping(path = "mod", method = RequestMethod.GET)
     public ModelAndView cambiarIngrediente(@RequestParam(value = "id") Long idIng) {
         Ingrediente ing = null;
@@ -191,6 +192,7 @@ public class ControladorDeIngredientes {
         }
         model.put("IngredientesQueElUsuarioSelecciono", sandwich.getIngredientesSandwich());
         model.put("montoFinal", sandwich.getMonto());
+        model.put("ok","Se ha modificado el ingrediente");
         return new ModelAndView("confirmar", model);
     }
 

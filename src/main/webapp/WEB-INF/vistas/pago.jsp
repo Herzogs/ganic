@@ -29,8 +29,25 @@
                     </div>
                     <%--Bloque que es visible si el elemento error no esta vacio	--%>
                     <c:if test="${not empty msg}">
-                        <h4><span>${msg}</span></h4>
-                        <br>
+                        <%--<h4><span>${msg}</span></h4>
+                        <br>--%>
+                        <div class="modal fade" id="miModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Informacion </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                            ${msg}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </c:if>
                 </div>
                 <div class="col-6">
@@ -67,26 +84,31 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
         crossorigin="anonymous"></script>
+<script src="${pageContext.request.contextPath}/js/jquery-1.11.3.min.js"></script>
 <script src="https://sdk.mercadopago.com/js/v2"></script>
-<script>
+<script type="text/javascript">
     // Agrega credenciales de SDK
     // Acá va la Public Key de la cuenta de mercadopago que voy a usar como
     // vendedor
-    const mp = new MercadoPago("APP_USR-b80d8e26-f1e7-4970-9308-37f7159ae8d7", {
-        locale : "es-AR",
+    $(document).ready(()=>{
+        $("#miModal").modal('toggle')
+        const mp = new MercadoPago("APP_USR-b80d8e26-f1e7-4970-9308-37f7159ae8d7", {
+            locale : "es-AR",
+        });
+        // Inicializa el checkout
+        mp.checkout({
+            preference : {
+                // Se le pasa el id de la preferencia de pago generada con el backend
+                // desde spring
+                id : '<c:out value="${preference.id}"/>',
+            },
+            render : {
+                container : ".cho-container", // Indica el nombre de la clase donde se mostrará el botón de pago
+                label : "Pagar", // Cambia el texto del botón de pago (opcional)
+            },
+        });
     });
-    // Inicializa el checkout
-    mp.checkout({
-        preference : {
-            // Se le pasa el id de la preferencia de pago generada con el backend
-            // desde spring
-            id : '<c:out value="${preference.id}"/>',
-        },
-        render : {
-            container : ".cho-container", // Indica el nombre de la clase donde se mostrará el botón de pago
-            label : "Pagar", // Cambia el texto del botón de pago (opcional)
-        },
-    });
+
 </script>
 </body>
 </html>
