@@ -23,8 +23,11 @@
             <div class="row mb-5">
                 <h2 class="mt-5 mb-3"><i class="bi bi-bag-heart text-primary mx-2"></i> Mis productos:</h2>
                 <c:if test="${not empty msg}">
-                        <input type="hidden" name="msg" id="msg" value="${msg}" />
-                            <input type="hidden" name="estado" id="estado" value="${error}"/>
+                    <div class="text-danger my-4">
+                        <span>${msg}</span>
+                    </div>
+                    <input type="hidden" name="msg" id="msg" value="${msg}"/>
+                    <input type="hidden" name="estado" id="estado" value="${error}"/>
 
                 </c:if>
                 <c:forEach var="detalle" items="${listaDetalle}">
@@ -48,13 +51,13 @@
                         </div>
                     </div>
                 </c:forEach>
-
-                <div class="py-5 text-end">
-                    <h4 class="pe-5">Total a pagar: $${montoCarrito}</h4>
-                    <a href="vaciarCarro" class="btn btn-danger px-5" type="button">Vaciar carrito</a>
-                    <a href="salvarCarro" class="btn btn-success px-5 ms-4" type="button">Pagar</a>
-                </div>
-
+                <c:if test="${empty hideButton}">
+                    <div class="py-5 text-end">
+                        <h4 class="pe-5">Total a pagar: $${montoCarrito}</h4>
+                        <a href="vaciarCarro" class="btn btn-danger px-5" type="button">Vaciar carrito</a>
+                        <a href="salvarCarro" class="btn btn-success px-5 ms-4" type="button">Pagar</a>
+                    </div>
+                </c:if>
             </div>
 
         </div>
@@ -87,8 +90,8 @@
         crossorigin="anonymous"></script>
 <script src="${pageContext.request.contextPath}/js/jquery-1.11.3.min.js"></script>
 <script type="text/javascript">
-    $(document).ready(()=>{
-        if($("#estado").val() === '1'){
+    $(document).ready(() => {
+        if ($("#estado").val() === '1') {
             $("#miModal").modal('show');
         }
     });

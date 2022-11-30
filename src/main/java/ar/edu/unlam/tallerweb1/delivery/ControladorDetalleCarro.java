@@ -56,6 +56,7 @@ public class ControladorDetalleCarro {
             modelMap.put("msg", "Usuario invalido");
         } catch (DetalleInexistenteExeption e) {
             modelMap.put("msg", "Carrito vacio");
+            modelMap.put("hideButton","ocultar");
         }
         return new ModelAndView("verCarrito", modelMap);
 
