@@ -42,18 +42,18 @@
 		<section class="bg-dark">
 			<div class="container">
 				<div class="row my-5 py-5">
-					<h2 class="text-center text-white"> Aprovechá nuestras promociones</h2>
+					<h2 class="text-center text-white"> Sandwichs de la Casa</h2>
 					<c:forEach var="sandwich" items="${listaEnPromocion}" >
 						<div class="col-4 g-5">
-							<div class="card" style="height: 280px">
-								<div class="card-header bg-success text-white">
-										<h5>${sandwich.nombre}</h5>
+							<div class="card h-100" >
+								<img src="img/homex.png" class="card-img-top" alt="banner home sandwich">
+								<div class="card-body">
+									<h5 class="mb-3">${sandwich.nombre}</h5>
+									<p>${sandwich.descripcion}</p>
+									<p>Es apto: <span class="text-primary">${sandwich.esApto}</p>
+									<p>Precio: <span class="fw-bold">$${sandwich.obtenerMonto()}</span></p>
+									<p class="text-end mt-4"><a href="confirmarSandwich?idSandwich=${sandwich.idSandwich}" class="btn btn-success" type="button">Comprar</a></p>
 								</div>
-								<ul class="list-group list-group-flush">
-									<li class="list-group-item">${sandwich.descripcion}</li>
-									<li class="list-group-item">Es apto: <span class="text-primary">${sandwich.esApto}</span></li>
-									<li class="list-group-item"><a href="confirmarSandwich?idSandwich=${sandwich.idSandwich}" class="btn btn-success px-3 my-3">Comprar</a></li>
-								</ul>
 							</div>
 						</div>
 					</c:forEach>

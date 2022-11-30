@@ -78,26 +78,25 @@
 <main>
 
     <section class="container">
-        <h1 class="my-5">Elija su destino</h1>
+        <h1 class="mt-5 mb-4">Elegí tu destino</h1>
         <c:if test="${not empty msg}">
-            <h4 id="error" class="my-3 text-danger">${msg}</h4>
+            <h4 id="error" class="mb-3 text-danger">${msg}</h4>
         </c:if>
-        <h5 class="text-end fw-bold me-5"><i class="bi bi-arrow-bar-down text-primary fs-4 pe-3"></i> Ingresá tu dirección </h5>
-        <div class="row">
-            <div class="col-12">
+        <div class="row mb-5">
+            <div class="col-8">
+                <h5 class="fw-bold"><i class="bi bi-arrow-bar-down text-primary fs-4 pe-3"></i> Ingresá tu dirección </h5>
                 <div id="map" class="map"></div>
             </div>
-            <div class="col-md-4 my-4">
-                <img src="img/envios.jpg" class="img-fluid" alt="Logo envios" style="max-width: 200px">
-            </div>
-
-            <div class="col-md-8 d-flex align-items-center my-4">
-                <f:form method="post" action="seleccionarDestino" modelAttribute="formDestino">
-                    <f:input path="destino" id="dest" type="hidden"/>
-                    <f:input path="distance" id="dist" type="hidden"/>
-                    <button class="btn btn-success px-5" type="submit">Confirmar Destino</button>
-                    <div><a href="restablecer" class="btn btn-primary px-5 my-5">Volver al Home</a></div>
-                </f:form>
+            <div class="col-md-4 ps-3 mt-3">
+                <div class=" my-4">
+                    <f:form method="post" action="seleccionarDestino" modelAttribute="formDestino">
+                        <f:input path="destino" id="dest" type="hidden"/>
+                        <f:input path="distance" id="dist" type="hidden"/>
+                        <button class="btn btn-success px-5" type="submit">Confirmar Destino</button>
+                        <div><a href="restablecer" class="btn btn-primary px-5 my-5">Volver al Home</a></div>
+                    </f:form>
+                </div>
+                <img src="img/envios.jpg" class="img-fluid" alt="Logo envios" style="max-width: 230px">
             </div>
 
         </div>

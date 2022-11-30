@@ -23,14 +23,19 @@
             <div class="row mb-5">
                 <h2 class="mt-5 mb-3"><i class="bi bi-bag-heart text-primary ms-2"></i> Mis pedidos en preparación:</h2>
                 <c:forEach var="compra" items="${listaDeCompras}" >
-                    <div class="col-6 g-5 h-100">
-                            <div class="p-3 bg-dark text-white rounded-top h-100 shadow-sm">
-                                <h4 class="mb-3">Nro de sandwich: ${ compra.idCompra } <span class="ms-5 text-primary">${ compra.estado }</span> </h4>
-                                <span class="pe-5">Fecha: ${ compra.fecha.withSecond(0).withNano(0) }</span>
-                                <span class="pe-5">Sandwichs comprados: ${ compra.cant }</span>
-                                <span class="pe-5">Total abonado: $${ compra.montoTotal}</span>
-                                <p class="text-end"><a href="cancelarCompra?idCompra=${compra.idCompra}" class="btn btn-danger" type="button">Cancelar Sandwich</a></p>
+                    <div class="col-4 g-5 h-100">
+                        <div class="card h-100" >
+                            <img src="img/carritox.png" class="card-img-top" alt="banner compra">
+                            <div class="card-body">
+                                <h4 class="mb-3"><i class="bi bi-bag-check-fill pe-2 text-success"></i> Nro de Compra: ${ compra.idCompra }</h4>
+                                <p class="fw-bold text-primary mb-4">${ compra.estado }</p>
+                                <p>Fecha: ${ compra.fecha.withSecond(0).withNano(0) }</p>
+                                <p>Sandwichs comprados: ${ compra.cant }</p>
+                                <p>Total abonado: <span class="fw-bold">$${ compra.montoTotal}</span></p>
+
+                                <p class="text-end mt-4"><a href="cancelarCompra?idCompra=${compra.idCompra}" class="btn btn-danger" type="button">Cancelar compra</a></p>
                             </div>
+                        </div>
                     </div>
                 </c:forEach>
             </div>

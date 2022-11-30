@@ -6,19 +6,18 @@
 <main>
 
     <div class="container py-5">
-        <div class="text-center mb-5">
-            <h2>TELÉFONOS</h2>
-            <h5 class="text-primary">+54 11 3033 1450</h5>
-            <hr>
-            <h2>ENCONTRANOS EN</h2>
-            <p>Seguìnos en Instagram y Facebook para enterarte de las novedades.</p>
-            <h5 class="text-primary">Instagram.com/ganic</h5>
-            <h5 class="text-primary">Facebook.com/ganic</h5>
-        </div>
-
         <div class="text-center">
             <div class="row">
                 <div class="col-6">
+                    <div class="text-center mb-5">
+                        <h2>TELÉFONO</h2>
+                        <h5 class="text-primary">+54 11 3033 1450</h5>
+                        <hr>
+                        <h2>ENCONTRANOS EN</h2>
+                        <p>Seguinos en Instagram y Facebook para enterarte de las novedades</p>
+                        <h5 class="text-primary">Instagram.com/ganic</h5>
+                        <h5 class="text-primary">Facebook.com/ganic</h5>
+                    </div>
                     <h2>UNLAM</h2>
                     <h5 class="text-primary">GANIC OFICIAL</h5>
                     <button class="btn btn-dark"><img src="img/ganiclogo.png" class="img-fluid logo_style" alt="Logo"></button>
