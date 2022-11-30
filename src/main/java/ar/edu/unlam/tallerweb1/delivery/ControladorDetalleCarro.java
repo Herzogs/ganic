@@ -46,6 +46,11 @@ public class ControladorDetalleCarro {
             detalle = servicioDetalleCarro.obtenerDetalleDeCarroDeUsuario(usuario);
             modelMap.put("listaDetalle", detalle);
             modelMap.put("montoCarrito",this.calcularMontoDelCarrito(detalle));
+            String mensajeError = (String) request.getSession().getAttribute("MENSAJE_ERROR");
+            if(mensajeError != null) {
+                modelMap.put("msg", mensajeError);
+                request.getSession().setAttribute("MENSAJE_ERROR",null);
+            }
         } catch (UsuarioInvalidoException e) {
             modelMap.put("msg", "Usuario invalido");
         } catch (DetalleInexistenteExeption e) {
@@ -97,14 +102,13 @@ public class ControladorDetalleCarro {
             /*Carro carro = servicioCarro.obtenerCarroDeCLiente(usuario);*/
             servicioDetalleCarro.decrementarCantidad(cantidad,usuario,sandwich);
 
-
         } catch (SandwichNoExistenteException e) {
             modelMap.put("msg", "Sandwich agotado");
 
         } catch (UsuarioInvalidoException e) {
             modelMap.put("msg", "Usuario invalido");
         } catch (NoSePudoQuitarException e) {
-            modelMap.put("msg", "No se puede quitar, debe eliminar el detalle");
+            request.getSession().setAttribute("MENSAJE_ERROR","No se puede quitar, debe eliminar el detalle");
         }
         return new ModelAndView("redirect:/verCarrito", modelMap);
     }
