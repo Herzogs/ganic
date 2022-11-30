@@ -124,7 +124,7 @@ public class ControladorDetalleCarroTest extends SpringTest {
     }
 
     @Test
-    public void siLaCantidadDeSandwichEs1MeTireUnMensajeQueNoSePuedaDecrementar() throws UsuarioInvalidoException, SandwichNoExistenteException, NoSePudoQuitarException {
+    public void siLaCantidadDeSandwichEs1YQuieroDecrementarloMeReenvieALaVistaDeCarrito() throws UsuarioInvalidoException, SandwichNoExistenteException, NoSePudoQuitarException {
         Usuario user = dadoQueTengoUnUsuario();
         Sandwich sand1 = dadoQueTengoUnSandwich();
         cuandoLePidaAlServletPorID(user);
@@ -132,8 +132,8 @@ public class ControladorDetalleCarroTest extends SpringTest {
         cuandoLePidaAlServicioDeSandwichObtenerSandwichPorID(sand1);
         cuandoInvoquenAlMetodoDecrementarCantidadYNoSePuedaTireExcepcion();
         ModelAndView mav = cuandoLePidoALControladorQueLeQuiteDelCarrito(this.request,sand1,1);
-        String mensaje = "No se puede quitar, debe eliminar el detalle";
-        entoncesVerificoQueMeDevuelvaMensajeDeError(mav, mensaje);
+        String mensaje = "redirect:/verCarrito";
+        entoncesVerificoQueMeRedirijaALaVistaDeCarro(mav, mensaje);
     }
 
     @Test
@@ -267,8 +267,12 @@ public class ControladorDetalleCarroTest extends SpringTest {
         when(this.servicioCarro.obtenerCarroDeCLiente(user)).thenReturn(carro);
     }
 
+    private void entoncesVerificoQueMeRedirijaALaVistaDeCarro(ModelAndView mav, String mensaje) {
+        assertThat(mav.getViewName()).isEqualTo(mensaje);
+    }
+
     private void entoncesVerificoQueMeDevuelvaMensajeDeError(ModelAndView mav, String mensaje) {
-        assertThat((mav.getModel().get("msg"))).isEqualTo(mensaje);
+        assertThat(mav.getModel().get("msg")).isEqualTo(mensaje);
     }
 
     private void cuandoLePidaAlServicioDetalleQueMeTireLaExcepcion(Usuario user) throws DetalleInexistenteExeption {
