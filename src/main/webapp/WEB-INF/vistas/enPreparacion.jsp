@@ -40,19 +40,9 @@
                 </c:forEach>
             </div>
 
-            <div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Información</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            ${msg}
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <c:if test="${not empty msg}">
+                <h4 id="error" class="mb-3 text-danger">${msg}</h4>
+            </c:if>
 
         </div>
     </section>

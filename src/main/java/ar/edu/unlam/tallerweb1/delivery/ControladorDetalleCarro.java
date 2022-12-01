@@ -110,7 +110,7 @@ public class ControladorDetalleCarro {
         } catch (UsuarioInvalidoException e) {
             modelMap.put("msg", "Usuario invalido");
         } catch (NoSePudoQuitarException e) {
-            request.getSession().setAttribute("MENSAJE_ERROR","No se puede quitar, debe eliminar el detalle");
+            request.getSession().setAttribute("MENSAJE_ERROR","La cantidad no puede ser inferior a uno");
         }
         return new ModelAndView("redirect:/verCarrito", modelMap);
     }
