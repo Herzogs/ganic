@@ -23,7 +23,7 @@ $(document).ready(() => {
                     unlam_marker.setLatLng(coord);
                 }, 10000 * index);
             });
-        }, 180000);
+        }, 120000);
 
     }).addTo(map);
 });
