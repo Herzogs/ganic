@@ -19,9 +19,30 @@ public class Usuario {
 	// el atributo, la misma admite nulos, y el tipo de dato se deduce del tipo de dato de java.
 	private String email;
 	private String password;
-	private String rol;
-	private Boolean activo = false;
-	
+	private String nombre;
+	private String apellido;
+
+	private String direccion;
+
+	private String preferencia;
+
+	public Usuario() {
+	}
+
+	public Usuario(String email, String password) {
+
+		this.email = email;
+		this.password = password;
+		this.nombre = this.apellido = this.direccion = this.preferencia = "";
+	}
+
+	public Usuario(String nombre, String apellido, String direccion, String preferencia) {
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.direccion = direccion;
+		this.preferencia = preferencia;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -40,24 +61,36 @@ public class Usuario {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getRol() {
-		return rol;
-	}
-	public void setRol(String rol) {
-		this.rol = rol;
-	}
-	public Boolean getActivo() {
-		return activo;
-	}
-	public void setActivo(Boolean activo) {
-		this.activo = activo;
+
+	public String getNombre() {
+		return nombre;
 	}
 
-	public boolean activo() {
-		return activo;
-    }
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
 
-    public void activar() {
-		activo = true;
-    }
+	public String getApellido() {
+		return apellido;
+	}
+
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
+	}
+
+	public String getDireccion() {
+		return direccion;
+	}
+
+	public void setDireccion(String direccion) {
+		this.direccion = direccion;
+	}
+
+	public String getPreferencia() {
+		return preferencia;
+	}
+
+	public void setPreferencia(String preferencia) {
+		this.preferencia = preferencia;
+	}
 }

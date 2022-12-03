@@ -32,6 +32,26 @@
 	</build>
 	<dependencies>
 		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itextpdf</artifactId>
+			<version>5.5.10</version>
+		</dependency>
+		<dependency>
+			<groupId>io.github.cdimascio</groupId>
+			<artifactId>dotenv-java</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.mercadopago</groupId>
+			<artifactId>sdk-java</artifactId>
+			<version>2.1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.5.0-b01</version>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
@@ -39,8 +59,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>1.10.19</version>
+			<artifactId>mockito-core</artifactId>
+			<version>3.2.4</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
